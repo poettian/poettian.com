@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-cn">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blog/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="nginx是如何解析请求先来看下nginx配置中server的写法：12345server &amp;#123;    listen      80;    server_name example.org www.example.org;    ...&amp;#125; nginx会根据请求头的Host字段来查找和匹配对应的server，如果配置中所有server的server_name都无法匹配该请求，那么n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx配置之server_name">
+<meta property="og:url" content="https://www.poettian.com/blog/2017/11/17/nginx配置之server-name/index.html">
+<meta property="og:site_name" content="poettian | 中点站">
+<meta property="og:description" content="nginx是如何解析请求先来看下nginx配置中server的写法：12345server &amp;#123;    listen      80;    server_name example.org www.example.org;    ...&amp;#125; nginx会根据请求头的Host字段来查找和匹配对应的server，如果配置中所有server的server_name都无法匹配该请求，那么n">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2017-11-17T02:33:40.543Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx配置之server_name">
+<meta name="twitter:description" content="nginx是如何解析请求先来看下nginx配置中server的写法：12345server &amp;#123;    listen      80;    server_name example.org www.example.org;    ...&amp;#125; nginx会根据请求头的Host字段来查找和匹配对应的server，如果配置中所有server的server_name都无法匹配该请求，那么n">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.poettian.com/blog/2017/11/17/nginx配置之server-name/"/>
+
+
+
+
+
+  <title>nginx配置之server_name | poettian | 中点站</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">poettian | 中点站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.poettian.com/blog/blog/2017/11/17/nginx配置之server-name/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="搬砖的poettian">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="poettian | 中点站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nginx配置之server_name</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-17T08:48:44+08:00">
+                2017-11-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="nginx是如何解析请求"><a href="#nginx是如何解析请求" class="headerlink" title="nginx是如何解析请求"></a>nginx是如何解析请求</h3><p>先来看下nginx配置中server的写法：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>      <span class="number">80</span>;</div><div class="line">    <span class="attribute">server_name</span> example.org www.example.org;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>nginx会根据请求头的Host字段来查找和匹配对应的server，如果配置中所有server的server_name都无法匹配该请求，那么nginx就route此请求到<code>ip:port</code>默认的server中。<br>其中，默认的server是配置文件中第一个server，除非明确指定某个server为default server，如下：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>      <span class="number">80</span> default_server;</div><div class="line">    <span class="attribute">server_name</span> example.net www.example.net;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：默认server是针对ip:port而言的，不同的ip:port分别有不同的default server</p>
+</blockquote>
+<h3 id="如何阻止nginx处理未带有Host的请求"><a href="#如何阻止nginx处理未带有Host的请求" class="headerlink" title="如何阻止nginx处理未带有Host的请求"></a>如何阻止nginx处理未带有Host的请求</h3><p>如果请求未带有Host请求头，那么可以用如下配置来阻止访问：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>      <span class="number">80</span>;</div><div class="line">    <span class="attribute">server_name</span> <span class="string">""</span>;</div><div class="line">    <span class="attribute">return</span>      <span class="number">444</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>定义为空字符串的server_name 会匹配未带有Host头的请求，然后返回一个nginx 的非标准的444响应码并关闭连接。<br>server_name这一行也可以去掉：</p>
+<blockquote>
+<p>If no server_name is defined in a server block then nginx uses the empty name as the server name.</p>
+</blockquote>
+<h3 id="基于ip和name的server"><a href="#基于ip和name的server" class="headerlink" title="基于ip和name的server"></a>基于ip和name的server</h3><p>让我们来看下更加复杂一些的server配置，分别定义了几个监听不同ip的虚拟主机：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>      <span class="number">192.168.1.1:80</span>;</div><div class="line">    <span class="attribute">server_name</span> example.org www.example.org;</div><div class="line">    ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>      <span class="number">192.168.1.1:80</span> default_server;</div><div class="line">    <span class="attribute">server_name</span> example.net www.example.net;</div><div class="line">    ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>      <span class="number">192.168.1.2:80</span> default_server;</div><div class="line">    <span class="attribute">server_name</span> example.com www.example.com;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>nginx首先检查请求对应的ip和port，找到listen配置能够匹配此请求的server，然后看请求是否匹配server_name，如果不匹配，就route此请求交给此ip:port 的default server来处理。</p>
+<h3 id="nginx的server-name详解"><a href="#nginx的server-name详解" class="headerlink" title="nginx的server_name详解"></a>nginx的server_name详解</h3><p>此配置可以用 exact names，通配符和正则表达式来定义。<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>       <span class="number">80</span>;</div><div class="line">    <span class="attribute">server_name</span>  example.org  www.example.org;</div><div class="line">    ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>       <span class="number">80</span>;</div><div class="line">    <span class="attribute">server_name</span>  <span class="regexp">*.example.org</span>;</div><div class="line">    ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>       <span class="number">80</span>;</div><div class="line">    <span class="attribute">server_name</span>  <span class="regexp">mail.*</span>;</div><div class="line">    ...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>       <span class="number">80</span>;</div><div class="line">    <span class="attribute">server_name</span>  ~^(?&lt;user&gt;.+)\.example\.net$;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果有多个server_name都能匹配某个请求，那么按如下规则，第一个匹配到的server会被选择来处理此请求</p>
+<ol>
+<li>exact name</li>
+<li>最长的以<em>开头的通配符定义，如”</em>.example.org”</li>
+<li>最长的以<em>结尾的通配符定义，如”mail.</em>“</li>
+<li>第一个匹配的正则表达式(以出现在配置文件的顺序来定)</li>
+</ol>
+<h4 id="通配符定义"><a href="#通配符定义" class="headerlink" title="通配符定义"></a>通配符定义</h4><p>通配符定义中<em>只能出现在开头或结尾，并以.结尾或开头，”www.</em>.example.org” 和 “w<em>.example.org”都是无效的，但是这些可以用正则表达式来定义，比如”~^www..+.example.org$” 和 “~^w.</em>.example.org$”。<em>匹配部分server name，”</em>.example.org”不仅匹配www.example.org 而且也匹配www.sub.example.org。<br>还有一种特殊的通配符定义”.example.org”，可以用来匹配exact name “example.org” 和 通配符定义 “*.example.org”</p>
+<h4 id="正则表达式定义"><a href="#正则表达式定义" class="headerlink" title="正则表达式定义"></a>正则表达式定义</h4><p>nginx使用的是pcre正则，必须用~符号来定义，否则就会被当做是一个exact name 或 通配符定义。^ 和 $ 符号虽然不是语法上必须的，但是最好加上。域名中的.必须用\转义，包含{和}的定义，必须用双引号外括：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">server_name</span>  <span class="string">"~^(?&lt;name&gt;\w\d&#123;1,3&#125;+)\.example\.net$"</span>;</div></pre></td></tr></table></figure></p>
+<p>正则中的捕获，可以作为变量用在后面：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">server_name</span>   ~^(www\.)?(?&lt;domain&gt;.+)$;</div><div class="line"></div><div class="line">    <span class="attribute">location</span> / &#123;</div><div class="line">        <span class="attribute">root</span>   /sites/<span class="variable">$domain</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">server_name</span>   ~^(www\.)?(.+)$;</div><div class="line"></div><div class="line">    <span class="attribute">location</span> / &#123;</div><div class="line">        <span class="attribute">root</span>   /sites/<span class="variable">$2</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>The PCRE library supports named captures using the following syntax:</p>
+<p>?<name>    Perl 5.10 compatible syntax, supported since PCRE-7.0<br>?’name’    Perl 5.10 compatible syntax, supported since PCRE-7.0<br>?P<name>    Python compatible syntax, supported since PCRE-4.0</name></name></p>
+<h3 id="其他的内容过于复杂，暂时略过"><a href="#其他的内容过于复杂，暂时略过" class="headerlink" title="其他的内容过于复杂，暂时略过"></a>其他的内容过于复杂，暂时略过</h3>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2017/11/14/ThinkPHP下的代码分层思考/" rel="next" title="ThinkPHP下的代码分层思考">
+                <i class="fa fa-chevron-left"></i> ThinkPHP下的代码分层思考
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">搬砖的poettian</p>
+              <p class="site-description motion-element" itemprop="description">努力变成一个热爱生活的人</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/blog/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx是如何解析请求"><span class="nav-number">1.</span> <span class="nav-text">nginx是如何解析请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何阻止nginx处理未带有Host的请求"><span class="nav-number">2.</span> <span class="nav-text">如何阻止nginx处理未带有Host的请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于ip和name的server"><span class="nav-number">3.</span> <span class="nav-text">基于ip和name的server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx的server-name详解"><span class="nav-number">4.</span> <span class="nav-text">nginx的server_name详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#通配符定义"><span class="nav-number">4.1.</span> <span class="nav-text">通配符定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则表达式定义"><span class="nav-number">4.2.</span> <span class="nav-text">正则表达式定义</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他的内容过于复杂，暂时略过"><span class="nav-number">5.</span> <span class="nav-text">其他的内容过于复杂，暂时略过</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">搬砖的poettian</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

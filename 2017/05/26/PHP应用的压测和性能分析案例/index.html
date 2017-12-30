@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-cn">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blog/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最近公司有个项目准备上线，为了保证上线后应用的正常运行和访问速度，着手进行压测和优化，虽然目前为止未能找到并发情况下QPS比较低的原因，但多多少少有些收获。 下面就这一过程做个记录，准备公司内部分享，也借鉴一下同事们的经验。 先介绍一下配置和用到的工具线上机器和部署情况（阿里云）：  服务器2台 16核 32G内存 PHP5.4负载均衡 带宽100M云数据库RDS MYSQL5.6NAS云盘 挂载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP应用的压测和性能分析案例">
+<meta property="og:url" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/index.html">
+<meta property="og:site_name" content="poettian | 中点站">
+<meta property="og:description" content="最近公司有个项目准备上线，为了保证上线后应用的正常运行和访问速度，着手进行压测和优化，虽然目前为止未能找到并发情况下QPS比较低的原因，但多多少少有些收获。 下面就这一过程做个记录，准备公司内部分享，也借鉴一下同事们的经验。 先介绍一下配置和用到的工具线上机器和部署情况（阿里云）：  服务器2台 16核 32G内存 PHP5.4负载均衡 带宽100M云数据库RDS MYSQL5.6NAS云盘 挂载">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957688652078.jpg">
+<meta property="og:image" content="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957788435179.jpg">
+<meta property="og:image" content="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957792674529.jpg">
+<meta property="og:image" content="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957800885061.jpg">
+<meta property="og:image" content="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957808316856.jpg">
+<meta property="og:updated_time" content="2017-10-16T13:38:40.010Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP应用的压测和性能分析案例">
+<meta name="twitter:description" content="最近公司有个项目准备上线，为了保证上线后应用的正常运行和访问速度，着手进行压测和优化，虽然目前为止未能找到并发情况下QPS比较低的原因，但多多少少有些收获。 下面就这一过程做个记录，准备公司内部分享，也借鉴一下同事们的经验。 先介绍一下配置和用到的工具线上机器和部署情况（阿里云）：  服务器2台 16核 32G内存 PHP5.4负载均衡 带宽100M云数据库RDS MYSQL5.6NAS云盘 挂载">
+<meta name="twitter:image" content="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957688652078.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/"/>
+
+
+
+
+
+  <title>PHP应用的压测和性能分析案例 | poettian | 中点站</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">poettian | 中点站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.poettian.com/blog/blog/2017/05/26/PHP应用的压测和性能分析案例/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="搬砖的poettian">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="poettian | 中点站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PHP应用的压测和性能分析案例</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-26T10:28:20+08:00">
+                2017-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近公司有个项目准备上线，为了保证上线后应用的正常运行和访问速度，着手进行压测和优化，虽然目前为止未能找到并发情况下QPS比较低的原因，但多多少少有些收获。 下面就这一过程做个记录，准备公司内部分享，也借鉴一下同事们的经验。</p>
+<h3 id="先介绍一下配置和用到的工具"><a href="#先介绍一下配置和用到的工具" class="headerlink" title="先介绍一下配置和用到的工具"></a>先介绍一下配置和用到的工具</h3><p>线上机器和部署情况（阿里云）：</p>
+<blockquote>
+<p>服务器2台 16核 32G内存 PHP5.4<br>负载均衡 带宽100M<br>云数据库RDS MYSQL5.6<br>NAS云盘 挂载在两台服务器的相同目录下</p>
+</blockquote>
+<p>php-fpm 部分配置情况</p>
+<blockquote>
+<p>error_log = /usr/local/php/var/log/php-fpm.log<br>pm = dynamic<br>pm.max_children = 500<br>pm.start_servers = 16<br>pm.min_spare_servers = 16<br>pm.max_spare_servers = 500<br>pm.max_requests = 600<br>request_terminate_timeout = 300<br>request_slowlog_timeout = 0<br>slowlog = var/log/slow.log</p>
+</blockquote>
+<p>压测工具：</p>
+<blockquote>
+<p>loadrunner HP的一个经典的压测工具，运行在windows环境<br>ApacheBench 简称ab，apache自带的一个压测工具，运行在linux环境</p>
+</blockquote>
+<p>分析工具：</p>
+<blockquote>
+<p>phptrace 360的一款用于跟踪、分析PHP运行情况的工具，需要安装相应的php扩展<br>xhprof facebook开源的一款分析工具，也需要安装相应的php扩展。可以搭配xhgui进行视图化，但是xhgui的安装需要mongodb，就没装</p>
+</blockquote>
+<h3 id="开始压测和分析"><a href="#开始压测和分析" class="headerlink" title="开始压测和分析"></a>开始压测和分析</h3><p>以网站首页为例</p>
+<p>用ab给到100的并发<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">ab -s 60 -n 2000 -c 100 -H &apos;Accept-Encoding: gzip&apos; -l http://ysc.baidu.com/</div><div class="line"></div><div class="line">参数含义：</div><div class="line">-s 60 每个请求允许的最大等待时间设为60秒</div><div class="line">-n 2000 一共执行2000个请求</div><div class="line">-c 100 每次的并发量设为100</div><div class="line">-H header头信息，这里是告诉服务器将响应数据用gzip压缩，减少带宽压力</div><div class="line">-l 允许响应数据大小发生变动，如果是静态网页，可以不要此参数，但如果是动态网页，最好加上这个参数，否则有些响应就计入failed统计</div></pre></td></tr></table></figure></p>
+<p>看下执行的情况</p>
+<p>能够看到，QPS很低，服务器每秒能够处理的请求基本在7个左右，响应时间大概在15s</p>
+<p>又进行了一次压测，这次去掉了业务的执行，单纯跑框架，结果QPS也只能达到十几，好尴尬！那就说明，框架本身的执行速度就不快，更别论业务的执行对响应时间的影响了。</p>
+<p>可能的原因：<br>1.cpu负载超了<br>2.io负载高，io发生阻塞或io速度慢<br>3.php-fpm进程不够，请求阻塞在php-fpm上<br>4.带宽占满<br>5.php-fpm进程执行中出现的其他问题<br>6.代码问题</p>
+<h5 id="先来排查cpu负载"><a href="#先来排查cpu负载" class="headerlink" title="先来排查cpu负载"></a>先来排查cpu负载</h5><p>用 <strong>top</strong> 或 <strong>mpstat</strong> 命令查看cpu的负载情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mpstat -P ALL 2 3</div></pre></td></tr></table></figure></p>
+<p>执行情况<br><img src="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957688652078.jpg" alt="cpu负载情况"></p>
+<p>发现cpu负载都很低，但是有一核几乎跑满了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps aux</div></pre></td></tr></table></figure>
+<p>发现是一个php进程的问题</p>
+<p><img src="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957788435179.jpg" alt=""></p>
+<p>这个脚本中有无限循环的情况，类似<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;&#125;</div></pre></td></tr></table></figure></p>
+<p>干掉这个进程，明显的cpu负载就下来了</p>
+<p>ok，以上说明cpu负载并不是导致QPS的原因</p>
+<h5 id="再来排查io"><a href="#再来排查io" class="headerlink" title="再来排查io"></a>再来排查io</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iostat -dx 1 5</div></pre></td></tr></table></figure>
+<p><img src="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957792674529.jpg" alt=""></p>
+<p>解释：</p>
+<table>
+<thead>
+<tr>
+<th>列名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rrqm/s</td>
+<td>队列中每秒钟合并的读请求数量</td>
+</tr>
+<tr>
+<td>wrqm/s</td>
+<td>队列中每秒钟合并的写请求数量</td>
+</tr>
+<tr>
+<td>r/s</td>
+<td>每秒钟完成的读请求数量</td>
+</tr>
+<tr>
+<td>w/s</td>
+<td>每秒钟完成的写请求数量</td>
+</tr>
+<tr>
+<td>rsec/s</td>
+<td>每秒钟读取的扇区数量</td>
+</tr>
+<tr>
+<td>wsec/s</td>
+<td>每秒钟写入的扇区数量</td>
+</tr>
+<tr>
+<td>avgrq-sz</td>
+<td>平均请求扇区的大小</td>
+</tr>
+<tr>
+<td>avgqu-sz</td>
+<td>平均请求队列的长度</td>
+</tr>
+<tr>
+<td>await</td>
+<td>平均每次请求的等待时间</td>
+</tr>
+<tr>
+<td>util</td>
+<td>设备的利用率</td>
+</tr>
+</tbody>
+</table>
+<p>下面是关键列的解释：<br>    <font color="red"><br>    util是设备的利用率。如果它接近100%，通常说明设备能力趋于饱和。<br>    await是平均每次请求的等待时间。这个时间包括了队列时间和服务时间，也就是说，一般情况下，await大于svctm，它们的差值越小，则说明队列时间越短，反之差值越大，队列时间越长，说明系统出了问题。<br>    avgqu-sz是平均请求队列的长度。毫无疑问，队列长度越短越好。<br>    </font></p>
+<p>可知，问题也不是出在io上</p>
+<h5 id="难道是php-fpm的进程不够？"><a href="#难道是php-fpm的进程不够？" class="headerlink" title="难道是php-fpm的进程不够？"></a>难道是php-fpm的进程不够？</h5><p>看php-fpm的配置，完全没有问题，最大子进程已经设置成了500，应该不是php-fpm进程不够的原因</p>
+<p>开启压测，查看php-fpm.log</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tail -f var/log/php-fpm.log</div></pre></td></tr></table></figure>
+<p><img src="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957800885061.jpg" alt=""></p>
+<p>可见php-fpm的进程数也上来了，也排除了这个可能</p>
+<h5 id="追究具体的php-fpm进程"><a href="#追究具体的php-fpm进程" class="headerlink" title="追究具体的php-fpm进程"></a>追究具体的php-fpm进程</h5><p>接下来只能追踪具体某个php-fpm进程的执行流程了，好在有phptrace这个利器，官网 <a href="https://github.com/Qihoo360/phptrace" target="_blank" rel="external">https://github.com/Qihoo360/phptrace</a> ，它能分析具体脚本中的执行流程和调用关系，并给出具体的执行时间，从而能够查探到你的程序卡在了哪里。</p>
+<p>话不多说，直接执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">phptrace -p 10875 &gt; /tmp/phptrace.log</div></pre></td></tr></table></figure></p>
+<p>把结果保存到文件中，ok，接下来分析这个文件，由于行数太多，这里截取几行能够说明就够了</p>
+<p><img src="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957808316856.jpg" alt=""></p>
+<p>是不是很清晰明了。在分析这个脚本的过程中，发现 <strong>require</strong> 占用了很大的一部分时间，几乎每个 require 要占用0.06s</p>
+<p>发生了什么？是进程在系统调用上有什么比较耗时的步骤吗？那就来看这个进程的系统调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">strace -p 10805 -tt -T -e trace=all -o /tmp/strace.log</div></pre></td></tr></table></figure>
+<p>分析结果，显示open(file)的耗时比较严重，close()的时间和open差不多，那就说明还是卡在了io上。</p>
+<p>这时候，另一个利器出场了！opcache，关于opcache的介绍，自行google，总之它的作用就是缓存php的opcode，节省了对脚步的语法检查，编译的时间，但是它有刷新时间，刷新时间内对文件的变动会无效，这也是缓存系统都有的问题，当然，你可以手动刷新。</p>
+<p>接下来继续压测实验，只跑框架，以下是压测结果中只看open()速度的对比：</p>
+<table>
+<thead>
+<tr>
+<th>并发量</th>
+<th>开启opcache</th>
+<th>不开启opcache</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50</td>
+<td>~0.045s</td>
+<td>~0.051s</td>
+</tr>
+<tr>
+<td>100</td>
+<td></td>
+<td>~0.11s</td>
+</tr>
+</tbody>
+</table>
+<p>好像opcache的作用并不是很大，依然有open(file)的调用</p>
+<p>为了排除是NAS云盘io读取速度慢的可能，接下来新起了个域名，根目录指向系统盘，再次测试，结果QPS明显上来了，用strace查看进程，发现open(file)速度也明显快了，基本在 ~0.0000*s上</p>
+<p>可见，罪魁祸首就是NAS云盘io读取速度慢。</p>
+<p>那么什么是NAS？自行百度和谷歌吧！</p>
+<hr>
+<p>既然是这样，那一般多服务器的分布式共享存储都是怎么实现的呢？下一篇文章揭晓</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2017/11/02/LNMP架构中的buffer/" rel="prev" title="LNMP架构中的buffer机制">
+                LNMP架构中的buffer机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">搬砖的poettian</p>
+              <p class="site-description motion-element" itemprop="description">努力变成一个热爱生活的人</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/blog/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#先介绍一下配置和用到的工具"><span class="nav-number">1.</span> <span class="nav-text">先介绍一下配置和用到的工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始压测和分析"><span class="nav-number">2.</span> <span class="nav-text">开始压测和分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#先来排查cpu负载"><span class="nav-number">2.0.1.</span> <span class="nav-text">先来排查cpu负载</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#再来排查io"><span class="nav-number">2.0.2.</span> <span class="nav-text">再来排查io</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#难道是php-fpm的进程不够？"><span class="nav-number">2.0.3.</span> <span class="nav-text">难道是php-fpm的进程不够？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#追究具体的php-fpm进程"><span class="nav-number">2.0.4.</span> <span class="nav-text">追究具体的php-fpm进程</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">搬砖的poettian</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
