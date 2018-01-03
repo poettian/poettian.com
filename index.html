@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-cn">
+<html class="theme-next muse use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -38,10 +38,6 @@
 
 
 
-  
-  
-  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
 
 
 
@@ -50,19 +46,19 @@
 
 <link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+<link href="/blog/css/main.css?v=6.0.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=5.1.4">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.0.0">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.0.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.0.0">
 
 
-  <link rel="mask-icon" href="/blog/images/logo.svg?v=5.1.4" color="#222">
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.0.0" color="#222">
 
 
 
@@ -79,16 +75,17 @@
 
 
 
-<meta name="description" content="努力变成一个热爱生活的人">
+<meta name="description" content="Hello World!">
 <meta property="og:type" content="website">
-<meta property="og:title" content="poettian | 中点站">
-<meta property="og:url" content="https://www.poettian.com/blog/index.html">
+<meta property="og:title" content="about">
+<meta property="og:url" content="https://www.poettian.com/blog/about/index.html">
 <meta property="og:site_name" content="poettian | 中点站">
-<meta property="og:description" content="努力变成一个热爱生活的人">
-<meta property="og:locale" content="zh-cn">
+<meta property="og:description" content="Hello World!">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-02T00:44:22.414Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="poettian | 中点站">
-<meta name="twitter:description" content="努力变成一个热爱生活的人">
+<meta name="twitter:title" content="about">
+<meta name="twitter:description" content="Hello World!">
 
 
 
@@ -96,15 +93,17 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/blog/',
-    scheme: 'Pisces',
-    version: '5.1.4',
+    scheme: 'Muse',
+    version: '6.0.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
-      author: 'Auteur'
+      author: '博主'
     },
     algolia: {
       applicationID: '',
@@ -118,7 +117,7 @@
 
 
 
-  <link rel="canonical" href="https://www.poettian.com/blog/"/>
+  <link rel="canonical" href="https://www.poettian.com/blog/about/"/>
 
 
 
@@ -136,7 +135,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -148,7 +147,7 @@
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
+      <div class="header-inner"> <div class="site-brand-wrapper">
   <div class="site-meta ">
     
 
@@ -185,7 +184,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            首页
           </a>
         </li>
       
@@ -195,7 +194,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archieven
+            归档
           </a>
         </li>
       
@@ -225,6 +224,8 @@
 
   
   
+  
+
   
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
@@ -261,11 +262,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Geplaatst op</span>
+                <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post aangemaakt" itemprop="dateCreated datePublished" datetime="2018-01-03T20:34:58+08:00">
-                2018-01-03
-              </time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-03T20:34:58+08:00">2018-01-03</time>
             
 
             
@@ -276,17 +275,6 @@
           
 
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/blog/2018/01/03/Hello-World/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/03/Hello-World/" itemprop="commentCount"></span>
-                </a>
-              </span>
             
           
 
@@ -358,6 +346,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -392,11 +382,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Geplaatst op</span>
+                <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post aangemaakt" itemprop="dateCreated datePublished" datetime="2017-11-17T08:48:44+08:00">
-                2017-11-17
-              </time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-17T08:48:44+08:00">2017-11-17</time>
             
 
             
@@ -407,17 +395,6 @@
           
 
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/blog/2017/11/17/nginx配置之server-name/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/17/nginx配置之server-name/" itemprop="commentCount"></span>
-                </a>
-              </span>
             
           
 
@@ -513,6 +490,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -547,11 +526,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Geplaatst op</span>
+                <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post aangemaakt" itemprop="dateCreated datePublished" datetime="2017-11-14T09:25:03+08:00">
-                2017-11-14
-              </time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-14T09:25:03+08:00">2017-11-14</time>
             
 
             
@@ -562,17 +539,6 @@
           
 
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/blog/2017/11/14/ThinkPHP下的代码分层思考/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/14/ThinkPHP下的代码分层思考/" itemprop="commentCount"></span>
-                </a>
-              </span>
             
           
 
@@ -646,6 +612,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -680,11 +648,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Geplaatst op</span>
+                <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post aangemaakt" itemprop="dateCreated datePublished" datetime="2017-11-02T08:46:16+08:00">
-                2017-11-02
-              </time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-02T08:46:16+08:00">2017-11-02</time>
             
 
             
@@ -701,7 +667,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">分类于</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -717,17 +683,6 @@
           
 
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/blog/2017/11/02/LNMP架构中的buffer/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/02/LNMP架构中的buffer/" itemprop="commentCount"></span>
-                </a>
-              </span>
             
           
 
@@ -817,6 +772,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -851,11 +808,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Geplaatst op</span>
+                <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post aangemaakt" itemprop="dateCreated datePublished" datetime="2017-05-26T10:28:20+08:00">
-                2017-05-26
-              </time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-26T10:28:20+08:00">2017-05-26</time>
             
 
             
@@ -866,17 +821,6 @@
           
 
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/blog/2017/05/26/PHP应用的压测和性能分析案例/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/05/26/PHP应用的压测和性能分析案例/" itemprop="commentCount"></span>
-                </a>
-              </span>
             
           
 
@@ -1115,7 +1059,7 @@
                 <a href="/blog/archives/">
               
                   <span class="site-state-item-count">5</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-name">日志</span>
                 </a>
               </div>
             
@@ -1126,7 +1070,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">categorieën</span>
+                  <span class="site-state-item-name">分类</span>
                 
               </div>
             
@@ -1137,7 +1081,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">labels</span>
+                  <span class="site-state-item-name">标签</span>
                 
               </div>
             
@@ -1180,10 +1124,12 @@
   <span class="author" itemprop="copyrightHolder">搬砖的poettian</span>
 
   
+
+  
 </div>
 
 
-  <div class="powered-by">Mede mogelijk gemaakt door <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
 
 
@@ -1191,7 +1137,7 @@
 
 
 
-  <div class="theme-info">Thema &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.0</div>
 
 
 
@@ -1235,7 +1181,11 @@
 
 
 
-  
+
+
+
+
+
 
 
 
@@ -1255,16 +1205,6 @@
 
   
   
-    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
     <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
@@ -1273,50 +1213,30 @@
     <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
 
-  
-  
-    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
 
   
 
 
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.0.0"></script>
 
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.0.0"></script>
 
 
 
   
   
 
-
-  <script type="text/javascript" src="/blog/js/src/affix.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=5.1.4"></script>
-
-
-
   
 
   
 
 
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.0.0"></script>
 
 
 
   
 
-
-  
-
-    
-      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
-    
-
-    
 
   
 
