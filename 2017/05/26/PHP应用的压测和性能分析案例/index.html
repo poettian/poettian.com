@@ -2,15 +2,27 @@
 
 
 
+
+
+
+
+
+
+
+
+
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-CN">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
+
+
+
 
 
 
@@ -46,46 +58,25 @@
 
 <link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/blog/css/main.css?v=6.0.0" rel="stylesheet" type="text/css" />
+<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.0.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.0.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.3.0">
 
 
-  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.0.0" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="Hexo, NexT" />
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.3.0" color="#222">
 
 
 
 
 
 
-
-
-
-
-<meta name="description" content="Hello World!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="https://www.poettian.com/blog/about/index.html">
-<meta property="og:site_name" content="poettian | 中点站">
-<meta property="og:description" content="Hello World!">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-02T00:44:22.414Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="about">
-<meta name="twitter:description" content="Hello World!">
 
 
 
@@ -93,22 +84,18 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/blog/',
-    scheme: 'Muse',
-    version: '6.0.0',
+    scheme: 'Mist',
+    version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
     algolia: {
-      applicationID: '',
+      applicationID: '8UR669C6NW',
       apiKey: '',
-      indexName: '',
+      indexName: 'getstarted_actors',
       hits: {"per_page":10},
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     }
@@ -116,14 +103,46 @@
 </script>
 
 
-
-  <link rel="canonical" href="https://www.poettian.com/blog/about/"/>
-
+  
 
 
 
 
-  <title>PHP应用的压测和性能分析案例 | poettian | 中点站</title>
+  <meta name="description" content="最近公司有个项目准备上线，为了保证上线后应用的正常运行和访问速度，着手进行压测和优化，虽然目前为止未能找到并发情况下QPS比较低的原因，但多多少少有些收获。 下面就这一过程做个记录，准备公司内部分享，也借鉴一下同事们的经验。 先介绍一下配置和用到的工具线上机器和部署情况（阿里云）：  服务器2台 16核 32G内存 PHP5.4负载均衡 带宽100M云数据库RDS MYSQL5.6NAS云盘 挂载">
+<meta name="keywords" content="测试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP应用的压测和性能分析案例">
+<meta property="og:url" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/index.html">
+<meta property="og:site_name" content="生活驿站">
+<meta property="og:description" content="最近公司有个项目准备上线，为了保证上线后应用的正常运行和访问速度，着手进行压测和优化，虽然目前为止未能找到并发情况下QPS比较低的原因，但多多少少有些收获。 下面就这一过程做个记录，准备公司内部分享，也借鉴一下同事们的经验。 先介绍一下配置和用到的工具线上机器和部署情况（阿里云）：  服务器2台 16核 32G内存 PHP5.4负载均衡 带宽100M云数据库RDS MYSQL5.6NAS云盘 挂载">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/图1.jpg">
+<meta property="og:image" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/图2.jpg">
+<meta property="og:image" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/图3.jpg">
+<meta property="og:image" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/图4.jpg">
+<meta property="og:image" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/图5.jpg">
+<meta property="og:updated_time" content="2018-05-25T02:49:45.888Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP应用的压测和性能分析案例">
+<meta name="twitter:description" content="最近公司有个项目准备上线，为了保证上线后应用的正常运行和访问速度，着手进行压测和优化，虽然目前为止未能找到并发情况下QPS比较低的原因，但多多少少有些收获。 下面就这一过程做个记录，准备公司内部分享，也借鉴一下同事们的经验。 先介绍一下配置和用到的工具线上机器和部署情况（阿里云）：  服务器2台 16核 32G内存 PHP5.4负载均衡 带宽100M云数据库RDS MYSQL5.6NAS云盘 挂载">
+<meta name="twitter:image" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/图1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>PHP应用的压测和性能分析案例 | 生活驿站</title>
   
 
 
@@ -131,11 +150,49 @@
 
 
 
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a366524a3aa0beb76dced93bc66a1e21";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -146,24 +203,22 @@
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"> <div class="site-brand-wrapper">
+      <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
 
     <div class="custom-logo-site-title">
-      <a href="/blog/"  class="brand" rel="start">
+      <a href="/blog/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">poettian | 中点站</span>
+        <span class="site-title">生活驿站</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-      
-        <p class="site-subtitle"></p>
-      
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -171,48 +226,117 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/blog/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/blog/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/blog/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tech">
+    <a href="/blog/tech/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-android"></i> <br />技术</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-life">
+    <a href="/blog/life/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-coffee"></i> <br />生活</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/blog/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/blog/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
 
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
       
     </ul>
   
 
   
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
 </nav>
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
           <div id="content" class="content">
             
 
@@ -235,13 +359,13 @@
     <link itemprop="mainEntityOfPage" href="https://www.poettian.com/blog/blog/2017/05/26/PHP应用的压测和性能分析案例/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="搬砖的poettian">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="白丁">
+      <meta itemprop="description" content="相濡以沫，不如相忘于江湖">
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="poettian | 中点站">
+      <meta itemprop="name" content="生活驿站">
     </span>
 
     
@@ -249,11 +373,19 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">PHP应用的压测和性能分析案例</h1>
+          <h1 class="post-title" itemprop="name headline">PHP应用的压测和性能分析案例
+              
+            
+          </h1>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -261,21 +393,81 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-26T10:28:20+08:00">2017-05-26</time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-05-26 10:28:20" itemprop="dateCreated datePublished" datetime="2017-05-26T10:28:20+08:00">2017-05-26</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-25 10:49:45" itemprop="dateModified" datetime="2018-05-25T10:49:45+08:00">2018-05-25</time>
+              
             
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/blog/2017/05/26/PHP应用的压测和性能分析案例/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/05/26/PHP应用的压测和性能分析案例/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
           
+          
+             <span id="/blog/2017/05/26/PHP应用的压测和性能分析案例/" class="leancloud_visitors" data-flag-title="PHP应用的压测和性能分析案例">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
           
 
           
@@ -302,6 +494,7 @@
 <blockquote>
 <p>服务器2台 16核 32G内存 PHP5.4<br>负载均衡 带宽100M<br>云数据库RDS MYSQL5.6<br>NAS云盘 挂载在两台服务器的相同目录下</p>
 </blockquote>
+<a id="more"></a>
 <p>php-fpm 部分配置情况</p>
 <blockquote>
 <p>error_log = /usr/local/php/var/log/php-fpm.log<br>pm = dynamic<br>pm.max_children = 500<br>pm.start_servers = 16<br>pm.min_spare_servers = 16<br>pm.max_spare_servers = 500<br>pm.max_requests = 600<br>request_terminate_timeout = 300<br>request_slowlog_timeout = 0<br>slowlog = var/log/slow.log</p>
@@ -321,17 +514,15 @@
 <p>又进行了一次压测，这次去掉了业务的执行，单纯跑框架，结果QPS也只能达到十几，好尴尬！那就说明，框架本身的执行速度就不快，更别论业务的执行对响应时间的影响了。</p>
 <p>可能的原因：<br>1.cpu负载超了<br>2.io负载高，io发生阻塞或io速度慢<br>3.php-fpm进程不够，请求阻塞在php-fpm上<br>4.带宽占满<br>5.php-fpm进程执行中出现的其他问题<br>6.代码问题</p>
 <h5 id="先来排查cpu负载"><a href="#先来排查cpu负载" class="headerlink" title="先来排查cpu负载"></a>先来排查cpu负载</h5><p>用 <strong>top</strong> 或 <strong>mpstat</strong> 命令查看cpu的负载情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mpstat -P ALL 2 3</div></pre></td></tr></table></figure></p>
-<p>执行情况<br><img src="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957688652078.jpg" alt="cpu负载情况"></p>
+<p>执行情况<br><img src="/blog/2017/05/26/PHP应用的压测和性能分析案例/图1.jpg" alt="cpu负载情况" title="cpu负载情况"></p>
 <p>发现cpu负载都很低，但是有一核几乎跑满了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps aux</div></pre></td></tr></table></figure>
-<p>发现是一个php进程的问题</p>
-<p><img src="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957788435179.jpg" alt=""></p>
+<p>发现是一个php进程的问题<br><img src="/blog/2017/05/26/PHP应用的压测和性能分析案例/图2.jpg" alt="进程情况" title="进程情况"></p>
 <p>这个脚本中有无限循环的情况，类似<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;&#125;</div></pre></td></tr></table></figure></p>
 <p>干掉这个进程，明显的cpu负载就下来了</p>
 <p>ok，以上说明cpu负载并不是导致QPS的原因</p>
 <h5 id="再来排查io"><a href="#再来排查io" class="headerlink" title="再来排查io"></a>再来排查io</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iostat -dx 1 5</div></pre></td></tr></table></figure>
-<p><img src="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957792674529.jpg" alt=""></p>
-<p>解释：</p>
+<img src="/blog/2017/05/26/PHP应用的压测和性能分析案例/图3.jpg" alt="io负载" title="io负载">
 <table>
 <thead>
 <tr>
@@ -382,17 +573,21 @@
 </tr>
 </tbody>
 </table>
-<p>下面是关键列的解释：<br>    <font color="red"><br>    util是设备的利用率。如果它接近100%，通常说明设备能力趋于饱和。<br>    await是平均每次请求的等待时间。这个时间包括了队列时间和服务时间，也就是说，一般情况下，await大于svctm，它们的差值越小，则说明队列时间越短，反之差值越大，队列时间越长，说明系统出了问题。<br>    avgqu-sz是平均请求队列的长度。毫无疑问，队列长度越短越好。<br>    </font></p>
+<p>下面是关键列的解释：</p>
+<ul>
+<li>util是设备的利用率。如果它接近100%，通常说明设备能力趋于饱和。</li>
+<li>await是平均每次请求的等待时间。这个时间包括了队列时间和服务时间，也就是说，一般情况下，await大于svctm，它们的差值越小，则说明队列时间越短，反之差值越大，队列时间越长，说明系统出了问题。</li>
+<li>avgqu-sz是平均请求队列的长度。毫无疑问，队列长度越短越好。</li>
+</ul>
 <p>可知，问题也不是出在io上</p>
 <h5 id="难道是php-fpm的进程不够？"><a href="#难道是php-fpm的进程不够？" class="headerlink" title="难道是php-fpm的进程不够？"></a>难道是php-fpm的进程不够？</h5><p>看php-fpm的配置，完全没有问题，最大子进程已经设置成了500，应该不是php-fpm进程不够的原因</p>
 <p>开启压测，查看php-fpm.log</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tail -f var/log/php-fpm.log</div></pre></td></tr></table></figure>
-<p><img src="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957800885061.jpg" alt=""></p>
+<img src="/blog/2017/05/26/PHP应用的压测和性能分析案例/图4.jpg" alt="fpm日志" title="fpm日志">
 <p>可见php-fpm的进程数也上来了，也排除了这个可能</p>
 <h5 id="追究具体的php-fpm进程"><a href="#追究具体的php-fpm进程" class="headerlink" title="追究具体的php-fpm进程"></a>追究具体的php-fpm进程</h5><p>接下来只能追踪具体某个php-fpm进程的执行流程了，好在有phptrace这个利器，官网 <a href="https://github.com/Qihoo360/phptrace" target="_blank" rel="external">https://github.com/Qihoo360/phptrace</a> ，它能分析具体脚本中的执行流程和调用关系，并给出具体的执行时间，从而能够查探到你的程序卡在了哪里。</p>
 <p>话不多说，直接执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">phptrace -p 10875 &gt; /tmp/phptrace.log</div></pre></td></tr></table></figure></p>
-<p>把结果保存到文件中，ok，接下来分析这个文件，由于行数太多，这里截取几行能够说明就够了</p>
-<p><img src="http://oqjjg4tjz.bkt.clouddn.com/2017-05-26-14957808316856.jpg" alt=""></p>
+<p>把结果保存到文件中，ok，接下来分析这个文件，由于行数太多，这里截取几行能够说明就够了<br><img src="/blog/2017/05/26/PHP应用的压测和性能分析案例/图5.jpg" alt="trace log分析" title="trace log分析"></p>
 <p>是不是很清晰明了。在分析这个脚本的过程中，发现 <strong>require</strong> 占用了很大的一部分时间，几乎每个 require 要占用0.06s</p>
 <p>发生了什么？是进程在系统调用上有什么比较耗时的步骤吗？那就来看这个进程的系统调用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">strace -p 10805 -tt -T -e trace=all -o /tmp/strace.log</div></pre></td></tr></table></figure>
@@ -429,6 +624,9 @@
 
       
     </div>
+
+    
+
     
     
     
@@ -440,6 +638,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/测试/" rel="tag"># 测试</a>
+          
+        </div>
       
 
       
@@ -484,8 +688,15 @@
           </div>
           
 
-
-          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
 
   
 
@@ -524,57 +735,86 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">搬砖的poettian</p>
-              <p class="site-description motion-element" itemprop="description">努力变成一个热爱生活的人</p>
+              <img class="site-author-image" itemprop="image"
+                src="/blog/images/avatar.jpeg"
+                alt="白丁" />
+            
+              <p class="site-author-name" itemprop="name">白丁</p>
+              <p class="site-description motion-element" itemprop="description">相濡以沫，不如相忘于江湖</p>
           </div>
 
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
+          
+            <nav class="site-state motion-element">
               
-                <a href="/blog/archives/">
-              
-                  <span class="site-state-item-count">5</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-categories">
+                <div class="site-state-item site-state-posts">
                 
-                  <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">分类</span>
+                  <a href="/blog/archives/">
                 
-              </div>
-            
-
-            
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
               
+
               
-              <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">标签</span>
                 
-              </div>
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
             
-
-          </nav>
-
           
-
-          
-
-          
-          
-
-          
-          
-
           
 
         </div>
@@ -611,10 +851,10 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
-  <span class="with-love">
+  <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">搬砖的poettian</span>
+  <span class="author" itemprop="copyrightHolder">白丁</span>
 
   
 
@@ -622,7 +862,9 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.3.9</div>
 
 
 
@@ -630,12 +872,13 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.0</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.3.0</div>
 
 
 
 
         
+
 
 
 
@@ -710,32 +953,53 @@
   
 
 
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.0.0"></script>
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
 
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.0.0"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.0.0"></script>
-<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.0.0"></script>
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
 
 
 
   
+  
 
-
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.0.0"></script>
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
 
 
 
   
 
 
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
   
+
+  
+    <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/';
+        this.page.identifier = '2017/05/26/PHP应用的压测和性能分析案例/';
+        this.page.title = 'PHP应用的压测和性能分析案例';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
 
 
 
@@ -763,13 +1027,122 @@
 
 
 
-
-
   
 
 
 
 
+  
+  
+  
+  <link rel="stylesheet" href="/blog/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/blog/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/blog/js/src/algolia-search.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OfHn2rURzWXvGqhoYEBtqC4J-gzGzoHsz", "wLjSd10AO01D1Bwbutam1snw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.get('time'));
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! See more at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see here how to solve it: https://github.com/theme-next/hexo-leancloud-counter-security. \n But you also can use LeanCloud without security, by set \'security\' option to \'false\'.');
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
 
   
 
@@ -778,6 +1151,10 @@
   
 
   
+  
+
+  
+
   
 
   

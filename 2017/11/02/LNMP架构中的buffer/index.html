@@ -2,15 +2,27 @@
 
 
 
+
+
+
+
+
+
+
+
+
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-CN">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
+
+
+
 
 
 
@@ -46,46 +58,25 @@
 
 <link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/blog/css/main.css?v=6.0.0" rel="stylesheet" type="text/css" />
+<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.0.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.3.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.0.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.3.0">
 
 
-  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.0.0" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="Hexo, NexT" />
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.3.0" color="#222">
 
 
 
 
 
 
-
-
-
-
-<meta name="description" content="Hello World!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="https://www.poettian.com/blog/about/index.html">
-<meta property="og:site_name" content="poettian | 中点站">
-<meta property="og:description" content="Hello World!">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-02T00:44:22.414Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="about">
-<meta name="twitter:description" content="Hello World!">
 
 
 
@@ -93,22 +84,18 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/blog/',
-    scheme: 'Muse',
-    version: '6.0.0',
+    scheme: 'Mist',
+    version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
     algolia: {
-      applicationID: '',
+      applicationID: '8UR669C6NW',
       apiKey: '',
-      indexName: '',
+      indexName: 'getstarted_actors',
       hits: {"per_page":10},
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     }
@@ -116,14 +103,42 @@
 </script>
 
 
-
-  <link rel="canonical" href="https://www.poettian.com/blog/about/"/>
-
+  
 
 
 
 
-  <title>LNMP架构中的buffer机制 | poettian | 中点站</title>
+  <meta name="description" content="之前一直对PHP的 ob_* 系统函数存在疑惑，始终没明白php和webserver的buffer机制，百度谷歌搜到的都是千篇一律的文章，自己测试也走不通，直到看了 “PHP out buffer“ 这篇文章才有种恍然大悟的感觉。 借用作者的一张图，如下：">
+<meta name="keywords" content="php">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LNMP架构中的buffer机制">
+<meta property="og:url" content="https://www.poettian.com/blog/2017/11/02/LNMP架构中的buffer/index.html">
+<meta property="og:site_name" content="生活驿站">
+<meta property="og:description" content="之前一直对PHP的 ob_* 系统函数存在疑惑，始终没明白php和webserver的buffer机制，百度谷歌搜到的都是千篇一律的文章，自己测试也走不通，直到看了 “PHP out buffer“ 这篇文章才有种恍然大悟的感觉。 借用作者的一张图，如下：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://www.poettian.com/blog/2017/11/02/LNMP架构中的buffer/图1.png">
+<meta property="og:updated_time" content="2018-05-25T09:35:49.072Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LNMP架构中的buffer机制">
+<meta name="twitter:description" content="之前一直对PHP的 ob_* 系统函数存在疑惑，始终没明白php和webserver的buffer机制，百度谷歌搜到的都是千篇一律的文章，自己测试也走不通，直到看了 “PHP out buffer“ 这篇文章才有种恍然大悟的感觉。 借用作者的一张图，如下：">
+<meta name="twitter:image" content="https://www.poettian.com/blog/2017/11/02/LNMP架构中的buffer/图1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://www.poettian.com/blog/2017/11/02/LNMP架构中的buffer/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>LNMP架构中的buffer机制 | 生活驿站</title>
   
 
 
@@ -131,11 +146,49 @@
 
 
 
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a366524a3aa0beb76dced93bc66a1e21";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -146,24 +199,22 @@
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"> <div class="site-brand-wrapper">
+      <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
 
     <div class="custom-logo-site-title">
-      <a href="/blog/"  class="brand" rel="start">
+      <a href="/blog/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">poettian | 中点站</span>
+        <span class="site-title">生活驿站</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-      
-        <p class="site-subtitle"></p>
-      
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -171,48 +222,117 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/blog/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/blog/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/blog/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tech">
+    <a href="/blog/tech/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-android"></i> <br />技术</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-life">
+    <a href="/blog/life/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-coffee"></i> <br />生活</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/blog/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/blog/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
 
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
       
     </ul>
   
 
   
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
 </nav>
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
           <div id="content" class="content">
             
 
@@ -235,13 +355,13 @@
     <link itemprop="mainEntityOfPage" href="https://www.poettian.com/blog/blog/2017/11/02/LNMP架构中的buffer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="搬砖的poettian">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="白丁">
+      <meta itemprop="description" content="相濡以沫，不如相忘于江湖">
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="poettian | 中点站">
+      <meta itemprop="name" content="生活驿站">
     </span>
 
     
@@ -249,11 +369,19 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">LNMP架构中的buffer机制</h1>
+          <h1 class="post-title" itemprop="name headline">LNMP架构中的buffer机制
+              
+            
+          </h1>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -261,11 +389,30 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-02T08:46:16+08:00">2017-11-02</time>
+
+              
+                
+              
+
+              <time title="创建时间：2017-11-02 08:46:16" itemprop="dateCreated datePublished" datetime="2017-11-02T08:46:16+08:00">2017-11-02</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-25 17:35:49" itemprop="dateModified" datetime="2018-05-25T17:35:49+08:00">2018-05-25</time>
+              
             
           </span>
 
@@ -281,11 +428,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/后端技术/" itemprop="url" rel="index">
-                    <span itemprop="name">后端技术</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
 
                 
                 
@@ -295,9 +438,32 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/blog/2017/11/02/LNMP架构中的buffer/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/02/LNMP架构中的buffer/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
+          
+             <span id="/blog/2017/11/02/LNMP架构中的buffer/" class="leancloud_visitors" data-flag-title="LNMP架构中的buffer机制">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
           
 
           
@@ -320,27 +486,32 @@
 
       
         <p>之前一直对PHP的 ob_* 系统函数存在疑惑，始终没明白php和webserver的buffer机制，百度谷歌搜到的都是千篇一律的文章，自己测试也走不通，直到看了 “<em><a href="http://www.jianshu.com/p/1a020dfe9e39" title="php out buffer" target="_blank" rel="external">PHP out buffer</a></em>“ 这篇文章才有种恍然大悟的感觉。</p>
-<p>借用作者的一张图，如下：</p>
-<img src="/blog/2017/11/02/LNMP架构中的buffer/图1.png" alt="PHP buffer flow" title="PHP buffer flow">
+<p>借用作者的一张图，如下：<br><img src="/blog/2017/11/02/LNMP架构中的buffer/图1.png" alt="PHP buffer flow" title="PHP buffer flow"><br><a id="more"></a></p>
 <h3 id="php的buffer"><a href="#php的buffer" class="headerlink" title="php的buffer"></a>php的buffer</h3><p>通过设置 php.ini 中 output_buffering 参数来控制php缓存输出数据（通过echo或print等）的大小，超过该大小，则php就会将数据发送出去给下一个接收者(php-fpm)。设为off，则php关闭缓冲区。</p>
 <h3 id="php-fpm的buffer"><a href="#php-fpm的buffer" class="headerlink" title="php-fpm的buffer"></a>php-fpm的buffer</h3><p>之前一直不知道这个的存在，好像是写死在程序中的，没法配置，默认大小是8k。</p>
 <h3 id="nginx的buffer"><a href="#nginx的buffer" class="headerlink" title="nginx的buffer"></a>nginx的buffer</h3><p>nginx的 ngx_http_fastcgi_module 通过下面这几个参数来配置buffering的行为：</p>
-<p><strong>fastcgi_buffering on|off;</strong> 开启/关闭 buffer<br><strong>fastcgi_buffer_size 4k;</strong> 用来缓存fastcgi response的header数据<br><strong>fastcgi_buffers 8 4k;</strong> 用来缓存fastcgi response的内容数据，当response数据大于此值（4k）时，就会发送response给client，而client就开始下载数据<br><strong>fastcgi_busy_buffers_size 8k;</strong> 用来控制同时传输到客户端的buffer数量，当fastcgi response源源不断的过来，此参数定义了处于busy状态下的发送response给client的buffer的数量<br>参数间关系：fastcgi_busy_buffers_size&lt;(all fastcgi_buffers - one buffer) 并且fastcgi_busy_buffers_size&gt;=max (fastcgi_buffer_size, one fastcgi _buffers)</p>
-<p>当fastcgi response比较大时，如果超出了fastcgi_buffers设定的值，那么就会将response存入temp file，此时由<strong>fastcgi_max_temp_file_size(临时文件的大小，默认1024m) </strong>和<strong> fastcgi_temp_file_write_size(每次写入临时文件的数据大小)</strong> 这两个参数来控制</p>
+<p><code>fastcgi_buffering on|off;</code>  开启/关闭 buffer<br><code>fastcgi_buffer_size 4k;</code>  用来缓存fastcgi response的header数据<br><code>fastcgi_buffers 8 4k;</code>  用来缓存fastcgi response的内容数据，当response数据大于此值（4k）时，就会发送response给client，而client就开始下载数据<br><code>fastcgi_busy_buffers_size 8k;</code>  用来控制同时传输到客户端的buffer数量，当fastcgi response源源不断的过来，此参数定义了处于busy状态下的发送response给client的buffer的数量</p>
+<p><code>参数间关系：fastcgi_busy_buffers_size&lt;(all fastcgi_buffers - one buffer) 并且fastcgi_busy_buffers_size&gt;=max (fastcgi_buffer_size, one fastcgi _buffers)</code></p>
+<p>当fastcgi response比较大时，如果超出了fastcgi_buffers设定的值，那么就会将response存入temp file，此时由 <code>fastcgi_max_temp_file_size(临时文件的大小，默认1024m)</code> 和 <code>fastcgi_temp_file_write_size(每次写入临时文件的数据大小)</code> 这两个参数来控制</p>
+<p>参看  error.log 会看到如下信息：</p>
 <blockquote>
-<p>参看error.log会看到如下信息：_an upstream response is buffered to a temporary file /usr/local/var/run/nginx/fastcgi<em>temp/4/00/0000000004 while reading upstream, client: 127.0.0.1, server: test.poettian.org, request: “GET / HTTP/1.1”, upstream: “fastcgi://unix:/usr/local/var/run/php-fpm.sock:”, host: “test.poettian.org”</em></p>
+<p style="text-align:initial;">an upstream response is buffered to a temporary file /usr/local/var/run/nginx/fastcgi_temp/4/00/0000000004 while reading upstream, client: 127.0.0.1, server: test.poettian.org, request: “GET / HTTP/1.1”, upstream: “fastcgi://unix:/usr/local/var/run/php-fpm.sock:”, host: “test.poettian.org”</p>
+
 </blockquote>
-<p>可以通过设置fastcgi response header中<strong>X-Accel-Buffering</strong>字段的值为no来禁用buffering</p>
-<p>可以参考如下的代码，这段代码可以实现每秒输出一个数字的效果：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>($i = <span class="number">0</span>; $i &lt; <span class="number">10</span>; $i++) &#123;</div><div class="line">	<span class="keyword">echo</span> $i;</div><div class="line">	<span class="keyword">echo</span> str_repeat(<span class="string">' '</span>, <span class="number">4096</span>) . <span class="string">"&lt;br /&gt;"</span>;</div><div class="line">	ob_flush(); <span class="comment">//ob_flush()可以刷新php的缓冲区</span></div><div class="line">	flush(); <span class="comment">//flush()可以刷新php-fpm的缓冲区</span></div><div class="line">	sleep(<span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以通过设置fastcgi response header中 <code>X-Accel-Buffering</code> 字段的值为 <code>no</code> 来禁用buffering</p>
+<p>可以参考如下的代码，这段代码可以实现每秒输出一个数字的效果：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>($i = <span class="number">0</span>; $i &lt; <span class="number">10</span>; $i++) &#123;</div><div class="line">    <span class="keyword">echo</span> $i;</div><div class="line">    <span class="keyword">echo</span> str_repeat(<span class="string">' '</span>, <span class="number">4096</span>) . <span class="string">"&lt;br /&gt;"</span>;</div><div class="line">    ob_flush(); <span class="comment">//ob_flush()可以刷新php的缓冲区</span></div><div class="line">    flush(); <span class="comment">//flush()可以刷新php-fpm的缓冲区</span></div><div class="line">    sleep(<span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h3 id="apache的缓冲区"><a href="#apache的缓冲区" class="headerlink" title="apache的缓冲区"></a>apache的缓冲区</h3><p>当php的输出数据给apache服务器时，它也会做一层buffer（也将数据放入它的缓冲区，当缓冲区数据满或执行完毕时，才输出数据）。若想关闭缓冲区，可以在php层使用flush()来强制将缓冲区数据输出。fulsh() 的工作原理：在apache module的sapi下, flush会通过调用sapi_module的flush成员函数指针, 间接的调用apache的api: ap_rflush刷新apache的输出缓冲区, 当然手册中也说了, 有一些apache的其他模块, 可能会改变这个动作的结果.例如mod_gzip，可能自己进行输出缓冲区，这将导致flush()函数产生的结果不会立即被发送到客户端浏览器。</p>
 <h3 id="php的自定义缓冲区："><a href="#php的自定义缓冲区：" class="headerlink" title="php的自定义缓冲区："></a>php的自定义缓冲区：</h3><p>PHP内核中，除了默认的输出缓冲区之外，用户也可以自己定义输出缓冲区，也就是ob_系列函数了。<br>(1)、可以通过ob_start函数激活一个缓冲区，激活的缓存区被压入栈中(OG(handlers))，多次调用ob_start函数会生成一个缓冲区栈。<br>开启output_buffering配置后，PHP内核默认输出缓冲区处于OG(handlers)的栈底。<br>(2)、通过ob_get_contents函数可以获取OG(handlers)栈顶部缓冲区(称之为active)的内容。<br>(3)、通过ob_flush函数可以将active缓冲区的内容冲刷到active缓冲区的上一级缓冲区(栈顶的下一位)，如果active已经处于栈底，那么冲刷active缓冲区会将其内容输出到SAPI(正如在三中所看到的)。<br>(4)、通过ob_end_flush函数除了将active缓冲区的内容冲刷出去外，还会将当前缓冲区从栈顶弹出。</p>
-<h3 id="其他php配置"><a href="#其他php配置" class="headerlink" title="其他php配置"></a>其他php配置</h3><p><strong>implicit_flush配置和ob_implicit_flush函数</strong><br>其中，如果将php.ini配置中的implicit_flush设置为1, 或者调用ob_implicit_flush(true)，那么就不需要调用flush函数了，他们都会刷新PHP-FPM缓冲区中的内容。<br>至于 cli，它的implicit_flush硬编码为1，它的output_buffering也是设置为0。</p>
-<h3 id="疑惑"><a href="#疑惑" class="headerlink" title="疑惑"></a>疑惑</h3><p>有个地方比较疑惑，见如下代码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>($i = <span class="number">0</span>; $i &lt; <span class="number">10</span>; ++$i) &#123;</div><div class="line">	<span class="keyword">echo</span> $i;</div><div class="line">	ob_flush();</div><div class="line">	flush();</div><div class="line">	sleep(<span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="其他php配置"><a href="#其他php配置" class="headerlink" title="其他php配置"></a>其他php配置</h3><p><code>implicit_flush</code> 配置和 <code>ob_implicit_flush</code> 函数<br>其中，如果将 <code>php.ini</code> 配置中的 <code>implicit_flush</code> 设置为1, 或者调用 <code>ob_implicit_flush(true)</code>，那么就不需要调用flush函数了，他们都会刷新PHP-FPM缓冲区中的内容。<br>至于 cli，它的 <code>implicit_flush</code> 硬编码为1，它的 <code>output_buffering</code> 也是设置为0。</p>
+<h3 id="疑惑"><a href="#疑惑" class="headerlink" title="疑惑"></a>疑惑</h3><p>有个地方比较疑惑，见如下代码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>($i = <span class="number">0</span>; $i &lt; <span class="number">10</span>; ++$i) &#123;</div><div class="line">    <span class="keyword">echo</span> $i;</div><div class="line">    ob_flush();</div><div class="line">    flush();</div><div class="line">    sleep(<span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>预期是每次输出一个数字，但是实际测试是前4个数字一起输出，然后才是一次输出一个数字，不知道为什么。如果在代码最前面加上<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">echo</span> str_repeat(<span class="string">' '</span>, <span class="number">4</span>);</div></pre></td></tr></table></figure></p>
 <p>就可以了。</p>
 
       
     </div>
+
+    
+
     
     
     
@@ -355,7 +526,7 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/buffer/" rel="tag"># buffer</a>
+            <a href="/blog/tags/php/" rel="tag"># php</a>
           
         </div>
       
@@ -406,8 +577,15 @@
           </div>
           
 
-
-          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
 
   
 
@@ -446,57 +624,86 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">搬砖的poettian</p>
-              <p class="site-description motion-element" itemprop="description">努力变成一个热爱生活的人</p>
+              <img class="site-author-image" itemprop="image"
+                src="/blog/images/avatar.jpeg"
+                alt="白丁" />
+            
+              <p class="site-author-name" itemprop="name">白丁</p>
+              <p class="site-description motion-element" itemprop="description">相濡以沫，不如相忘于江湖</p>
           </div>
 
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
+          
+            <nav class="site-state motion-element">
               
-                <a href="/blog/archives/">
-              
-                  <span class="site-state-item-count">5</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-categories">
+                <div class="site-state-item site-state-posts">
                 
-                  <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">分类</span>
+                  <a href="/blog/archives/">
                 
-              </div>
-            
-
-            
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
               
+
               
-              <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">标签</span>
                 
-              </div>
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
             
-
-          </nav>
-
           
-
-          
-
-          
-          
-
-          
-          
-
           
 
         </div>
@@ -533,10 +740,10 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
-  <span class="with-love">
+  <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">搬砖的poettian</span>
+  <span class="author" itemprop="copyrightHolder">白丁</span>
 
   
 
@@ -544,7 +751,9 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.3.9</div>
 
 
 
@@ -552,12 +761,13 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.0</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.3.0</div>
 
 
 
 
         
+
 
 
 
@@ -632,32 +842,53 @@
   
 
 
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.0.0"></script>
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
 
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.0.0"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.0.0"></script>
-<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.0.0"></script>
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
 
 
 
   
+  
 
-
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.0.0"></script>
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
 
 
 
   
 
 
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
   
+
+  
+    <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://www.poettian.com/blog/2017/11/02/LNMP架构中的buffer/';
+        this.page.identifier = '2017/11/02/LNMP架构中的buffer/';
+        this.page.title = 'LNMP架构中的buffer机制';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
 
 
 
@@ -685,13 +916,122 @@
 
 
 
-
-
   
 
 
 
 
+  
+  
+  
+  <link rel="stylesheet" href="/blog/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/blog/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/blog/js/src/algolia-search.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OfHn2rURzWXvGqhoYEBtqC4J-gzGzoHsz", "wLjSd10AO01D1Bwbutam1snw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.get('time'));
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! See more at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see here how to solve it: https://github.com/theme-next/hexo-leancloud-counter-security. \n But you also can use LeanCloud without security, by set \'security\' option to \'false\'.');
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
 
   
 
@@ -700,6 +1040,10 @@
   
 
   
+  
+
+  
+
   
 
   
