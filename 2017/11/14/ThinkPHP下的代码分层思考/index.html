@@ -108,18 +108,18 @@
 
 
 
-  <meta name="description" content="公司一直在用国产框架ThinkPHP做开发，上半年进行了一次代码重构， 使用了最新的thinkphp 5，虽然相较之前版本代码结构更加清晰合理，可依然有比较混乱的地方。随着开发进度已接近尾声，重新架构已经不可能，但有必要做一个梳理，方便以后升级参考和后续优化。 结合ThinkPHP手册的说明，暂时给出一个我觉得合理的分层结构，如下： |–Application|    |–common/ 公共模块">
+  <meta name="description" content="公司一直在用国产框架ThinkPHP做开发，上半年进行了一次代码重构， 使用了最新的thinkphp 5，虽然相较之前版本代码结构更加清晰合理，可依然有比较混乱的地方。随着开发进度已接近尾声，重新架构已经不可能，但有必要做一个梳理，方便以后升级参考和后续优化。1 结合ThinkPHP手册的说明，暂时给出一个我觉得合理的分层结构，如下： |–Application|    |–common/ 公共模">
 <meta name="keywords" content="php">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ThinkPHP下的代码分层思考">
 <meta property="og:url" content="https://www.poettian.com/blog/2017/11/14/ThinkPHP下的代码分层思考/index.html">
 <meta property="og:site_name" content="生活驿站">
-<meta property="og:description" content="公司一直在用国产框架ThinkPHP做开发，上半年进行了一次代码重构， 使用了最新的thinkphp 5，虽然相较之前版本代码结构更加清晰合理，可依然有比较混乱的地方。随着开发进度已接近尾声，重新架构已经不可能，但有必要做一个梳理，方便以后升级参考和后续优化。 结合ThinkPHP手册的说明，暂时给出一个我觉得合理的分层结构，如下： |–Application|    |–common/ 公共模块">
+<meta property="og:description" content="公司一直在用国产框架ThinkPHP做开发，上半年进行了一次代码重构， 使用了最新的thinkphp 5，虽然相较之前版本代码结构更加清晰合理，可依然有比较混乱的地方。随着开发进度已接近尾声，重新架构已经不可能，但有必要做一个梳理，方便以后升级参考和后续优化。1 结合ThinkPHP手册的说明，暂时给出一个我觉得合理的分层结构，如下： |–Application|    |–common/ 公共模">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-25T09:17:27.113Z">
+<meta property="og:updated_time" content="2018-05-26T15:02:37.838Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ThinkPHP下的代码分层思考">
-<meta name="twitter:description" content="公司一直在用国产框架ThinkPHP做开发，上半年进行了一次代码重构， 使用了最新的thinkphp 5，虽然相较之前版本代码结构更加清晰合理，可依然有比较混乱的地方。随着开发进度已接近尾声，重新架构已经不可能，但有必要做一个梳理，方便以后升级参考和后续优化。 结合ThinkPHP手册的说明，暂时给出一个我觉得合理的分层结构，如下： |–Application|    |–common/ 公共模块">
+<meta name="twitter:description" content="公司一直在用国产框架ThinkPHP做开发，上半年进行了一次代码重构， 使用了最新的thinkphp 5，虽然相较之前版本代码结构更加清晰合理，可依然有比较混乱的地方。随着开发进度已接近尾声，重新架构已经不可能，但有必要做一个梳理，方便以后升级参考和后续优化。1 结合ThinkPHP手册的说明，暂时给出一个我觉得合理的分层结构，如下： |–Application|    |–common/ 公共模">
 
 
 
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-25 17:17:27" itemprop="dateModified" datetime="2018-05-25T17:17:27+08:00">2018-05-25</time>
+                <time title="修改时间：2018-05-26 23:02:37" itemprop="dateModified" datetime="2018-05-26T23:02:37+08:00">2018-05-26</time>
               
             
           </span>
@@ -483,7 +483,7 @@
       
 
       
-        <p>公司一直在用国产框架ThinkPHP做开发，上半年进行了一次代码重构， 使用了最新的thinkphp 5，虽然相较之前版本代码结构更加清晰合理，可依然有比较混乱的地方。随着开发进度已接近尾声，重新架构已经不可能，但有必要做一个梳理，方便以后升级参考和后续优化。</p>
+        <p>公司一直在用国产框架ThinkPHP做开发，上半年进行了一次代码重构， 使用了最新的thinkphp 5，虽然相较之前版本代码结构更加清晰合理，可依然有比较混乱的地方。随着开发进度已接近尾声，重新架构已经不可能，但有必要做一个梳理，方便以后升级参考和后续优化。1</p>
 <p>结合ThinkPHP手册的说明，暂时给出一个我觉得合理的分层结构，如下：</p>
 <p>|–Application<br>|    |–common/ 公共模块，统一存放：行为，数据层，枚举，逻辑层，业务层等<br>|    |    |–behavior/ 行为，权限检测，模板处理等等<br>|    |    |–model/ 数据层，读取和更新数据<br>|    |    |–enum/ 枚举字段数值定义和说明<br>|    |    |–logic/ 逻辑层，调用数据层和其他逻辑层进行业务处理，抛异常方式返回错误信息<br>|    |    |–service/ 服务层，提供：参数校验，行为调用，事务开启，逻辑调用和异常捕获，数据过滤等服务<br>|    |    …<br>|    |–admin/ 后台模块<br>|    |    |–controller/ 调用服务层，数据格式化<br>|    |–home/ 前台模块<br>|    |–api/ 接口模块<br>|    |    |–controller/ 调用服务层，数据格式化<br>|–extend/<br>|    |–util/ 工具箱<br>|    …<br>|–vendor/ composer文件<br>…</p>
 
