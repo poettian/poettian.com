@@ -26,6 +26,13 @@
 
 
 
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
 
 
 
@@ -110,14 +117,14 @@
 
   <meta name="description" content="相濡以沫，不如相忘于江湖">
 <meta property="og:type" content="website">
-<meta property="og:title" content="tags">
+<meta property="og:title" content="标签">
 <meta property="og:url" content="https://www.poettian.com/tags/index.html">
 <meta property="og:site_name" content="生活驿站">
 <meta property="og:description" content="相濡以沫，不如相忘于江湖">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-10-16T12:40:06.931Z">
+<meta property="og:updated_time" content="2018-05-27T09:04:27.958Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
+<meta name="twitter:title" content="标签">
 <meta name="twitter:description" content="相濡以沫，不如相忘于江湖">
 
 
@@ -135,7 +142,7 @@
   };
 </script>
 
-  <title>tags | 生活驿站</title>
+  <title>标签 | 生活驿站</title>
   
 
 
@@ -238,7 +245,7 @@
         
           
           <li class="menu-item menu-item-tech">
-    <a href="/tech/" rel="section">
+    <a href="/categories/技术/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-android"></i> <br />技术</a>
   </li>
         
@@ -246,8 +253,16 @@
         
           
           <li class="menu-item menu-item-life">
-    <a href="/life/" rel="section">
+    <a href="/categories/生活/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-coffee"></i> <br />生活</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags menu-item-active">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
         
@@ -283,6 +298,9 @@
     
 
     
+    
+      
+      
     
       
       
@@ -362,7 +380,7 @@
     <div class="post-block page">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">tags</h1>
+<h1 class="post-title" itemprop="name headline">标签</h1>
 
 <div class="post-meta">
   
@@ -380,7 +398,28 @@
       <div class="post-body">
         
         
-          
+          <div class="tag-cloud">
+            <div class="tag-cloud-title">
+                
+                
+                  
+                    
+                  
+                
+                  
+                    
+                  
+                
+                  
+                    
+                  
+                
+                目前共计 3 个标签
+            </div>
+            <div class="tag-cloud-tags">
+              <a href="/tags/nginx/" style="font-size: 12px; color: #ccc">nginx</a> <a href="/tags/php/" style="font-size: 30px; color: #111">php</a> <a href="/tags/测试/" style="font-size: 12px; color: #ccc">测试</a>
+            </div>
+          </div>
         
       </div>
       
@@ -399,20 +438,6 @@
 
           </div>
           
-
-  
-    <div class="comments" id="comments">
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
-    </div>
-
-  
-
-
 
         </div>
         
@@ -440,9 +465,9 @@
             
               <img class="site-author-image" itemprop="image"
                 src="/images/avatar.jpg"
-                alt="岸上的鱼" />
+                alt="poettian" />
             
-              <p class="site-author-name" itemprop="name">岸上的鱼</p>
+              <p class="site-author-name" itemprop="name">poettian</p>
               <p class="site-description motion-element" itemprop="description">相濡以沫，不如相忘于江湖</p>
           </div>
 
@@ -478,7 +503,7 @@
                 
                 
                 <div class="site-state-item site-state-tags">
-                  
+                  <a href="/tags/index.html">
                     
                     
                       
@@ -489,7 +514,7 @@
                     
                     <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">标签</span>
-                  
+                  </a>
                 </div>
               
             </nav>
@@ -497,6 +522,30 @@
 
           
 
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/poettian" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:poettian@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/poettian_tian" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/grotian" target="_blank" title="微博"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                  
+                </span>
+              
+            </div>
           
 
           
@@ -529,9 +578,9 @@
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">岸上的鱼</span>
+  <span class="author" itemprop="copyrightHolder">poettian</span>
 
   
 
@@ -541,20 +590,34 @@
 
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.3.9</div>
 
 
 
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.3.0</div>
 
 
 
 
         
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      访客数<span class="busuanzi-value" id="busuanzi_value_site_uv"></span>人次
+    </span>
+  
+  
+    <span class="post-meta-divider">|</span>
+  
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      访问量<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次
+    </span>
+  
+</div>
+
 
 
 
@@ -658,23 +721,6 @@
     <script id="dsq-count-scr" src="https://poettian.disqus.com/count.js" async></script>
   
 
-  
-    <script type="text/javascript">
-      var disqus_config = function () {
-        this.page.url = 'https://www.poettian.com/tags/index.html';
-        this.page.identifier = 'tags/index.html';
-        this.page.title = 'tags';
-        };
-      function loadComments () {
-        var d = document, s = d.createElement('script');
-        s.src = 'https://poettian.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', '' + +new Date());
-        (d.head || d.body).appendChild(s);
-      }
-      
-        loadComments();
-      
-    </script>
   
 
 
