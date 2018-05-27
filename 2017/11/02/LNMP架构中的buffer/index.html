@@ -116,12 +116,12 @@
 <meta property="og:site_name" content="生活驿站">
 <meta property="og:description" content="之前一直对PHP的 ob_* 系统函数存在疑惑，始终没明白php和webserver的buffer机制，百度谷歌搜到的都是千篇一律的文章，自己测试也走不通，直到看了 “PHP out buffer“ 这篇文章才有种恍然大悟的感觉。 借用作者的一张图，如下：">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.poettian.com/blog/2017/11/02/LNMP架构中的buffer/图1.png">
+<meta property="og:image" content="https://www.poettian.com/2017/11/02/LNMP架构中的buffer/图1.png">
 <meta property="og:updated_time" content="2018-05-25T09:35:49.072Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LNMP架构中的buffer机制">
 <meta name="twitter:description" content="之前一直对PHP的 ob_* 系统函数存在疑惑，始终没明白php和webserver的buffer机制，百度谷歌搜到的都是千篇一律的文章，自己测试也走不通，直到看了 “PHP out buffer“ 这篇文章才有种恍然大悟的感觉。 借用作者的一张图，如下：">
-<meta name="twitter:image" content="https://www.poettian.com/blog/2017/11/02/LNMP架构中的buffer/图1.png">
+<meta name="twitter:image" content="https://www.poettian.com/2017/11/02/LNMP架构中的buffer/图1.png">
 
 
 
@@ -474,7 +474,7 @@
 
       
         <p>之前一直对PHP的 ob_* 系统函数存在疑惑，始终没明白php和webserver的buffer机制，百度谷歌搜到的都是千篇一律的文章，自己测试也走不通，直到看了 “<em><a href="http://www.jianshu.com/p/1a020dfe9e39" title="php out buffer" target="_blank" rel="external">PHP out buffer</a></em>“ 这篇文章才有种恍然大悟的感觉。</p>
-<p>借用作者的一张图，如下：<br><img src="/blog/2017/11/02/LNMP架构中的buffer/图1.png" alt="PHP buffer flow" title="PHP buffer flow"><br><a id="more"></a></p>
+<p>借用作者的一张图，如下：<br><img src="/2017/11/02/LNMP架构中的buffer/图1.png" alt="PHP buffer flow" title="PHP buffer flow"><br><a id="more"></a></p>
 <h3 id="php的buffer"><a href="#php的buffer" class="headerlink" title="php的buffer"></a>php的buffer</h3><p>通过设置 php.ini 中 output_buffering 参数来控制php缓存输出数据（通过echo或print等）的大小，超过该大小，则php就会将数据发送出去给下一个接收者(php-fpm)。设为off，则php关闭缓冲区。</p>
 <h3 id="php-fpm的buffer"><a href="#php-fpm的buffer" class="headerlink" title="php-fpm的buffer"></a>php-fpm的buffer</h3><p>之前一直不知道这个的存在，好像是写死在程序中的，没法配置，默认大小是8k。</p>
 <h3 id="nginx的buffer"><a href="#nginx的buffer" class="headerlink" title="nginx的buffer"></a>nginx的buffer</h3><p>nginx的 ngx_http_fastcgi_module 通过下面这几个参数来配置buffering的行为：</p>

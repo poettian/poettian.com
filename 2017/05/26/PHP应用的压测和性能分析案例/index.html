@@ -116,16 +116,16 @@
 <meta property="og:site_name" content="生活驿站">
 <meta property="og:description" content="最近公司有个项目准备上线，为了保证上线后应用的正常运行和访问速度，着手进行压测和优化，虽然目前为止未能找到并发情况下QPS比较低的原因，但多多少少有些收获。 下面就这一过程做个记录，准备公司内部分享，也借鉴一下同事们的经验。 先介绍一下配置和用到的工具线上机器和部署情况（阿里云）：  服务器2台 16核 32G内存 PHP5.4负载均衡 带宽100M云数据库RDS MYSQL5.6NAS云盘 挂载">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/图1.jpg">
-<meta property="og:image" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/图2.jpg">
-<meta property="og:image" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/图3.jpg">
-<meta property="og:image" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/图4.jpg">
-<meta property="og:image" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/图5.jpg">
+<meta property="og:image" content="https://www.poettian.com/2017/05/26/PHP应用的压测和性能分析案例/图1.jpg">
+<meta property="og:image" content="https://www.poettian.com/2017/05/26/PHP应用的压测和性能分析案例/图2.jpg">
+<meta property="og:image" content="https://www.poettian.com/2017/05/26/PHP应用的压测和性能分析案例/图3.jpg">
+<meta property="og:image" content="https://www.poettian.com/2017/05/26/PHP应用的压测和性能分析案例/图4.jpg">
+<meta property="og:image" content="https://www.poettian.com/2017/05/26/PHP应用的压测和性能分析案例/图5.jpg">
 <meta property="og:updated_time" content="2018-05-25T02:49:45.888Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP应用的压测和性能分析案例">
 <meta name="twitter:description" content="最近公司有个项目准备上线，为了保证上线后应用的正常运行和访问速度，着手进行压测和优化，虽然目前为止未能找到并发情况下QPS比较低的原因，但多多少少有些收获。 下面就这一过程做个记录，准备公司内部分享，也借鉴一下同事们的经验。 先介绍一下配置和用到的工具线上机器和部署情况（阿里云）：  服务器2台 16核 32G内存 PHP5.4负载均衡 带宽100M云数据库RDS MYSQL5.6NAS云盘 挂载">
-<meta name="twitter:image" content="https://www.poettian.com/blog/2017/05/26/PHP应用的压测和性能分析案例/图1.jpg">
+<meta name="twitter:image" content="https://www.poettian.com/2017/05/26/PHP应用的压测和性能分析案例/图1.jpg">
 
 
 
@@ -502,15 +502,15 @@
 <p>又进行了一次压测，这次去掉了业务的执行，单纯跑框架，结果QPS也只能达到十几，好尴尬！那就说明，框架本身的执行速度就不快，更别论业务的执行对响应时间的影响了。</p>
 <p>可能的原因：<br>1.cpu负载超了<br>2.io负载高，io发生阻塞或io速度慢<br>3.php-fpm进程不够，请求阻塞在php-fpm上<br>4.带宽占满<br>5.php-fpm进程执行中出现的其他问题<br>6.代码问题</p>
 <h5 id="先来排查cpu负载"><a href="#先来排查cpu负载" class="headerlink" title="先来排查cpu负载"></a>先来排查cpu负载</h5><p>用 <strong>top</strong> 或 <strong>mpstat</strong> 命令查看cpu的负载情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mpstat -P ALL 2 3</div></pre></td></tr></table></figure></p>
-<p>执行情况<br><img src="/blog/2017/05/26/PHP应用的压测和性能分析案例/图1.jpg" alt="cpu负载情况" title="cpu负载情况"></p>
+<p>执行情况<br><img src="/2017/05/26/PHP应用的压测和性能分析案例/图1.jpg" alt="cpu负载情况" title="cpu负载情况"></p>
 <p>发现cpu负载都很低，但是有一核几乎跑满了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps aux</div></pre></td></tr></table></figure>
-<p>发现是一个php进程的问题<br><img src="/blog/2017/05/26/PHP应用的压测和性能分析案例/图2.jpg" alt="进程情况" title="进程情况"></p>
+<p>发现是一个php进程的问题<br><img src="/2017/05/26/PHP应用的压测和性能分析案例/图2.jpg" alt="进程情况" title="进程情况"></p>
 <p>这个脚本中有无限循环的情况，类似<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;&#125;</div></pre></td></tr></table></figure></p>
 <p>干掉这个进程，明显的cpu负载就下来了</p>
 <p>ok，以上说明cpu负载并不是导致QPS的原因</p>
 <h5 id="再来排查io"><a href="#再来排查io" class="headerlink" title="再来排查io"></a>再来排查io</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iostat -dx 1 5</div></pre></td></tr></table></figure>
-<img src="/blog/2017/05/26/PHP应用的压测和性能分析案例/图3.jpg" alt="io负载" title="io负载">
+<img src="/2017/05/26/PHP应用的压测和性能分析案例/图3.jpg" alt="io负载" title="io负载">
 <table>
 <thead>
 <tr>
@@ -571,11 +571,11 @@
 <h5 id="难道是php-fpm的进程不够？"><a href="#难道是php-fpm的进程不够？" class="headerlink" title="难道是php-fpm的进程不够？"></a>难道是php-fpm的进程不够？</h5><p>看php-fpm的配置，完全没有问题，最大子进程已经设置成了500，应该不是php-fpm进程不够的原因</p>
 <p>开启压测，查看php-fpm.log</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tail -f var/log/php-fpm.log</div></pre></td></tr></table></figure>
-<img src="/blog/2017/05/26/PHP应用的压测和性能分析案例/图4.jpg" alt="fpm日志" title="fpm日志">
+<img src="/2017/05/26/PHP应用的压测和性能分析案例/图4.jpg" alt="fpm日志" title="fpm日志">
 <p>可见php-fpm的进程数也上来了，也排除了这个可能</p>
 <h5 id="追究具体的php-fpm进程"><a href="#追究具体的php-fpm进程" class="headerlink" title="追究具体的php-fpm进程"></a>追究具体的php-fpm进程</h5><p>接下来只能追踪具体某个php-fpm进程的执行流程了，好在有phptrace这个利器，官网 <a href="https://github.com/Qihoo360/phptrace" target="_blank" rel="external">https://github.com/Qihoo360/phptrace</a> ，它能分析具体脚本中的执行流程和调用关系，并给出具体的执行时间，从而能够查探到你的程序卡在了哪里。</p>
 <p>话不多说，直接执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">phptrace -p 10875 &gt; /tmp/phptrace.log</div></pre></td></tr></table></figure></p>
-<p>把结果保存到文件中，ok，接下来分析这个文件，由于行数太多，这里截取几行能够说明就够了<br><img src="/blog/2017/05/26/PHP应用的压测和性能分析案例/图5.jpg" alt="trace log分析" title="trace log分析"></p>
+<p>把结果保存到文件中，ok，接下来分析这个文件，由于行数太多，这里截取几行能够说明就够了<br><img src="/2017/05/26/PHP应用的压测和性能分析案例/图5.jpg" alt="trace log分析" title="trace log分析"></p>
 <p>是不是很清晰明了。在分析这个脚本的过程中，发现 <strong>require</strong> 占用了很大的一部分时间，几乎每个 require 要占用0.06s</p>
 <p>发生了什么？是进程在系统调用上有什么比较耗时的步骤吗？那就来看这个进程的系统调用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">strace -p 10805 -tt -T -e trace=all -o /tmp/strace.log</div></pre></td></tr></table></figure>
