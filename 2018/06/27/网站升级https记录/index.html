@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '8UR669C6NW',
+      apiKey: '983f3b72ca627207def729571824f32d',
+      indexName: 'hexo_search',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言本博客搭建在搬瓦工的vps上，之前用的都是http，一直想升级到https，但都没付诸实践，这次正好尝试一下，并做一个总结。首先，需要了解https协议的一些原理，阮一峰的《HTTPS 协议概述》 《图解SSL/TLS协议》这几篇文章中有详细的介绍。其次，本文有部分引用了 Jerry Qu 的《Let’s Encrypt，免费好用的 HTTPS 证书》 一文。再次，由于我还是一个小白，文中难免">
+<meta name="keywords" content="https">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网站升级https记录">
+<meta property="og:url" content="https://www.poettian.com/2018/06/27/网站升级https记录/index.html">
+<meta property="og:site_name" content="健忘的记事本">
+<meta property="og:description" content="前言本博客搭建在搬瓦工的vps上，之前用的都是http，一直想升级到https，但都没付诸实践，这次正好尝试一下，并做一个总结。首先，需要了解https协议的一些原理，阮一峰的《HTTPS 协议概述》 《图解SSL/TLS协议》这几篇文章中有详细的介绍。其次，本文有部分引用了 Jerry Qu 的《Let’s Encrypt，免费好用的 HTTPS 证书》 一文。再次，由于我还是一个小白，文中难免">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-27T09:53:01.710Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网站升级https记录">
+<meta name="twitter:description" content="前言本博客搭建在搬瓦工的vps上，之前用的都是http，一直想升级到https，但都没付诸实践，这次正好尝试一下，并做一个总结。首先，需要了解https协议的一些原理，阮一峰的《HTTPS 协议概述》 《图解SSL/TLS协议》这几篇文章中有详细的介绍。其次，本文有部分引用了 Jerry Qu 的《Let’s Encrypt，免费好用的 HTTPS 证书》 一文。再次，由于我还是一个小白，文中难免">
+
+
+
+
+
+
+  <link rel="canonical" href="https://www.poettian.com/2018/06/27/网站升级https记录/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>网站升级https记录 | 健忘的记事本</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a366524a3aa0beb76dced93bc66a1e21";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">健忘的记事本</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tech">
+    <a href="/categories/技术/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-android"></i> <br />技术</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-life">
+    <a href="/categories/生活/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-coffee"></i> <br />生活</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.poettian.com/2018/06/27/网站升级https记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="poettian">
+      <meta itemprop="description" content="好记性不如烂笔头">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="健忘的记事本">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网站升级https记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-27 17:50:44 / 修改时间：17:53:01" itemprop="dateCreated datePublished" datetime="2018-06-27T17:50:44+08:00">2018-06-27</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/06/27/网站升级https记录/" class="leancloud_visitors" data-flag-title="网站升级https记录">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本博客搭建在搬瓦工的vps上，之前用的都是http，一直想升级到https，但都没付诸实践，这次正好尝试一下，并做一个总结。首先，需要了解https协议的一些原理，阮一峰的<em><a href="http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html" title="HTTPS 协议概述" target="_blank" rel="external">《HTTPS 协议概述》</a></em> <a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html" title="图解SSL/TLS协议" target="_blank" rel="external">《图解SSL/TLS协议》</a>这几篇文章中有详细的介绍。其次，本文有部分引用了 <a href="https://imququ.com/" target="_blank" rel="external">Jerry Qu</a> 的<a href="https://imququ.com/post/letsencrypt-certificate.html" target="_blank" rel="external">《Let’s Encrypt，免费好用的 HTTPS 证书》</a> 一文。再次，由于我还是一个小白，文中难免有错误之处，欢迎指正。</p>
+<h3 id="关于证书"><a href="#关于证书" class="headerlink" title="关于证书"></a>关于证书</h3><p>由于是个人网站，我准备使用 <a href="https://letsencrypt.org/" target="_blank" rel="external">Let’s Encrypt</a>  这一免费证书，这也是当前最为流行的免费证书，而且配置过程简单，虽然每次只有90天的有效期，但可以部署脚本定期更新，所以还是比较方便的。Let’s Encrypt 使用ACME协议来签发证书，并提供了官方的客户端工具 <a href="https://certbot.eff.org/" title="Certbot" target="_blank" rel="external">Certbot</a>，但是我使用了 <a href="https://github.com/diafygi/acme-tiny" target="_blank" rel="external">acme-tiny</a> 这个更为小巧的开源工具。</p>
+<h3 id="开始申请"><a href="#开始申请" class="headerlink" title="开始申请"></a>开始申请</h3><h4 id="创建目录"><a href="#创建目录" class="headerlink" title="创建目录"></a>创建目录</h4><p>我使用的 Web Server 是 nginx，进入 nginx 的配置目录<code>conf</code>，创建目录<code>ssl</code>用来存放证书申请过程中的各种临时和证书文件，进入这个目录，之后的操作都在这个目录中进行。</p>
+<h4 id="创建账号私钥"><a href="#创建账号私钥" class="headerlink" title="创建账号私钥"></a>创建账号私钥</h4><p>我们用公钥在 Let’s Encrypt 注册账号，然后用对应的私钥对请求签名。因此，先要生成一个 key，acme-tiny 会使用这个key来注册账号并对请求签名。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl genrsa 4096 &gt; account.key</div></pre></td></tr></table></figure>
+<h4 id="创建CSR文件"><a href="#创建CSR文件" class="headerlink" title="创建CSR文件"></a>创建CSR文件</h4><p>接下来就可以生成 CSR（Certificate Signing Request，证书签名请求）文件了。ACME 协议需要提交一个 CSR 文件，后续的对证书更新也需要这个文件。在这之前，还需要创建域名私钥（一定不要使用上面创建的账号私钥）。</p>
+<p>1）创建账号私钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl genrsa 4096 &gt; domain.key</div></pre></td></tr></table></figure>
+<p>2) 生成 CSR 文件</p>
+<p>有了私钥文件，就可以生成 CSR 文件了。在 CSR 中推荐至少把域名带 <code>www</code> 和不带 <code>www</code> 的两种情况都加进去，其它子域可以根据需要添加（目前一张证书最多可以包含 100 个域名）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl req -new -sha256 -key domain.key -subj <span class="string">"/"</span> -reqexts SAN -config &lt;(cat /etc/ssl/openssl.cnf &lt;(<span class="built_in">printf</span> <span class="string">"[SAN]\nsubjectAltName=DNS:yoursite.com,DNS:www.yoursite.com"</span>)) &gt; domain.csr</div></pre></td></tr></table></figure>
+<p>执行这一步时，如果提示找不到 <code>/etc/ssl/openssl.cnf</code> 文件，请看看 <code>/usr/local/openssl/ssl/openssl.cnf</code> 是否存在。如果还是不行，也可以使用交互方式创建 CSR（需要注意 Common Name 必须为你的域名）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl req -new -sha256 -key domain.key -out domain.csr</div></pre></td></tr></table></figure>
+<h4 id="配置验证服务"><a href="#配置验证服务" class="headerlink" title="配置验证服务"></a>配置验证服务</h4><p>为了证明你对需要申请证书的域名有控制权，Let’s Encrypt 需要你在该域名下配置验证文件，再通过创建 CSR 时指定的域名访问，如果可以访问则表明你对这个域名有控制权。acme-tiny 这个脚本会在你指定的目录下生成这些验证文件，因此你需要做的就是保证能够通过 “.well-known/acme-challenge/” 这个 url 路径能够访问到这些文件。</p>
+<p>1）首先创建用于存放验证文件的目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir /data/wwwroot/challenges/</div></pre></td></tr></table></figure>
+<p>2）然后配置一个 HTTP 服务。注意：Let’s Encrypt 会通过 http 访问你主机上的80端口，所以你必须提供能够通过 http 访问的路径。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">server_name</span> www.yoursite.com yoursite.com;</div><div class="line">    <span class="attribute">server_tokens</span> <span class="literal">off</span>;</div><div class="line"></div><div class="line">    <span class="attribute">access_log</span> /dev/null;</div><div class="line"></div><div class="line">    <span class="attribute">if</span> (<span class="variable">$request_method</span> !<span class="regexp">~ ^(GET|HEAD|POST)$</span> ) &#123;</div><div class="line">        <span class="attribute">return</span> <span class="number">444</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="attribute">location</span><span class="regexp"> ^~</span> /.well-known/acme-challenge/ &#123;</div><div class="line">       <span class="attribute">alias</span> /data/wwwroot/challenges/;</div><div class="line">       <span class="attribute">try_files</span> <span class="variable">$uri</span> =<span class="number">404</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="attribute">location</span> / &#123;</div><div class="line">        <span class="attribute">rewrite</span><span class="regexp"> ^/(.*)$</span> https://yoursite.com/<span class="variable">$1</span> <span class="literal">permanent</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个验证服务以后更新证书还要用到，建议一直保留。</p>
+<h4 id="获取网站证书"><a href="#获取网站证书" class="headerlink" title="获取网站证书"></a>获取网站证书</h4><p>先把 acme-tiny 脚本保存到之前的 <code>ssl</code> 目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget https://raw.githubusercontent.com/diafygi/acme-tiny/master/acme_tiny.py</div></pre></td></tr></table></figure>
+<p>指定账户私钥、CSR 以及验证目录，执行脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python acme_tiny.py --account-key ./account.key --csr ./domain.csr --acme-dir /data/wwwroot/challenges/ &gt; ./chained.pem</div></pre></td></tr></table></figure>
+<p>最后修改nginx配置，reload 服务就可以了，这里贴一下此站的配置：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</div><div class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl http2;</div><div class="line">    <span class="attribute">ssl_certificate</span> ssl/chained.pem;</div><div class="line">    <span class="attribute">ssl_certificate_key</span> ssl/domain.key;</div><div class="line">    <span class="attribute">ssl_protocols</span> TLSv1 TLSv1.<span class="number">1</span> TLSv1.<span class="number">2</span>;</div><div class="line">    <span class="attribute">ssl_ciphers</span> EECDH+CHACHA20:EECDH+CHACHA20-draft:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;</div><div class="line">    <span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">on</span>;</div><div class="line">    <span class="attribute">ssl_session_timeout</span> <span class="number">1d</span>;</div><div class="line">    <span class="attribute">ssl_session_cache</span> builtin:<span class="number">1000</span> shared:SSL:<span class="number">10m</span>;</div><div class="line">    <span class="attribute">ssl_buffer_size</span> <span class="number">1400</span>;</div><div class="line">    <span class="attribute">add_header</span> Strict-Transport-Security <span class="string">"max-age=31536000; includeSubDomains; preload"</span>;</div><div class="line">    <span class="attribute">ssl_stapling</span> <span class="literal">on</span>;</div><div class="line">    <span class="attribute">ssl_stapling_verify</span> <span class="literal">on</span>;</div><div class="line">    <span class="comment">#ssl_trusted_certificate ssl/full_chained.pem;</span></div><div class="line"></div><div class="line">    <span class="attribute">server_name</span> yoursite.com;</div><div class="line"></div><div class="line">    <span class="attribute">access_log</span> /../yoursite_nginx.log combined;</div><div class="line"></div><div class="line">    <span class="attribute">index</span> index.html index.htm index.php;</div><div class="line"></div><div class="line">    <span class="attribute">root</span> /../yoursite_webroot_dir;</div><div class="line"></div><div class="line">    <span class="attribute">if</span> (<span class="variable">$ssl_protocol</span> = <span class="string">""</span>) &#123; <span class="attribute">return</span> <span class="number">301</span> https://<span class="variable">$host</span><span class="variable">$request_uri</span>; &#125;</div><div class="line"></div><div class="line">    <span class="attribute">location</span> <span class="regexp">~ .*\.(gif|jpg|jpeg|png|bmp|swf|flv|mp4|ico)$</span> &#123;</div><div class="line">        <span class="attribute">expires</span> <span class="number">30d</span>;</div><div class="line">        <span class="attribute">access_log</span> <span class="literal">off</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="attribute">location</span> <span class="regexp">~ .*\.(js|css)?$</span> &#123;</div><div class="line">        <span class="attribute">expires</span> <span class="number">7d</span>;</div><div class="line">        <span class="attribute">access_log</span> <span class="literal">off</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="attribute">location</span> <span class="regexp">~ /\.ht</span> &#123;</div><div class="line">        <span class="attribute">deny</span> all;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">server_name</span> yoursite.com;</div><div class="line">    <span class="attribute">server_tokens</span> <span class="literal">off</span>;</div><div class="line"></div><div class="line">    <span class="attribute">access_log</span> /dev/null;</div><div class="line"></div><div class="line">    <span class="attribute">if</span> (<span class="variable">$request_method</span> !<span class="regexp">~ ^(GET|HEAD|POST)$</span> ) &#123;</div><div class="line">        <span class="attribute">return</span> <span class="number">444</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="attribute">location</span><span class="regexp"> ^~</span> /.well-known/acme-challenge/ &#123;</div><div class="line">       <span class="attribute">alias</span> /../yoursite_webroot_dir/challenges/;</div><div class="line">       <span class="attribute">try_files</span> <span class="variable">$uri</span> =<span class="number">404</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="attribute">location</span> / &#123;</div><div class="line">        <span class="attribute">rewrite</span><span class="regexp"> ^/(.*)$</span> https://yoursite.com/<span class="variable">$1</span> <span class="literal">permanent</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="配置自动更新"><a href="#配置自动更新" class="headerlink" title="配置自动更新"></a>配置自动更新</h3><p>Let’s Encrypt 签发的证书只有 90 天有效期，可以使用脚本定期更新。在之前的<code>ssl</code>目录下创建renew_cert.sh，赋予其执行权限<code>chmod a+x</code>。内容如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line"><span class="built_in">cd</span> /../nginx/conf/ssl</div><div class="line">python acme_tiny.py --account-key account.key --csr domain.csr --acme-dir /../yoursite_webroot_dir/challenges/ &gt; chained.pem || <span class="built_in">exit</span></div><div class="line">service nginx reload</div></pre></td></tr></table></figure></p>
+<p>加入定时任务中，<code>crontab -e</code>：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">0 0 1 * * /../nginx/conf/ssl/renew_cert.sh &gt;/dev/null 2&gt;&amp;1</div></pre></td></tr></table></figure></p>
+<p>这样以后证书每个月都会自动更新啦。</p>
+<h3 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h3><p>其实一步步弄下来还是很简单的，当在浏览器地址栏里看见自己的网站域名提示有小锁并有安全字样时，是不是蛮开心的呢！关于nginx的配置，我也是一知半解，等慢慢更新吧！</p>
+
+      
+    </div>
+
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="poettian 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpeg" alt="poettian 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>poettian</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://www.poettian.com/2018/06/27/网站升级https记录/" title="网站升级https记录">https://www.poettian.com/2018/06/27/网站升级https记录/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/https/" rel="tag"><i class="fa fa-tag"></i> https</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/17/nginx配置之server-name/" rel="next" title="nginx配置之server_name">
+                <i class="fa fa-chevron-left"></i> nginx配置之server_name
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjg3NS8xMzQxMQ"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="poettian" />
+            
+              <p class="site-author-name" itemprop="name">poettian</p>
+              <p class="site-description motion-element" itemprop="description">好记性不如烂笔头</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/poettian" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:poettian@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/poettian_tian" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/grotian" target="_blank" title="微博"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于证书"><span class="nav-number">2.</span> <span class="nav-text">关于证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始申请"><span class="nav-number">3.</span> <span class="nav-text">开始申请</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建目录"><span class="nav-number">3.1.</span> <span class="nav-text">创建目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建账号私钥"><span class="nav-number">3.2.</span> <span class="nav-text">创建账号私钥</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建CSR文件"><span class="nav-number">3.3.</span> <span class="nav-text">创建CSR文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置验证服务"><span class="nav-number">3.4.</span> <span class="nav-text">配置验证服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取网站证书"><span class="nav-number">3.5.</span> <span class="nav-text">获取网站证书</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置自动更新"><span class="nav-number">4.</span> <span class="nav-text">配置自动更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结束语"><span class="nav-number">5.</span> <span class="nav-text">结束语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">poettian</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      访客数<span class="busuanzi-value" id="busuanzi_value_site_uv"></span>人次
+    </span>
+  
+  
+    <span class="post-meta-divider">|</span>
+  
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      访问量<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OfHn2rURzWXvGqhoYEBtqC4J-gzGzoHsz", "wLjSd10AO01D1Bwbutam1snw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.get('time'));
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! See more at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see here how to solve it: https://github.com/theme-next/hexo-leancloud-counter-security. \n But you also can use LeanCloud without security, by set \'security\' option to \'false\'.');
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
