@@ -123,7 +123,7 @@
 <meta property="og:site_name" content="健忘的记事本">
 <meta property="og:description" content="前言本博客搭建在搬瓦工的vps上，之前用的都是http，一直想升级到https，但都没付诸实践，这次正好尝试一下，并做一个总结。首先，需要了解https协议的一些原理，阮一峰的《HTTPS 协议概述》 《图解SSL/TLS协议》这几篇文章中有详细的介绍。其次，本文有部分引用了 Jerry Qu 的《Let’s Encrypt，免费好用的 HTTPS 证书》 一文。再次，由于我还是一个小白，文中难免">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-27T09:53:01.710Z">
+<meta property="og:updated_time" content="2018-06-27T09:54:53.981Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网站升级https记录">
 <meta name="twitter:description" content="前言本博客搭建在搬瓦工的vps上，之前用的都是http，一直想升级到https，但都没付诸实践，这次正好尝试一下，并做一个总结。首先，需要了解https协议的一些原理，阮一峰的《HTTPS 协议概述》 《图解SSL/TLS协议》这几篇文章中有详细的介绍。其次，本文有部分引用了 Jerry Qu 的《Let’s Encrypt，免费好用的 HTTPS 证书》 一文。再次，由于我还是一个小白，文中难免">
@@ -407,7 +407,7 @@
                 
               
 
-              <time title="创建时间：2018-06-27 17:50:44 / 修改时间：17:53:01" itemprop="dateCreated datePublished" datetime="2018-06-27T17:50:44+08:00">2018-06-27</time>
+              <time title="创建时间：2018-06-27 17:50:44 / 修改时间：17:54:53" itemprop="dateCreated datePublished" datetime="2018-06-27T17:50:44+08:00">2018-06-27</time>
             
 
             
@@ -474,7 +474,7 @@
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本博客搭建在搬瓦工的vps上，之前用的都是http，一直想升级到https，但都没付诸实践，这次正好尝试一下，并做一个总结。首先，需要了解https协议的一些原理，阮一峰的<em><a href="http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html" title="HTTPS 协议概述" target="_blank" rel="external">《HTTPS 协议概述》</a></em> <a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html" title="图解SSL/TLS协议" target="_blank" rel="external">《图解SSL/TLS协议》</a>这几篇文章中有详细的介绍。其次，本文有部分引用了 <a href="https://imququ.com/" target="_blank" rel="external">Jerry Qu</a> 的<a href="https://imququ.com/post/letsencrypt-certificate.html" target="_blank" rel="external">《Let’s Encrypt，免费好用的 HTTPS 证书》</a> 一文。再次，由于我还是一个小白，文中难免有错误之处，欢迎指正。</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本博客搭建在搬瓦工的vps上，之前用的都是http，一直想升级到https，但都没付诸实践，这次正好尝试一下，并做一个总结。首先，需要了解https协议的一些原理，阮一峰的<em><a href="http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html" title="HTTPS 协议概述" target="_blank" rel="external">《HTTPS 协议概述》</a></em> <a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html" title="图解SSL/TLS协议" target="_blank" rel="external">《图解SSL/TLS协议》</a>这几篇文章中有详细的介绍。其次，本文有部分引用了 <a href="https://imququ.com/" target="_blank" rel="external">Jerry Qu</a> 的<a href="https://imququ.com/post/letsencrypt-certificate.html" target="_blank" rel="external">《Let’s Encrypt，免费好用的 HTTPS 证书》</a> 一文。再次，由于我还是一个小白，文中难免有错误之处，欢迎指正。<br><a id="more"></a></p>
 <h3 id="关于证书"><a href="#关于证书" class="headerlink" title="关于证书"></a>关于证书</h3><p>由于是个人网站，我准备使用 <a href="https://letsencrypt.org/" target="_blank" rel="external">Let’s Encrypt</a>  这一免费证书，这也是当前最为流行的免费证书，而且配置过程简单，虽然每次只有90天的有效期，但可以部署脚本定期更新，所以还是比较方便的。Let’s Encrypt 使用ACME协议来签发证书，并提供了官方的客户端工具 <a href="https://certbot.eff.org/" title="Certbot" target="_blank" rel="external">Certbot</a>，但是我使用了 <a href="https://github.com/diafygi/acme-tiny" target="_blank" rel="external">acme-tiny</a> 这个更为小巧的开源工具。</p>
 <h3 id="开始申请"><a href="#开始申请" class="headerlink" title="开始申请"></a>开始申请</h3><h4 id="创建目录"><a href="#创建目录" class="headerlink" title="创建目录"></a>创建目录</h4><p>我使用的 Web Server 是 nginx，进入 nginx 的配置目录<code>conf</code>，创建目录<code>ssl</code>用来存放证书申请过程中的各种临时和证书文件，进入这个目录，之后的操作都在这个目录中进行。</p>
 <h4 id="创建账号私钥"><a href="#创建账号私钥" class="headerlink" title="创建账号私钥"></a>创建账号私钥</h4><p>我们用公钥在 Let’s Encrypt 注册账号，然后用对应的私钥对请求签名。因此，先要生成一个 key，acme-tiny 会使用这个key来注册账号并对请求签名。</p>
