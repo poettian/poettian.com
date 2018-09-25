@@ -511,21 +511,21 @@
 <p>phptrace 360的一款用于跟踪、分析PHP运行情况的工具，需要安装相应的php扩展<br>xhprof facebook开源的一款分析工具，也需要安装相应的php扩展。可以搭配xhgui进行视图化，但是xhgui的安装需要mongodb，就没装</p>
 </blockquote>
 <h3 id="开始压测和分析"><a href="#开始压测和分析" class="headerlink" title="开始压测和分析"></a>开始压测和分析</h3><p>以网站首页为例</p>
-<p>用ab给到100的并发<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">ab -s 60 -n 2000 -c 100 -H &apos;Accept-Encoding: gzip&apos; -l http://ysc.baidu.com/</div><div class="line"></div><div class="line">参数含义：</div><div class="line">-s 60 每个请求允许的最大等待时间设为60秒</div><div class="line">-n 2000 一共执行2000个请求</div><div class="line">-c 100 每次的并发量设为100</div><div class="line">-H header头信息，这里是告诉服务器将响应数据用gzip压缩，减少带宽压力</div><div class="line">-l 允许响应数据大小发生变动，如果是静态网页，可以不要此参数，但如果是动态网页，最好加上这个参数，否则有些响应就计入failed统计</div></pre></td></tr></table></figure></p>
+<p>用ab给到100的并发<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ab -s 60 -n 2000 -c 100 -H &apos;Accept-Encoding: gzip&apos; -l http://ysc.baidu.com/</span><br><span class="line"></span><br><span class="line">参数含义：</span><br><span class="line">-s 60 每个请求允许的最大等待时间设为60秒</span><br><span class="line">-n 2000 一共执行2000个请求</span><br><span class="line">-c 100 每次的并发量设为100</span><br><span class="line">-H header头信息，这里是告诉服务器将响应数据用gzip压缩，减少带宽压力</span><br><span class="line">-l 允许响应数据大小发生变动，如果是静态网页，可以不要此参数，但如果是动态网页，最好加上这个参数，否则有些响应就计入failed统计</span><br></pre></td></tr></table></figure></p>
 <p>看下执行的情况</p>
 <p>能够看到，QPS很低，服务器每秒能够处理的请求基本在7个左右，响应时间大概在15s</p>
 <p>又进行了一次压测，这次去掉了业务的执行，单纯跑框架，结果QPS也只能达到十几，好尴尬！那就说明，框架本身的执行速度就不快，更别论业务的执行对响应时间的影响了。</p>
 <p>可能的原因：<br>1.cpu负载超了<br>2.io负载高，io发生阻塞或io速度慢<br>3.php-fpm进程不够，请求阻塞在php-fpm上<br>4.带宽占满<br>5.php-fpm进程执行中出现的其他问题<br>6.代码问题</p>
-<h5 id="先来排查cpu负载"><a href="#先来排查cpu负载" class="headerlink" title="先来排查cpu负载"></a>先来排查cpu负载</h5><p>用 <strong>top</strong> 或 <strong>mpstat</strong> 命令查看cpu的负载情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mpstat -P ALL 2 3</div></pre></td></tr></table></figure></p>
-<p>执行情况<br><img src="/2017/05/26/PHP应用的压测和性能分析案例/图1.jpg" alt="cpu负载情况" title="cpu负载情况"></p>
+<h5 id="先来排查cpu负载"><a href="#先来排查cpu负载" class="headerlink" title="先来排查cpu负载"></a>先来排查cpu负载</h5><p>用 <strong>top</strong> 或 <strong>mpstat</strong> 命令查看cpu的负载情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mpstat -P ALL 2 3</span><br></pre></td></tr></table></figure></p>
+<p>执行情况<br><img src="/2017/05/26/PHP应用的压测和性能分析案例/图1.jpg" title="cpu负载情况"></p>
 <p>发现cpu负载都很低，但是有一核几乎跑满了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps aux</div></pre></td></tr></table></figure>
-<p>发现是一个php进程的问题<br><img src="/2017/05/26/PHP应用的压测和性能分析案例/图2.jpg" alt="进程情况" title="进程情况"></p>
-<p>这个脚本中有无限循环的情况，类似<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux</span><br></pre></td></tr></table></figure>
+<p>发现是一个php进程的问题<br><img src="/2017/05/26/PHP应用的压测和性能分析案例/图2.jpg" title="进程情况"></p>
+<p>这个脚本中有无限循环的情况，类似<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;&#125;</span><br></pre></td></tr></table></figure></p>
 <p>干掉这个进程，明显的cpu负载就下来了</p>
 <p>ok，以上说明cpu负载并不是导致QPS的原因</p>
-<h5 id="再来排查io"><a href="#再来排查io" class="headerlink" title="再来排查io"></a>再来排查io</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iostat -dx 1 5</div></pre></td></tr></table></figure>
-<img src="/2017/05/26/PHP应用的压测和性能分析案例/图3.jpg" alt="io负载" title="io负载">
+<h5 id="再来排查io"><a href="#再来排查io" class="headerlink" title="再来排查io"></a>再来排查io</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iostat -dx 1 5</span><br></pre></td></tr></table></figure>
+<img src="/2017/05/26/PHP应用的压测和性能分析案例/图3.jpg" title="io负载">
 <table>
 <thead>
 <tr>
@@ -585,15 +585,15 @@
 <p>可知，问题也不是出在io上</p>
 <h5 id="难道是php-fpm的进程不够？"><a href="#难道是php-fpm的进程不够？" class="headerlink" title="难道是php-fpm的进程不够？"></a>难道是php-fpm的进程不够？</h5><p>看php-fpm的配置，完全没有问题，最大子进程已经设置成了500，应该不是php-fpm进程不够的原因</p>
 <p>开启压测，查看php-fpm.log</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tail -f var/log/php-fpm.log</div></pre></td></tr></table></figure>
-<img src="/2017/05/26/PHP应用的压测和性能分析案例/图4.jpg" alt="fpm日志" title="fpm日志">
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f var/log/php-fpm.log</span><br></pre></td></tr></table></figure>
+<img src="/2017/05/26/PHP应用的压测和性能分析案例/图4.jpg" title="fpm日志">
 <p>可见php-fpm的进程数也上来了，也排除了这个可能</p>
-<h5 id="追究具体的php-fpm进程"><a href="#追究具体的php-fpm进程" class="headerlink" title="追究具体的php-fpm进程"></a>追究具体的php-fpm进程</h5><p>接下来只能追踪具体某个php-fpm进程的执行流程了，好在有phptrace这个利器，官网 <a href="https://github.com/Qihoo360/phptrace" target="_blank" rel="external">https://github.com/Qihoo360/phptrace</a> ，它能分析具体脚本中的执行流程和调用关系，并给出具体的执行时间，从而能够查探到你的程序卡在了哪里。</p>
-<p>话不多说，直接执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">phptrace -p 10875 &gt; /tmp/phptrace.log</div></pre></td></tr></table></figure></p>
-<p>把结果保存到文件中，ok，接下来分析这个文件，由于行数太多，这里截取几行能够说明就够了<br><img src="/2017/05/26/PHP应用的压测和性能分析案例/图5.jpg" alt="trace log分析" title="trace log分析"></p>
+<h5 id="追究具体的php-fpm进程"><a href="#追究具体的php-fpm进程" class="headerlink" title="追究具体的php-fpm进程"></a>追究具体的php-fpm进程</h5><p>接下来只能追踪具体某个php-fpm进程的执行流程了，好在有phptrace这个利器，官网 <a href="https://github.com/Qihoo360/phptrace" target="_blank" rel="noopener">https://github.com/Qihoo360/phptrace</a> ，它能分析具体脚本中的执行流程和调用关系，并给出具体的执行时间，从而能够查探到你的程序卡在了哪里。</p>
+<p>话不多说，直接执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phptrace -p 10875 &gt; /tmp/phptrace.log</span><br></pre></td></tr></table></figure></p>
+<p>把结果保存到文件中，ok，接下来分析这个文件，由于行数太多，这里截取几行能够说明就够了<br><img src="/2017/05/26/PHP应用的压测和性能分析案例/图5.jpg" title="trace log分析"></p>
 <p>是不是很清晰明了。在分析这个脚本的过程中，发现 <strong>require</strong> 占用了很大的一部分时间，几乎每个 require 要占用0.06s</p>
 <p>发生了什么？是进程在系统调用上有什么比较耗时的步骤吗？那就来看这个进程的系统调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">strace -p 10805 -tt -T -e trace=all -o /tmp/strace.log</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strace -p 10805 -tt -T -e trace=all -o /tmp/strace.log</span><br></pre></td></tr></table></figure>
 <p>分析结果，显示open(file)的耗时比较严重，close()的时间和open差不多，那就说明还是卡在了io上。</p>
 <p>这时候，另一个利器出场了！opcache，关于opcache的介绍，自行google，总之它的作用就是缓存php的opcode，节省了对脚步的语法检查，编译的时间，但是它有刷新时间，刷新时间内对文件的变动会无效，这也是缓存系统都有的问题，当然，你可以手动刷新。</p>
 <p>接下来继续压测实验，只跑框架，以下是压测结果中只看open()速度的对比：</p>
@@ -802,7 +802,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -842,7 +842,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

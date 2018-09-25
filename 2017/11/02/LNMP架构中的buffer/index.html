@@ -488,8 +488,8 @@
       
 
       
-        <p>之前一直对PHP的 ob_* 系统函数存在疑惑，始终没明白php和webserver的buffer机制，百度谷歌搜到的都是千篇一律的文章，自己测试也走不通，直到看了 “<em><a href="http://www.jianshu.com/p/1a020dfe9e39" title="php out buffer" target="_blank" rel="external">PHP out buffer</a></em>“ 这篇文章才有种恍然大悟的感觉。</p>
-<p>借用作者的一张图，如下：<br><img src="/2017/11/02/LNMP架构中的buffer/图1.png" alt="PHP buffer flow" title="PHP buffer flow"><br><a id="more"></a></p>
+        <p>之前一直对PHP的 ob_* 系统函数存在疑惑，始终没明白php和webserver的buffer机制，百度谷歌搜到的都是千篇一律的文章，自己测试也走不通，直到看了 “<em><a href="http://www.jianshu.com/p/1a020dfe9e39" title="php out buffer" target="_blank" rel="noopener">PHP out buffer</a></em>“ 这篇文章才有种恍然大悟的感觉。</p>
+<p>借用作者的一张图，如下：<br><img src="/2017/11/02/LNMP架构中的buffer/图1.png" title="PHP buffer flow"><br><a id="more"></a></p>
 <h3 id="php的buffer"><a href="#php的buffer" class="headerlink" title="php的buffer"></a>php的buffer</h3><p>通过设置 php.ini 中 output_buffering 参数来控制php缓存输出数据（通过echo或print等）的大小，超过该大小，则php就会将数据发送出去给下一个接收者(php-fpm)。设为off，则php关闭缓冲区。</p>
 <h3 id="php-fpm的buffer"><a href="#php-fpm的buffer" class="headerlink" title="php-fpm的buffer"></a>php-fpm的buffer</h3><p>之前一直不知道这个的存在，好像是写死在程序中的，没法配置，默认大小是8k。</p>
 <h3 id="nginx的buffer"><a href="#nginx的buffer" class="headerlink" title="nginx的buffer"></a>nginx的buffer</h3><p>nginx的 ngx_http_fastcgi_module 通过下面这几个参数来配置buffering的行为：</p>
@@ -499,15 +499,14 @@
 <p>参看  error.log 会看到如下信息：</p>
 <blockquote>
 <p style="text-align:initial;">an upstream response is buffered to a temporary file /usr/local/var/run/nginx/fastcgi_temp/4/00/0000000004 while reading upstream, client: 127.0.0.1, server: test.poettian.org, request: “GET / HTTP/1.1”, upstream: “fastcgi://unix:/usr/local/var/run/php-fpm.sock:”, host: “test.poettian.org”</p>
-
 </blockquote>
 <p>可以通过设置fastcgi response header中 <code>X-Accel-Buffering</code> 字段的值为 <code>no</code> 来禁用buffering</p>
-<p>可以参考如下的代码，这段代码可以实现每秒输出一个数字的效果：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>($i = <span class="number">0</span>; $i &lt; <span class="number">10</span>; $i++) &#123;</div><div class="line">    <span class="keyword">echo</span> $i;</div><div class="line">    <span class="keyword">echo</span> str_repeat(<span class="string">' '</span>, <span class="number">4096</span>) . <span class="string">"&lt;br /&gt;"</span>;</div><div class="line">    ob_flush(); <span class="comment">//ob_flush()可以刷新php的缓冲区</span></div><div class="line">    flush(); <span class="comment">//flush()可以刷新php-fpm的缓冲区</span></div><div class="line">    sleep(<span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以参考如下的代码，这段代码可以实现每秒输出一个数字的效果：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>($i = <span class="number">0</span>; $i &lt; <span class="number">10</span>; $i++) &#123;</span><br><span class="line">    <span class="keyword">echo</span> $i;</span><br><span class="line">    <span class="keyword">echo</span> str_repeat(<span class="string">' '</span>, <span class="number">4096</span>) . <span class="string">"&lt;br /&gt;"</span>;</span><br><span class="line">    ob_flush(); <span class="comment">//ob_flush()可以刷新php的缓冲区</span></span><br><span class="line">    flush(); <span class="comment">//flush()可以刷新php-fpm的缓冲区</span></span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="apache的缓冲区"><a href="#apache的缓冲区" class="headerlink" title="apache的缓冲区"></a>apache的缓冲区</h3><p>当php的输出数据给apache服务器时，它也会做一层buffer（也将数据放入它的缓冲区，当缓冲区数据满或执行完毕时，才输出数据）。若想关闭缓冲区，可以在php层使用flush()来强制将缓冲区数据输出。fulsh() 的工作原理：在apache module的sapi下, flush会通过调用sapi_module的flush成员函数指针, 间接的调用apache的api: ap_rflush刷新apache的输出缓冲区, 当然手册中也说了, 有一些apache的其他模块, 可能会改变这个动作的结果.例如mod_gzip，可能自己进行输出缓冲区，这将导致flush()函数产生的结果不会立即被发送到客户端浏览器。</p>
 <h3 id="php的自定义缓冲区："><a href="#php的自定义缓冲区：" class="headerlink" title="php的自定义缓冲区："></a>php的自定义缓冲区：</h3><p>PHP内核中，除了默认的输出缓冲区之外，用户也可以自己定义输出缓冲区，也就是ob_系列函数了。<br>(1)、可以通过ob_start函数激活一个缓冲区，激活的缓存区被压入栈中(OG(handlers))，多次调用ob_start函数会生成一个缓冲区栈。<br>开启output_buffering配置后，PHP内核默认输出缓冲区处于OG(handlers)的栈底。<br>(2)、通过ob_get_contents函数可以获取OG(handlers)栈顶部缓冲区(称之为active)的内容。<br>(3)、通过ob_flush函数可以将active缓冲区的内容冲刷到active缓冲区的上一级缓冲区(栈顶的下一位)，如果active已经处于栈底，那么冲刷active缓冲区会将其内容输出到SAPI(正如在三中所看到的)。<br>(4)、通过ob_end_flush函数除了将active缓冲区的内容冲刷出去外，还会将当前缓冲区从栈顶弹出。</p>
 <h3 id="其他php配置"><a href="#其他php配置" class="headerlink" title="其他php配置"></a>其他php配置</h3><p><code>implicit_flush</code> 配置和 <code>ob_implicit_flush</code> 函数<br>其中，如果将 <code>php.ini</code> 配置中的 <code>implicit_flush</code> 设置为1, 或者调用 <code>ob_implicit_flush(true)</code>，那么就不需要调用flush函数了，他们都会刷新PHP-FPM缓冲区中的内容。<br>至于 cli，它的 <code>implicit_flush</code> 硬编码为1，它的 <code>output_buffering</code> 也是设置为0。</p>
-<h3 id="疑惑"><a href="#疑惑" class="headerlink" title="疑惑"></a>疑惑</h3><p>有个地方比较疑惑，见如下代码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>($i = <span class="number">0</span>; $i &lt; <span class="number">10</span>; ++$i) &#123;</div><div class="line">    <span class="keyword">echo</span> $i;</div><div class="line">    ob_flush();</div><div class="line">    flush();</div><div class="line">    sleep(<span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>预期是每次输出一个数字，但是实际测试是前4个数字一起输出，然后才是一次输出一个数字，不知道为什么。如果在代码最前面加上<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">echo</span> str_repeat(<span class="string">' '</span>, <span class="number">4</span>);</div></pre></td></tr></table></figure></p>
+<h3 id="疑惑"><a href="#疑惑" class="headerlink" title="疑惑"></a>疑惑</h3><p>有个地方比较疑惑，见如下代码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>($i = <span class="number">0</span>; $i &lt; <span class="number">10</span>; ++$i) &#123;</span><br><span class="line">    <span class="keyword">echo</span> $i;</span><br><span class="line">    ob_flush();</span><br><span class="line">    flush();</span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>预期是每次输出一个数字，但是实际测试是前4个数字一起输出，然后才是一次输出一个数字，不知道为什么。如果在代码最前面加上<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">echo</span> str_repeat(<span class="string">' '</span>, <span class="number">4</span>);</span><br></pre></td></tr></table></figure></p>
 <p>就可以了。</p>
 
       
@@ -691,7 +690,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -731,7 +730,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

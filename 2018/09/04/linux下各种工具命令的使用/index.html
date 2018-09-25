@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '8UR669C6NW',
+      apiKey: '983f3b72ca627207def729571824f32d',
+      indexName: 'hexo_search',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="linux下各种命令的使用文本处理（awk、grep、sed、cut）本小节引用文章：【玩转linux系列】awk、grep、sed awk、grep、sed是linux操作文本的三大利器，也是必须掌握的linux命令之一。三者的功能都是处理文本，但侧重点各不相同，其中属awk功能最强大，但也最复杂。grep更适合单纯的查找或匹配文本，sed更适合编辑匹配到的文本，awk更适合格式化文本，对文本进">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux下各种工具命令的使用">
+<meta property="og:url" content="https://www.poettian.com/2018/09/04/linux下各种工具命令的使用/index.html">
+<meta property="og:site_name" content="健忘的记事本">
+<meta property="og:description" content="linux下各种命令的使用文本处理（awk、grep、sed、cut）本小节引用文章：【玩转linux系列】awk、grep、sed awk、grep、sed是linux操作文本的三大利器，也是必须掌握的linux命令之一。三者的功能都是处理文本，但侧重点各不相同，其中属awk功能最强大，但也最复杂。grep更适合单纯的查找或匹配文本，sed更适合编辑匹配到的文本，awk更适合格式化文本，对文本进">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-09-05T06:00:33.672Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux下各种工具命令的使用">
+<meta name="twitter:description" content="linux下各种命令的使用文本处理（awk、grep、sed、cut）本小节引用文章：【玩转linux系列】awk、grep、sed awk、grep、sed是linux操作文本的三大利器，也是必须掌握的linux命令之一。三者的功能都是处理文本，但侧重点各不相同，其中属awk功能最强大，但也最复杂。grep更适合单纯的查找或匹配文本，sed更适合编辑匹配到的文本，awk更适合格式化文本，对文本进">
+
+
+
+
+
+
+  <link rel="canonical" href="https://www.poettian.com/2018/09/04/linux下各种工具命令的使用/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>linux下各种工具命令的使用 | 健忘的记事本</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a366524a3aa0beb76dced93bc66a1e21";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">健忘的记事本</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tech">
+    <a href="/categories/技术/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-android"></i> <br />技术</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-life">
+    <a href="/categories/生活/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-coffee"></i> <br />生活</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.poettian.com/2018/09/04/linux下各种工具命令的使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="poettian">
+      <meta itemprop="description" content="好记性不如烂笔头">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="健忘的记事本">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">linux下各种工具命令的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-04 09:25:03" itemprop="dateCreated datePublished" datetime="2018-09-04T09:25:03+08:00">2018-09-04</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-05 14:00:33" itemprop="dateModified" datetime="2018-09-05T14:00:33+08:00">2018-09-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/09/04/linux下各种工具命令的使用/" class="leancloud_visitors" data-flag-title="linux下各种工具命令的使用">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="linux下各种命令的使用"><a href="#linux下各种命令的使用" class="headerlink" title="linux下各种命令的使用"></a>linux下各种命令的使用</h1><h3 id="文本处理（awk、grep、sed、cut）"><a href="#文本处理（awk、grep、sed、cut）" class="headerlink" title="文本处理（awk、grep、sed、cut）"></a>文本处理（awk、grep、sed、cut）</h3><p>本小节引用文章：<a href="https://thief.one/2017/08/12/1/" target="_blank" rel="noopener">【玩转linux系列】awk、grep、sed</a></p>
+<p>awk、grep、sed是linux操作文本的三大利器，也是必须掌握的linux命令之一。三者的功能都是处理文本，但侧重点各不相同，其中属awk功能最强大，但也最复杂。grep更适合单纯的查找或匹配文本，sed更适合编辑匹配到的文本，awk更适合格式化文本，对文本进行较复杂格式处理。</p>
+<a id="more"></a>
+<h4 id="实验数据"><a href="#实验数据" class="headerlink" title="实验数据"></a>实验数据</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test.log</span></span><br><span class="line">20170102 admin,password Open</span><br><span class="line">20170801 nmask,nmask close</span><br><span class="line">20180902 nm4k,<span class="built_in">test</span> filter</span><br></pre></td></tr></table></figure>
+<h4 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h4><h5 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">awk [选项参数] <span class="string">'script'</span> var=value file(s)</span><br><span class="line">或</span><br><span class="line">awk [选项参数] -f scriptfile var=value file(s)</span><br></pre></td></tr></table></figure>
+<p> awk是以列为划分计数的，$0 表示所有列，$1 表示第一列，$2 表示第二列。</p>
+<h5 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h5><ul>
+<li>-F 指定输入文件折分隔符，如-F:</li>
+<li>-v 赋值一个用户定义变量，如-va=1</li>
+<li>-f 从脚本文件中读取awk命令</li>
+</ul>
+<h5 id="分隔符"><a href="#分隔符" class="headerlink" title="分隔符"></a>分隔符</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 按空格分割</span></span><br><span class="line">awk <span class="string">'&#123;print $1,$3&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用“,”分割</span></span><br><span class="line">awk -F , <span class="string">'&#123;print $1,$2&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用多个分隔符，先使用空格分割，然后对分割结果再使用”,”分割</span></span><br><span class="line">awk -F <span class="string">'[ ,]'</span>  <span class="string">'&#123;print $1,$2,$3&#125;'</span>  test.log  <span class="comment">#注意逗号前面有一个空格</span></span><br></pre></td></tr></table></figure>
+<h5 id="设置变量"><a href="#设置变量" class="headerlink" title="设置变量"></a>设置变量</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">awk -v a=1 -v b=s <span class="string">'&#123;print $1,$1+a,$1b&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 字符串拼接，用"</span></span><br><span class="line">awk -v a=\<span class="string">" '&#123;print a"</span><span class="string">"<span class="variable">$0</span>"</span><span class="string">"a&#125;' test.log</span></span><br></pre></td></tr></table></figure>
+<h5 id="逻辑判断"><a href="#逻辑判断" class="headerlink" title="逻辑判断"></a>逻辑判断</h5><blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">运算符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">= += -= *= /= %= ^= **=</td>
+<td>赋值</td>
+</tr>
+<tr>
+<td style="text-align:left">?:</td>
+<td>C条件表达式</td>
+</tr>
+<tr>
+<td style="text-align:left">&#124;&#124;</td>
+<td>逻辑或</td>
+</tr>
+<tr>
+<td style="text-align:left">&amp;&amp;</td>
+<td>逻辑与</td>
+</tr>
+<tr>
+<td style="text-align:left">~ ~!</td>
+<td>匹配正则表达式和不匹配正则表达式</td>
+</tr>
+<tr>
+<td style="text-align:left">&lt; &lt;= &gt; &gt;= != ==</td>
+<td>关系运算符</td>
+</tr>
+<tr>
+<td style="text-align:left">空格</td>
+<td>连接</td>
+</tr>
+<tr>
+<td style="text-align:left">+ -</td>
+<td>加，减</td>
+</tr>
+<tr>
+<td style="text-align:left">* / %</td>
+<td>乘，除与求余</td>
+</tr>
+<tr>
+<td style="text-align:left">+ - !</td>
+<td>一元加，减和逻辑非</td>
+</tr>
+<tr>
+<td style="text-align:left">^ ***</td>
+<td>求幂</td>
+</tr>
+<tr>
+<td style="text-align:left">++ –</td>
+<td>增加或减少，作为前缀或后缀</td>
+</tr>
+<tr>
+<td style="text-align:left">$</td>
+<td>字段引用</td>
+</tr>
+<tr>
+<td style="text-align:left">in</td>
+<td>数组成员</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输出第一列为20170801的记录</span></span><br><span class="line">awk <span class="string">'$1==20170801 &#123;print&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出第二列不是nmask,nmask的记录</span></span><br><span class="line">awk <span class="string">'$2!="nmask,nmask" &#123;print&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 组合使用</span></span><br><span class="line">awk <span class="string">'$1==20170801 &amp;&amp; $2!="nmask,nmask" &#123;print $1,$2,$3&#125;'</span> test.log</span><br></pre></td></tr></table></figure>
+<h5 id="内建变量"><a href="#内建变量" class="headerlink" title="内建变量"></a>内建变量</h5><blockquote>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$n</td>
+<td>当前记录的第n个字段，字段间由FS分隔</td>
+</tr>
+<tr>
+<td>$0</td>
+<td>完整的输入记录</td>
+</tr>
+<tr>
+<td>ARGC</td>
+<td>命令行参数的数目</td>
+</tr>
+<tr>
+<td>ARGIND</td>
+<td>命令行中当前文件的位置(从0开始算)</td>
+</tr>
+<tr>
+<td>ARGV</td>
+<td>包含命令行参数的数组</td>
+</tr>
+<tr>
+<td>CONVFMT</td>
+<td>数字转换格式(默认值为%.6g)ENVIRON环境变量关联数组</td>
+</tr>
+<tr>
+<td>ERRNO</td>
+<td>最后一个系统错误的描述</td>
+</tr>
+<tr>
+<td>FIELDWIDTHS</td>
+<td>字段宽度列表(用空格键分隔)</td>
+</tr>
+<tr>
+<td>FILENAME</td>
+<td>当前文件名</td>
+</tr>
+<tr>
+<td>FNR</td>
+<td>各文件分别计数的行号</td>
+</tr>
+<tr>
+<td>FS</td>
+<td>字段分隔符(默认是任何空格)</td>
+</tr>
+<tr>
+<td>IGNORECASE</td>
+<td>如果为真，则进行忽略大小写的匹配</td>
+</tr>
+<tr>
+<td>NF</td>
+<td>一条记录的字段的数目</td>
+</tr>
+<tr>
+<td>NR</td>
+<td>已经读出的记录数，就是行号，从1开始</td>
+</tr>
+<tr>
+<td>OFMT</td>
+<td>数字的输出格式(默认值是%.6g)</td>
+</tr>
+<tr>
+<td>OFS</td>
+<td>输出记录分隔符（输出换行符），输出时用指定的符号代替换行符</td>
+</tr>
+<tr>
+<td>ORS</td>
+<td>输出记录分隔符(默认值是一个换行符)</td>
+</tr>
+<tr>
+<td>RLENGTH</td>
+<td>由match函数所匹配的字符串的长度</td>
+</tr>
+<tr>
+<td>RS</td>
+<td>记录分隔符(默认是一个换行符)</td>
+</tr>
+<tr>
+<td>RSTART</td>
+<td>由match函数所匹配的字符串的第一个位置</td>
+</tr>
+<tr>
+<td>SUBSEP</td>
+<td>数组下标分隔符(默认值是/034)</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'BEGIN&#123;printf "%4s %4s %4s %4s %4s %4s %4s %4s %4s\n","FILENAME","ARGC","FNR","FS","NF","NR","OFS","ORS","RS";printf "---------------------------------------------\n"&#125; &#123;printf "%4s %4s %4s %4s %4s %4s %4s %4s %4s\n",FILENAME,ARGC,FNR,FS,NF,NR,OFS,ORS,RS&#125;'</span>  test.log</span><br></pre></td></tr></table></figure>
+<h5 id="使用正则"><a href="#使用正则" class="headerlink" title="使用正则"></a>使用正则</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输出第二列中包含nm开头的所有记录</span></span><br><span class="line">awk <span class="string">'$2 ~ /nm.*/ &#123;print&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出包含2017开头的记录</span></span><br><span class="line">awk <span class="string">'/2017.*/ &#123;print&#125;'</span> test.log <span class="comment"># 注意：这里没有～，因为没有指定是哪一列</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 忽略大小写&#123;INGORECASE=1&#125;</span></span><br><span class="line">awk <span class="string">'&#123;INGORECASE=1&#125; /nmask/ &#123;print&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配取反 !~</span></span><br><span class="line">awk <span class="string">'$2 !~ /nm.*/ &#123;print&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 数组和正则捕获的强大用法</span></span><br></pre></td></tr></table></figure>
+<h5 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># substr字符串截取, 截取第一列的第一到第四个字符</span></span><br><span class="line">awk <span class="string">'&#123;print substr($1, 1, 4)&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># split切分字符串, 以逗号分隔第2列的数据，并输出分别输出第2列的内容</span></span><br><span class="line">awk <span class="string">'&#123;split($2, a, ",");print a[1],a[2]&#125;'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># gsub替换, 将第2列中的nmask替换成nMask</span></span><br><span class="line">awk <span class="string">'&#123;gsub("nmask", "nMask", $2);print&#125;'</span></span><br></pre></td></tr></table></figure>
+<h4 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h4><p>Linux grep命令用于查找文件里符合条件的字符串。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 递归查询</span></span><br><span class="line">grep -r nmask /etc/  <span class="comment">#查看/etc目录下内容包含nmask的文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询取反</span></span><br><span class="line">grep -v <span class="built_in">test</span>  test.log</span><br></pre></td></tr></table></figure>
+<h4 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h4><p>Linux sed命令是利用script来处理文本文件。</p>
+<h5 id="命令格式-1"><a href="#命令格式-1" class="headerlink" title="命令格式"></a>命令格式</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed [-hnV][-e&lt;script&gt;][-f&lt;script文件&gt;][文本文件]</span><br></pre></td></tr></table></figure>
+<h5 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h5><ul>
+<li>-e &lt;script&gt; 或 –expression=&lt;script&gt; 以选项中指定的script来处理输入的文本文件。</li>
+<li>-f &lt;script文件&gt; 或 –file=&lt;script文件&gt; 以选项中指定的script文件来处理输入的文本文件。</li>
+<li>-h或–help 显示帮助。</li>
+<li>-n或–quiet或–silent 仅显示script处理后的结果。</li>
+<li>-V或–version 显示版本信息。</li>
+</ul>
+<h5 id="动作说明"><a href="#动作说明" class="headerlink" title="动作说明"></a>动作说明</h5><ul>
+<li>a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)～</li>
+<li>c ：取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行！</li>
+<li>d ：删除，因为是删除啊，所以 d 后面通常不接任何咚咚；</li>
+<li>i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)；</li>
+<li>p ：打印，亦即将某个选择的数据印出。通常 p 会与参数 sed -n 一起运行～</li>
+<li>s ：取代，可以直接进行取代的工作哩！通常这个 s 的动作可以搭配正规表示法！例如 1,20s/old/new/g 就是啦！</li>
+</ul>
+<h5 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在test.log文件的第3行后插入一行，内容为nmask</span></span><br><span class="line">sed -e 3a\nmask test.log <span class="comment"># 注意在使用a, c or i时要在后面使用\</span></span><br><span class="line">或者</span><br><span class="line">sed -e <span class="string">'3a nmask'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># -e 可以省略</span></span><br><span class="line">sed 3a\nmask test.log</span><br><span class="line">或者</span><br><span class="line">sed <span class="string">'3a nmask'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果有空格</span></span><br><span class="line">sed 3a\nmask\ sdg\ sdg test.log</span><br><span class="line">或者</span><br><span class="line">sed <span class="string">'3a nmask sdg sdg'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除2~3行</span></span><br><span class="line">sed 2,3d test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 替换第二行为“No 2 number”</span></span><br><span class="line">sed <span class="string">'2c No 2-5 number'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 搜索有"nmask"关键字的行 </span></span><br><span class="line">sed -n <span class="string">'/nmask/p'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 搜索有"nmask"关键字的行并删除</span></span><br><span class="line">sed <span class="string">'/nmask/d'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据的搜寻并替换</span></span><br><span class="line">sed <span class="string">'s/要被取代的字串/新的字串/g'</span> FILE</span><br><span class="line"></span><br><span class="line"><span class="comment"># 直接修改文件内容(危险动作)</span></span><br><span class="line">sed -i <span class="string">'s/\.$/\!/g'</span> regular_express.txt <span class="comment"># 利用 sed 将 regular_express.txt 内每一行结尾若为 . 则换成 !</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 利用 sed 直接在 regular_express.txt 最后一行加入『# This is a test』</span></span><br><span class="line"><span class="comment"># 由於 $ 代表的是最后一行，而 a 的动作是新增，因此该文件最后新增『# This is a test』！</span></span><br><span class="line">sed -i <span class="string">'$a # This is a test'</span> regular_express.txt</span><br></pre></td></tr></table></figure>
+<h4 id="cut"><a href="#cut" class="headerlink" title="cut"></a>cut</h4><p>Linux cut命令用于显示每行从开头算起 num1 到 num2 的文字。</p>
+<h6 id="命令格式-2"><a href="#命令格式-2" class="headerlink" title="命令格式"></a>命令格式</h6><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cut  [-bn] [file]</span><br><span class="line">cut [-c] [file]</span><br><span class="line">cut [-df] [file]</span><br></pre></td></tr></table></figure>
+<h5 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h5><ul>
+<li>-b ：以字节为单位进行分割。这些字节位置将忽略多字节字符边界，除非也指定了 -n 标志。</li>
+<li>-c ：以字符为单位进行分割。</li>
+<li>-d ：自定义分隔符，默认为制表符。</li>
+<li>-f ：与-d一起使用，指定显示哪个区域。</li>
+<li>-n ：取消分割多字节字符。仅和 -b 标志一起使用。如果字符的最后一个字节落在由 -b 标志的 List 参数指示的<br>范围之内，该字符将被写出；否则，该字符将被排除</li>
+</ul>
+<h5 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cut -d <span class="string">':'</span> -f1 /etc/passwd</span><br></pre></td></tr></table></figure>
+<h3 id="管道过滤器（xargs）"><a href="#管道过滤器（xargs）" class="headerlink" title="管道过滤器（xargs）"></a>管道过滤器（xargs）</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p><strong>xargs命令</strong>是给其他命令传递参数的一个过滤器，也是组合多个命令的一个工具。</p>
+<p><strong>它擅长将标准输入数据转换成命令行参数，xargs能够处理管道或者stdin并将其转换成特定命令的命令参数</strong>。</p>
+<p>xargs也可以将单行或多行文本输入转换为其他格式，例如多行变单行，单行变多行。</p>
+<p>xargs的默认命令是<a href="http://man.linuxde.net/echo" target="_blank" rel="noopener">echo</a>，空格是默认定界符。这意味着通过管道传递给xargs的输入将会包含换行和空白，不过通过xargs的处理，换行和空白将被空格取代。</p>
+<p>xargs 是一个强有力的命令，它能够捕获一个命令的输出，然后传递给另外一个命令。之所以能用到这个命令，关键是由于很多命令不支持|管道来传递参数，而日常工作中有有这个必要，所以就有了 xargs 命令</p>
+<h4 id="命令格式-3"><a href="#命令格式-3" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">somecommand |xargs -item  <span class="built_in">command</span></span><br></pre></td></tr></table></figure>
+<h4 id="常用参数-1"><a href="#常用参数-1" class="headerlink" title="常用参数"></a>常用参数</h4><ul>
+<li>-n num 后面加次数，表示命令在执行的时候一次用的argument的个数，默认是用所有的。</li>
+<li>-d delim 分隔符，默认的xargs分隔符是回车，argument的分隔符是空格，这里修改的是xargs的分隔符</li>
+</ul>
+<h4 id="用法-1"><a href="#用法-1" class="headerlink" title="用法"></a>用法</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat test.txt</span></span><br><span class="line"></span><br><span class="line">a b c d e f g</span><br><span class="line">h i j k l m n</span><br><span class="line">o p q</span><br><span class="line">r s t</span><br><span class="line">u v w x y z</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多行输入单行输出：</span></span><br><span class="line"><span class="comment"># cat test.txt | xargs</span></span><br><span class="line">a b c d e f g h i j k l m n o p q r s t u v w x y z</span><br><span class="line"></span><br><span class="line"><span class="comment"># -n 选项多行输出：</span></span><br><span class="line"><span class="comment"># cat test.txt | xargs -n3</span></span><br><span class="line">a b c</span><br><span class="line">d e f</span><br><span class="line">g h i</span><br><span class="line">j k l</span><br><span class="line">m n o</span><br><span class="line">p q r</span><br><span class="line">s t u</span><br><span class="line">v w x</span><br><span class="line">y z</span><br><span class="line"></span><br><span class="line"><span class="comment"># -d 选项可以自定义一个定界符：</span></span><br><span class="line"><span class="comment"># echo "nameXnameXnameXname" | xargs -dX</span></span><br><span class="line">name name name name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 stdin，将格式化后的参数传递给命令</span></span><br><span class="line"><span class="comment"># xargs的一个选项-I，使用-I指定一个替换字符串&#123;&#125;，这个字符串在xargs扩展时会被替换掉，当-I与xargs结合使用，每一个参数命令都会被执行一次</span></span><br><span class="line">cat arg.txt | xargs -I &#123;&#125; ./sk.sh -p &#123;&#125; -l</span><br><span class="line">或者</span><br><span class="line">cat arg.txt | xargs -i ./sk.sh -p &#123;&#125; -l</span><br><span class="line"><span class="comment"># 输出：</span></span><br><span class="line">-p aaa -l</span><br><span class="line">-p bbb -l</span><br><span class="line">-p ccc -l</span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制所有图片文件到 /data/images 目录下</span></span><br><span class="line">ls *.jpg | xargs -n1 -I &#123;&#125; cp &#123;&#125; /data/images</span><br><span class="line">或者</span><br><span class="line">ls *.jpg | xargs -n1 -i cp &#123;&#125; /data/images</span><br><span class="line"></span><br><span class="line"><span class="comment"># 参数说明</span></span><br><span class="line">-I R               same as --replace=R (R must be specified)</span><br><span class="line">-i,--replace=[R]   Replace R <span class="keyword">in</span> initial arguments with names <span class="built_in">read</span> from standard input. If R is unspecified, assume &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 再看一个例子</span></span><br><span class="line">sudo apt list | grep php | awk -F <span class="string">'/'</span> <span class="string">'/^php7\.2/ &#123;print $1&#125;'</span> | xargs</span><br><span class="line"></span><br><span class="line"><span class="comment"># xargs结合find使用</span></span><br><span class="line"><span class="comment"># 用rm 删除太多的文件时候，可能得到一个错误信息：/bin/rm Argument list too long. 用xargs去避免这个问题：</span></span><br><span class="line">find . -<span class="built_in">type</span> f -name <span class="string">"*.log"</span> -print0 | xargs -0 rm -f</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查找所有的jpg 文件，并且压缩它们：</span></span><br><span class="line">find . -<span class="built_in">type</span> f -name <span class="string">"*.jpg"</span> -<span class="built_in">print</span> | xargs tar -czvf images.tar.gz</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="poettian 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpeg" alt="poettian 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>poettian</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://www.poettian.com/2018/09/04/linux下各种工具命令的使用/" title="linux下各种工具命令的使用">https://www.poettian.com/2018/09/04/linux下各种工具命令的使用/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i> linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/27/网站升级https记录/" rel="next" title="网站升级https记录">
+                <i class="fa fa-chevron-left"></i> 网站升级https记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNjg3NS8xMzQxMQ"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="poettian" />
+            
+              <p class="site-author-name" itemprop="name">poettian</p>
+              <p class="site-description motion-element" itemprop="description">好记性不如烂笔头</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/poettian" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:poettian@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/poettian_tian" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/grotian" target="_blank" title="微博"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#linux下各种命令的使用"><span class="nav-number">1.</span> <span class="nav-text">linux下各种命令的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文本处理（awk、grep、sed、cut）"><span class="nav-number">1.0.1.</span> <span class="nav-text">文本处理（awk、grep、sed、cut）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实验数据"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">实验数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#awk"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">awk</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#命令格式"><span class="nav-number">1.0.1.2.1.</span> <span class="nav-text">命令格式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常用参数"><span class="nav-number">1.0.1.2.2.</span> <span class="nav-text">常用参数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分隔符"><span class="nav-number">1.0.1.2.3.</span> <span class="nav-text">分隔符</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#设置变量"><span class="nav-number">1.0.1.2.4.</span> <span class="nav-text">设置变量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#逻辑判断"><span class="nav-number">1.0.1.2.5.</span> <span class="nav-text">逻辑判断</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#内建变量"><span class="nav-number">1.0.1.2.6.</span> <span class="nav-text">内建变量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用正则"><span class="nav-number">1.0.1.2.7.</span> <span class="nav-text">使用正则</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#内置函数"><span class="nav-number">1.0.1.2.8.</span> <span class="nav-text">内置函数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#grep"><span class="nav-number">1.0.1.3.</span> <span class="nav-text">grep</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sed"><span class="nav-number">1.0.1.4.</span> <span class="nav-text">sed</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#命令格式-1"><span class="nav-number">1.0.1.4.1.</span> <span class="nav-text">命令格式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#参数"><span class="nav-number">1.0.1.4.2.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#动作说明"><span class="nav-number">1.0.1.4.3.</span> <span class="nav-text">动作说明</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#插入操作"><span class="nav-number">1.0.1.4.4.</span> <span class="nav-text">插入操作</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cut"><span class="nav-number">1.0.1.5.</span> <span class="nav-text">cut</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#命令格式-2"><span class="nav-number">1.0.1.5.0.1.</span> <span class="nav-text">命令格式</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#参数-1"><span class="nav-number">1.0.1.5.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#用法"><span class="nav-number">1.0.1.5.2.</span> <span class="nav-text">用法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管道过滤器（xargs）"><span class="nav-number">1.0.2.</span> <span class="nav-text">管道过滤器（xargs）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令格式-3"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">命令格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用参数-1"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">常用参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用法-1"><span class="nav-number">1.0.2.4.</span> <span class="nav-text">用法</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">poettian</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      访客数<span class="busuanzi-value" id="busuanzi_value_site_uv"></span>人次
+    </span>
+  
+  
+    <span class="post-meta-divider">|</span>
+  
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      访问量<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OfHn2rURzWXvGqhoYEBtqC4J-gzGzoHsz", "wLjSd10AO01D1Bwbutam1snw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.get('time'));
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! See more at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see here how to solve it: https://github.com/theme-next/hexo-leancloud-counter-security. \n But you also can use LeanCloud without security, by set \'security\' option to \'false\'.');
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
