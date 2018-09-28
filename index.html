@@ -419,61 +419,6 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2017/11/14/ThinkPHP下的代码分层思考/">ThinkPHP下的代码分层思考</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2017-11-14
-        </span>
-        
-          <span class="post-category">
-            
-              <a href="/categories/技术/">技术</a>
-            
-          </span>
-        
-        
-        <span class="post-visits"
-             data-url="/2017/11/14/ThinkPHP下的代码分层思考/"
-             data-title="ThinkPHP下的代码分层思考">
-          阅读次数 0
-        </span>
-        
-      </div>
-    </header>
-
-    
-    
-
-
-    <div class="post-content">
-      
-        
-        
-
-        
-          <p>公司一直在用国产框架ThinkPHP做开发，上半年进行了一次代码重构， 使用了最新的thinkphp 5，虽然相较之前版本代码结构更加清晰合理，可依然有比较混乱的地方。随着开发进度已接近尾声，重新架构已经不可能，但有必要做一个梳理，方便以后升级参考和后续优化。</p>
-<p>结合ThinkPHP手册的说明，暂时给出一个我觉得合理的分层结构，如下：</p>
-<p>|–Application<br>|      |–common/ 公共模块，统一存放：行为，数据层，枚举，逻辑层，业务层等<br>|    |    |–behavior/ 行为，权限检测，模板处理等等<br>|    |    |–model/ 数据层，读取和更新数据<br>|    |    |–enum/ 枚举字段数值定义和说明<br>|    |    |–logic/ 逻辑层，调用数据层和其他逻辑层进行业务处理，抛异常方式返回错误信息<br>|    |    |–service/ 服务层，提供：参数校验，行为调用，事务开启，逻辑调用和异常捕获，数据过滤等服务<br>|    |    …<br>|    |–admin/ 后台模块<br>|    |    |–controller/ 调用服务层，数据格式化<br>|    |–home/ 前台模块<br>|    |–api/ 接口模块<br>|    |    |–controller/ 调用服务层，数据格式化<br>|–extend/<br>|    |–util/ 工具箱<br>|    …<br>|–vendor/ composer文件<br>…</p>
-
-        
-      
-    </div>
-
-    
-
-    
-
-  </article>
-
-      
-        
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
           <a class="post-link" href="/2017/11/02/LNMP架构中的buffer/">LNMP架构中的buffer机制</a>
         
       </h1>
