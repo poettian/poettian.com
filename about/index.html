@@ -90,12 +90,10 @@
 
 
 
-  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.10.0/dist/av-min.js"></script>
   <script id="leancloud">
-    AV.init({
-      appId: "OfHn2rURzWXvGqhoYEBtqC4J-gzGzoHsz",
-      appKey: "wLjSd10AO01D1Bwbutam1snw"
-    });
+    var { Query, User } = AV;
+    AV.init('OfHn2rURzWXvGqhoYEBtqC4J-gzGzoHsz', 'wLjSd10AO01D1Bwbutam1snw');
   </script>
 
 
@@ -361,6 +359,7 @@
     (d.head || d.body).appendChild(s);
     })();  
   </script>
+
 
   
 
