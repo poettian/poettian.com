@@ -101,8 +101,9 @@
 
 
 
+
 <script>
-  window.config = {"title":"健忘的记事本","subtitle":null,"description":"好记性不如烂笔头","author":"poettian","language":"zh-CN","timezone":null,"url":"https://www.poettian.com","root":"/","permalink":":year/:month/:day/:title/","permalink_defaults":null,"source_dir":"source","public_dir":"public","tag_dir":"tags","archive_dir":"archives","category_dir":"categories","code_dir":"downloads/code","i18n_dir":":lang","skip_render":null,"new_post_name":":title.md","default_layout":"post","titlecase":false,"external_link":true,"filename_case":0,"render_drafts":false,"post_asset_folder":true,"relative_link":false,"future":true,"highlight":{"enable":true,"auto_detect":false,"line_number":true,"tab_replace":null,"first_line_number":"always1"},"default_category":"uncategorized","category_map":null,"tag_map":null,"date_format":"YYYY-MM-DD","time_format":"HH:mm:ss","per_page":10,"pagination_dir":"page","theme":"even","deploy":[{"type":"git","repo":"https://github.com/poettian/poettian.com.git","branch":"master"},{"type":"leancloud_counter_security_sync"}],"ignore":[],"index_generator":{"per_page":10,"order_by":"-date","path":""},"leancloud_counter_security":{"enable_sync":true,"app_id":"OfHn2rURzWXvGqhoYEBtqC4J-gzGzoHsz","app_key":"wLjSd10AO01D1Bwbutam1snw","username":"poettian","password":"Gg450972998"},"algolia":{"applicationID":"8UR669C6NW","apiKey":"983f3b72ca627207def729571824f32d","adminApiKey":"5f3e1f0e45b13ddb06586cc6753ab04b","indexName":"hexo_search","chunkSize":5000},"archive_generator":{"per_page":10,"yearly":true,"monthly":true,"daily":false},"category_generator":{"per_page":10},"tag_generator":{"per_page":10},"marked":{"gfm":true,"pedantic":false,"sanitize":false,"tables":true,"breaks":true,"smartLists":true,"smartypants":true,"modifyAnchors":"","autolink":true},"server":{"port":4000,"log":false,"ip":"0.0.0.0","compress":false,"header":true},"since":2017,"favicon":"/favicon.ico","rss":"default","menu":{"Home":"/","Archives":"/archives/","Tags":"/tags","Categories":"/categories","About":"/about"},"color":"cobalt blue","mode":"default","toc":true,"fancybox":true,"pjax":true,"copyright":{"enable":true,"license":"<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\" target=\"_blank\">知识共享署名-非商业性使用 4.0 国际许可协议</a>"},"reward":{"enable":false,"qrCode":{"wechat":null,"alipay":null}},"social":{"email":"poettian@gmail.com","stack-overflow":null,"twitter":"https://twitter.com/poettian_tian","facebook":null,"linkedin":null,"google":null,"github":"https://github.com/poettian","weibo":null,"zhihu":null,"douban":null,"pocket":null,"tumblr":null,"instagram":null},"leancloud":{"app_id":"OfHn2rURzWXvGqhoYEBtqC4J-gzGzoHsz","app_key":"wLjSd10AO01D1Bwbutam1snw"},"baidu_analytics":"a366524a3aa0beb76dced93bc66a1e21","baidu_verification":null,"google_analytics":null,"google_verification":null,"disqus_shortname":"poettian","changyan":{"appid":null,"appkey":null},"livere_datauid":null,"version":"2.10.1"};
+  window.config = {"leancloud":{"app_id":"OfHn2rURzWXvGqhoYEBtqC4J-gzGzoHsz","app_key":"wLjSd10AO01D1Bwbutam1snw"},"toc":true,"fancybox":true,"pjax":true};
 </script>
 
     <title> 健忘的记事本 </title>
@@ -237,108 +238,6 @@
   
   <section id="posts" class="posts">
     
-      
-        
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2018/11/05/LNMP架构中的缓冲区/">LNMP架构中的buffer机制</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2018-11-05
-        </span>
-        
-          <span class="post-category">
-            
-              <a href="/categories/技术/">技术</a>
-            
-          </span>
-        
-        
-        <span class="post-visits"
-             data-url="/2018/11/05/LNMP架构中的缓冲区/"
-             data-title="LNMP架构中的buffer机制">
-          阅读次数 0
-        </span>
-        
-      </div>
-    </header>
-
-    
-    
-
-
-    <div class="post-content">
-      
-        
-        
-
-        
-          <h3 id="什么是缓冲区-buffer"><a href="#什么是缓冲区-buffer" class="headerlink" title="什么是缓冲区(buffer)"></a>什么是缓冲区(buffer)</h3><p>当执行 PHP 脚本中输出指令时，例如：<code>header()</code> <code>setcookie()</code>  <code>session_start()</code> 以及我们常用的<code>echo</code> <code>print</code> 等，此时产生的数据会有两种行为模式选择，一是立即发送到下游SAPI；二是缓存起来等积累到一定的大小后再发送到下游SAPI，这种先将输出数据存起来等之后再发送的机制，就是缓冲区。</p>
-<h3 id="为什么需要缓冲区"><a href="#为什么需要缓冲区" class="headerlink" title="为什么需要缓冲区"></a>为什么需要缓冲区</h3><ol>
-<li>没有缓冲区，数据立即发送给SAPI，这会使得数据以碎片形式不断传输，降低php和SAPI间通讯的效率；</li>
-<li>没有缓冲区，你将无法对输出数据在发送前做一些操作，而缓冲区的存在使得你可以任意加工这些数据，然后选择你认为合适的时机再发送；</li>
-<li>如果你遇到过这样的提示 “Warning: Cannot modify header information - headers already sent by (output)”，那么你可以利用缓冲区来解决。</li>
-</ol>
-<h3 id="LNMP架构下的多层缓冲区"><a href="#LNMP架构下的多层缓冲区" class="headerlink" title="LNMP架构下的多层缓冲区"></a>LNMP架构下的多层缓冲区</h3><p>上面我们谈到的缓冲区只是指 php 脚本运行时存在于php进程内存中（到底存在于哪里我并不清楚，这只是我的理解）的缓冲区，只讨论这一个缓冲区是不够的。</p>
-<p>在LNMP架构下，每一层都存在着缓冲区：</p>
-<ol>
-<li>php的缓冲区</li>
-<li>SAPI（php-fpm）的缓冲区</li>
-<li>webserver（nginx）的缓冲区</li>
-</ol>
-<p>用一张图可以很好的说明这几者间的关系：</p>
-<img src="/2018/11/05/LNMP架构中的缓冲区/图1.png" title="PHP buffer flow">
-<h3 id="php的缓冲区"><a href="#php的缓冲区" class="headerlink" title="php的缓冲区"></a>php的缓冲区</h3><p>php默认开启了缓冲区，大小为4096字节，这可以在配置文件 php.ini 中看到，参数项 <code>output_buffering = 4096</code> 即指明了缓冲区开启并设置大小为4096字节。</p>
-<p>其他参数值如下：</p>
-<blockquote>
-<p>On = Enabled and buffer is unlimited. (Use with caution)<br>Off = Disabled<br>Integer = Enables the buffer and sets its maximum size in bytes.</p>
-</blockquote>
-<p>当输出数据没有超过此值时，php将不断接收并缓存这些数据，而一旦超出该值，那么php就会刷新缓冲区将数据送往SAPI。这是php中默认缓冲区的行为机制。</p>
-<p>php为开发者提供了自定义缓冲区的能力，借助 <code>ob_start</code> 函数，开发者可以定义新的缓冲区并可以嵌套（多次调用 <code>ob_start</code>），这些缓冲区将被压入栈中。当数据过来时， 会存入栈顶的缓冲区中，当数据大小超出缓冲区定义的 size 或 调用 <code>ob_flush</code> 和 <code>ob_end_flush</code> 时则将数据送到下一个缓冲区中，如此直到 php 默认的缓冲区（存在于栈底），最后送入SAPI。</p>
-<h3 id="SAPI的缓冲区"><a href="#SAPI的缓冲区" class="headerlink" title="SAPI的缓冲区"></a>SAPI的缓冲区</h3><p>SAPI有cli、mod_php、php-fpm等多种形式，不同的SAPI，缓冲区的存在和表现形式也大不相同。</p>
-<p>在讲这几个SAPI的区别前，先来看 php.ini 中的一个配置项 <code>implicit_flush</code> 和 函数 <code>ob_implicit_flush()</code> 。</p>
-<blockquote>
-<p><em>implicit_flush</em>的作用，<a href="http://lxr.php.net/xref/PHP_5_5/main/output.c#1095" target="_blank" rel="noopener">源代码已说明一切</a>：当<em>implicit_flush</em>被设置为打开（值为1），一旦有任何输出写入到SAPI缓冲区层，它都会立即刷新（flush，意思是把这些数据写入到更低层，并且缓冲区会被清空），将数据送往下一层。</p>
-</blockquote>
-<blockquote>
-<p>ob_implicit_flush 的作用和 implicit_flush 类似，当调用 ob_implicit_flush(true) 时表示打开绝对（隐式）刷送，和 设置 implicit_flush=1 作用相同；当调用 ob_implicit_flush(false) 则表示关闭绝对（隐式）刷送，和 设置 implicit_flush=0 作用相同。</p>
-</blockquote>
-<p>下面说一下这几个SAPI的区别：</p>
-<p>cli 会将 ini 配置中的 <em>output_buffer</em> 选项强制设置为0，这表示禁用默认PHP输出缓冲区。所以在CLI中，默认情况下你要输出的东西会直接传递到SAPI层，除非你手动调用ob_()类函数。并且在CLI中，<em>implicit_flush</em> 的值也会被设置为1。</p>
-<p>mod_php 不会缓存数据，将直接把数据送往 Apache。</p>
-<p>php-fpm 中有一个硬编码的8k大小的缓冲区。使用 <code>flush()</code> 函数会刷新这个缓冲区，把数据送往webserver。</p>
-<h3 id="Nginx的缓冲区"><a href="#Nginx的缓冲区" class="headerlink" title="Nginx的缓冲区"></a>Nginx的缓冲区</h3><p>nginx的缓冲区机制主要由下面几个参数来控制：</p>
-<p><strong>fastcgi_buffering</strong> on | off;</p>
-<p>开启或关闭接收来自 FastCGI server 的响应的缓冲区。</p>
-<p>当缓冲区被打开，nginx将立即接收来自 FastCGI server 的响应并把响应头和响应体分别存入由 <code>fastcgi_buffer_size</code> <code>fastcgi_buffers</code> 控制的缓冲区内。如果响应体积太大，部分响应内容将被写入临时文件中，临时文件的路径和大小以及每次写入临时文件的数据体大小分别由 <code>fastcgi_temp_path</code> <code>fastcgi_max_temp_file_size</code> <code>fastcgi_temp_file_write_size</code> 这三个配置项来决定。</p>
-<p>如果缓冲区被关闭，那么nginx会把从 FastCGI server 接收到的响应数据立即发送给客户端。</p>
-<p>使用 <code>X-Accel-Buffering</code> 这个响应头也可以控制缓冲区的打开和关闭，<code>header(&#39;X-Accel-Buffering: no&#39;)</code> 关闭，<code>header(&#39;X-Accel-Buffering: yes&#39;);</code> 打开。</p>
-<p><strong>fastcgi_buffer_size</strong> size;</p>
-<p>设置接收 FastCGI server 第一部分响应（通常包含体积很小的响应头）的缓冲区的大小。默认大小等于一个内存页，或者4k或者8k，和操作系统有关。</p>
-<p><strong>fastcgi_buffers</strong> number size;</p>
-<p>设置单个连接中接收 FastCGI server 响应体的缓冲区的数量和每个缓冲区的大小。默认每个缓冲区大小等于一个内存页，或者4k或者8k，和操作系统有关。</p>
-<p><strong>fastcgi_busy_buffers_size</strong> size;</p>
-<p>没看明白的一个配置项，手册上的解释为：</p>
-<blockquote>
-<p>When <a href="http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html#fastcgi_buffering" target="_blank" rel="noopener">buffering</a> of responses from the FastCGI server is enabled, limits the total <code>*size*</code> of buffers that can be busy sending a response to the client while the response is not yet fully read. In the meantime, the rest of the buffers can be used for reading the response and, if needed, buffering part of the response to a temporary file. By default, <code>*size*</code> is limited by the size of two buffers set by the <a href="http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html#fastcgi_buffer_size" target="_blank" rel="noopener">fastcgi_buffer_size</a>and <a href="http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html#fastcgi_buffers" target="_blank" rel="noopener">fastcgi_buffers</a> directives.</p>
-</blockquote>
-<p>但实际上nginx并不会等数据塞满 buffer 后才发送给client，具体机制还不明确，待研究。</p>
-
-        
-      
-    </div>
-
-    
-
-    
-
-  </article>
-
       
         
   <article class="post">
@@ -520,7 +419,7 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2017/11/17/nginx配置之server-name/">nginx配置之server_name</a>
+          <a class="post-link" href="/2017/11/17/nginx系列之server_name/">nginx系列之server_name</a>
         
       </h1>
 
@@ -537,8 +436,8 @@
         
         
         <span class="post-visits"
-             data-url="/2017/11/17/nginx配置之server-name/"
-             data-title="nginx配置之server_name">
+             data-url="/2017/11/17/nginx系列之server_name/"
+             data-title="nginx系列之server_name">
           阅读次数 0
         </span>
         
@@ -557,13 +456,85 @@
         
 
         
-          <h3 id="nginx是如何解析请求"><a href="#nginx是如何解析请求" class="headerlink" title="nginx是如何解析请求"></a>nginx是如何解析请求</h3><p>先来看下nginx配置中server的写法：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>      <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> example.org www.example.org;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>nginx会根据请求头的Host字段来查找和匹配对应的server，如果配置中所有server的server_name都无法匹配该请求，那么nginx就route此请求到<code>ip:port</code>默认的server中。<br>其中，默认的server是配置文件中第一个server，除非明确指定某个server为default server，如下：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>      <span class="number">80</span> default_server;</span><br><span class="line">    <span class="attribute">server_name</span> example.net www.example.net;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>注意：默认server是针对ip:port而言的，不同的ip:port分别有不同的default server</p>
-</blockquote>
+          <h3 id="server-name的作用"><a href="#server-name的作用" class="headerlink" title="server_name的作用"></a>server_name的作用</h3><p>当请求过来时，nginx 根据 <code>listen</code> 和 <code>server_name</code> 这两个配置项来决定使用哪一个 server 块下的配置来处理请求。当请求头中的 “Host” 字段值匹配不到任一个 server_name 或者请求头中没有该字段时，nginx会把该请求路由到相关端口的默认 server 块中去处理。其中默认 server 是第一个定义在配置文件中的 server，也可以在 <code>listen</code> 配置项中明确指明：<code>listen 80 default_server;</code></p>
+<p>如果你选择不处理未带有“Host”的请求，那么可以采用如下配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;</span><br><span class="line">    server_name <span class="string">""</span>;</span><br><span class="line">    <span class="built_in">return</span>      444;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>server_name 被定义为一个空字符串来匹配未带有“Host”的请求，你也可以省略该配置项，nginx默认的server_name 就是空字符串。其中，444 是一个非标准的nginx响应码。</p>
           <div class="read-more">
-            <a href="/2017/11/17/nginx配置之server-name/" class="read-more-link">阅读更多</a>
+            <a href="/2017/11/17/nginx系列之server_name/" class="read-more-link">阅读更多</a>
+          </div>
+        
+      
+    </div>
+
+    
+
+    
+
+  </article>
+
+      
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2017/10/05/LNMP架构中的缓冲区/">LNMP架构中的buffer机制</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-10-05
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/技术/">技术</a>
+            
+          </span>
+        
+        
+        <span class="post-visits"
+             data-url="/2017/10/05/LNMP架构中的缓冲区/"
+             data-title="LNMP架构中的buffer机制">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+
+
+    <div class="post-content">
+      
+        
+        
+          
+        
+
+        
+          <h3 id="什么是缓冲区-buffer"><a href="#什么是缓冲区-buffer" class="headerlink" title="什么是缓冲区(buffer)"></a>什么是缓冲区(buffer)</h3><p>当执行 PHP 脚本中输出指令时，例如：<code>header()</code> <code>setcookie()</code>  <code>session_start()</code> 以及我们常用的<code>echo</code> <code>print</code> 等，此时产生的数据会有两种行为模式选择，一是立即发送到下游SAPI；二是缓存起来等积累到一定的大小后再发送到下游SAPI，这种先将输出数据存起来等之后再发送的机制，就是缓冲区。</p>
+<h3 id="为什么需要缓冲区"><a href="#为什么需要缓冲区" class="headerlink" title="为什么需要缓冲区"></a>为什么需要缓冲区</h3><ul>
+<li><p>没有缓冲区，数据立即发送给SAPI，这会使得数据以碎片形式不断传输，降低php和SAPI间通讯的效率；</p>
+</li>
+<li><p>没有缓冲区，你将无法对输出数据在发送前做一些操作，而缓冲区的存在使得你可以任意加工这些数据，然后选择你认为合适的时机再发送；</p>
+</li>
+<li><p>如果你遇到过这样的提示 “Warning: Cannot modify header information - headers already sent by (output)”，那么你可以利用缓冲区来解决。</p>
+</li>
+</ul>
+<h3 id="LNMP架构下的多层缓冲区"><a href="#LNMP架构下的多层缓冲区" class="headerlink" title="LNMP架构下的多层缓冲区"></a>LNMP架构下的多层缓冲区</h3><p>上面我们谈到的缓冲区只是指 php 脚本运行时存在于php进程内存中（到底存在于哪里我并不清楚，这只是我的理解）的缓冲区，只讨论这一个缓冲区是不够的。在LNMP架构下，每一层都存在着缓冲区：</p>
+<ul>
+<li>php的缓冲区</li>
+<li>SAPI（php-fpm）的缓冲区</li>
+<li>webserver（nginx）的缓冲区</li>
+</ul>
+<p>用一张图可以很好的说明这几者间的关系：</p>
+<img src="/2017/10/05/LNMP架构中的缓冲区/图1.png" title="PHP buffer flow">
+          <div class="read-more">
+            <a href="/2017/10/05/LNMP架构中的缓冲区/" class="read-more-link">阅读更多</a>
           </div>
         
       
