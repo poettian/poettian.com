@@ -163,11 +163,9 @@
       query.find().then(function (results) {
         if (results.length > 0) {
           var counter = results[0];
+          counter.increment('time', 1);
           counter.save(null, {
-            fetchWhenSave: true
-          }).then(function (counter) {
-            counter.increment('time', 1);
-            return counter.save();
+              fetchWhenSave: true
           }).then(function (counter) {
             updateVisits($visits, counter.get('time'));
           });
