@@ -2,24 +2,24 @@
 <html lang="zh">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>前言 - Poettian的博客</title>
+<title>PHP的数据类型 - Poettian的博客</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-    <meta name="description" content="这不是我写过的第一篇博客，但应该是最认真、最简单的一篇。  Hello，Poettian的博客。">
-<meta name="keywords" content="this">
+    <meta name="description" content="学习一门语言，数据类型是必须要首先了解的。php 作为一种弱类型语言，数据类型的特点和不经意间的类型转换，往往是入坑的关键。">
+<meta name="keywords" content="PHP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前言">
-<meta property="og:url" content="https://www.poettian.com/2019/05/30/前言/index.html">
+<meta property="og:title" content="PHP的数据类型">
+<meta property="og:url" content="https://www.poettian.com/2019/05/31/PHP的数据类型/index.html">
 <meta property="og:site_name" content="Poettian的博客">
-<meta property="og:description" content="这不是我写过的第一篇博客，但应该是最认真、最简单的一篇。  Hello，Poettian的博客。">
+<meta property="og:description" content="学习一门语言，数据类型是必须要首先了解的。php 作为一种弱类型语言，数据类型的特点和不经意间的类型转换，往往是入坑的关键。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://www.poettian.com/images/og_image.png">
-<meta property="og:updated_time" content="2019-05-30T14:19:13.109Z">
+<meta property="og:updated_time" content="2019-05-31T07:39:49.896Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="前言">
-<meta name="twitter:description" content="这不是我写过的第一篇博客，但应该是最认真、最简单的一篇。  Hello，Poettian的博客。">
+<meta name="twitter:title" content="PHP的数据类型">
+<meta name="twitter:description" content="学习一门语言，数据类型是必须要首先了解的。php 作为一种弱类型语言，数据类型的特点和不经意间的类型转换，往往是入坑的关键。">
 <meta name="twitter:image" content="https://www.poettian.com/images/og_image.png">
 
 
@@ -104,7 +104,7 @@ var _hmt = _hmt || [];
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/logo.png" alt="前言" height="28">
+                <img src="/images/logo.png" alt="PHP的数据类型" height="28">
             
             </a>
         </div>
@@ -155,10 +155,10 @@ var _hmt = _hmt || [];
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-05-30T14:02:20.000Z">2019-05-30</time>
+                <time class="level-item has-text-grey" datetime="2019-05-31T05:22:26.000Z">2019-05-31</time>
                 
                 <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/杂记/">杂记</a>
+                <a class="has-link-grey -link" href="/categories/技术/">技术</a>
                 </div>
                 
                 
@@ -168,14 +168,44 @@ var _hmt = _hmt || [];
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                前言
+                PHP的数据类型
             
         </h1>
         <div class="content">
-            <p>这不是我写过的第一篇博客，但应该是最认真、最简单的一篇。</p>
+            <p>学习一门语言，数据类型是必须要首先了解的。php 作为一种弱类型语言，数据类型的特点和不经意间的类型转换，往往是入坑的关键。</p>
+<a id="more"></a>
+<h3 id="查看和验证数据的类型"><a href="#查看和验证数据的类型" class="headerlink" title="查看和验证数据的类型"></a>查看和验证数据的类型</h3><p>如果想查看某个<a href="https://www.php.net/manual/zh/language.expressions.php" target="_blank" rel="noopener">表达式</a>的值和类型，用 <a href="https://www.php.net/manual/zh/function.var-dump.php" target="_blank" rel="noopener">var_dump()</a> 函数。</p>
+<p>如果只是想得到一个易读懂的类型的表达方式用于调试，用 <a href="https://www.php.net/manual/zh/function.gettype.php" target="_blank" rel="noopener">gettype()</a> 函数。要检验某个类型，<em>不要</em>用 <a href="https://www.php.net/manual/zh/function.gettype.php" target="_blank" rel="noopener">gettype()</a>，而用 <em>is_type</em> 函数。</p>
+<h3 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h3><p>PHP 中不区分 float 和 double，如果需要高精度的计算，应该使用 <a href="https://www.php.net/manual/zh/ref.bc.php" target="_blank" rel="noopener">BC 数学函数</a> 或 <a href="https://www.php.net/manual/zh/ref.gmp.php" target="_blank" rel="noopener">gmp函数</a>。</p>
 <blockquote>
-<p>Hello，Poettian的博客。</p>
+<p>理解计算机是如何存储浮点类型数据的</p>
 </blockquote>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>PHP 中的 <a href="https://www.php.net/manual/zh/language.types.string.php" target="_blank" rel="noopener">string</a> 的实现方式是一个由字节组成的数组再加上一个整数指明缓冲区长度。</p>
+<h5 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h5><p>字符串会被按照该脚本文件相同的编码方式来编码。我们知道，一般脚本文件都是以utf-8编码的，那么我们就来看一看字符串（英文和中文）到底在php中是如何存储的。</p>
+<p>我们知道以utf8编码的一个字符占用1-4个字节，英文字符占用一个字节，中文字符一般占用3个字节。而由定义可知，字符串的内容是存在字节数组中的，所以字符串实际存储是以字节为单位的。</p>
+<p>举个例子，比如：<code>$str = &#39;abc严肃&#39;</code>。英文 <code>abc</code> 是单字节字符，对应的字节是 <code>0x61 0x62 0x63</code>，中文 <code>严肃</code> 是多字节字符，对应的字节分别是 <code>0xe4 0xb8 0xa5</code> <code>0xe8 0x82 0x83</code>。（此处可参考：<a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html" target="_blank" rel="noopener">字符编码笔记：ASCII，Unicode 和 UTF-8</a>）</p>
+<p>所以字符串 <code>$str</code> 实际的存储如图所示：</p>
+<img src="/2019/05/31/PHP的数据类型/image-20190531140620689.png" title="字符串存储示例">
+<p>但我们使用单字节函数时，就会得到以下结果：</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$str = <span class="hljs-string">'abc严肃'</span></span><br><span class="line"><span class="hljs-keyword">echo</span> strlen($str); <span class="hljs-comment">// output: 9</span></span><br><span class="line"><span class="hljs-keyword">echo</span> substr($str, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// output：�，也许我们的本意是想取得‘严’这个字符，但是因为结果实际是取到了 0xe4 这个字节，但是无法以utf8反编码，只能是显示为乱码</span></span><br></pre></td></tr></table></figure>
+<p>其实这也解释了，为什么我们可以直接对中文字符串使用 ‘==’ 进行比较，因为比较是基于字节进行的。</p>
+<h5 id="与c语言字符串的区别："><a href="#与c语言字符串的区别：" class="headerlink" title="与c语言字符串的区别："></a>与c语言字符串的区别：</h5><p>在c语言中，字符串是以一个空字符 <code>\0</code> 结尾的，但是在php中，其值为 <em>0</em>（“NUL bytes”）的字节可以处于字符串任何位置。那php中如何界定字符串的结尾呢？这依赖于字符串的特殊结构：</p>
+<figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">/*</span></span><br><span class="line"><span class="hljs-comment">gc: 变量引用信息,比如当前value的引用数,所有用到引用计数的变量类型都会有这个结构,3.1节会详细分析</span></span><br><span class="line"><span class="hljs-comment">h: 哈希值,数组中计算索引时会用到</span></span><br><span class="line"><span class="hljs-comment">len: 字符串长度,通过这个值保证二进制安全</span></span><br><span class="line"><span class="hljs-comment">val: 字符串内容,变长struct,分配时按len长度申请内存</span></span><br><span class="line"><span class="hljs-comment">事实上字符串又可具体分为几类:IS_STR_PERSISTENT(通过malloc分配的)、IS_STR_INTERNED(php代码里写的一些字面量,比如函数名、变量值)、IS_STR_PERMANENT(永久值,生命周期大于request)、IS_STR_CONSTANT(常量)、IS_STR_CONSTANT_UNQUALIFIED,这个信息通过flag保存:zval.value-&gt;gc.u.flags,后面用到的时候再具体分析. </span></span><br><span class="line"><span class="hljs-comment">*/</span></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">struct</span> _<span class="hljs-title">zend_string</span> &#123;</span></span><br><span class="line">    zend_refcounted_h gc;</span><br><span class="line">    zend_ulong        h;                <span class="hljs-comment">/* hash value */</span></span><br><span class="line">    <span class="hljs-keyword">size_t</span>            len;</span><br><span class="line">    <span class="hljs-keyword">char</span>              val[<span class="hljs-number">1</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可以看到，结构中定义了字符串的长度 <strong>len</strong>，通过这个数值，就可以判断字符串是否已到结尾。</p>
+<h5 id="二进制安全"><a href="#二进制安全" class="headerlink" title="二进制安全"></a>二进制安全</h5><p>我们经常会在php的手册中看到这么一句话：</p>
+<blockquote>
+<p>此函数是二进制安全的</p>
+</blockquote>
+<p>那二进制安全是指的什么呢？其实这要结合c语言的函数来说，我们知道c语言判定字符串结束的标志是空字符 <code>\0</code> 。所以，在 c 语言中字符串函数操作到空字符时就会忽略后面的字符。</p>
+<p>于是，在c语言中 <code>strcmp(&quot;abc&quot;, &quot;abc\0def&quot;)</code> 返回的结果是 0。</p>
+<p>但是在php中，如果一个函数是二进制安全的，那么此函数只会把空字符视为普通的字符，于是 <code>strcmp(&quot;abc&quot;, &quot;abc\0def&quot;)</code> 返回的结果是 -1。</p>
+<p>因此，二进制安全的定义就是：</p>
+<p><strong>程序不会对其中的数据做任何限制、过滤、或者假设 —— 数据在写入时是什么样的， 它被读取时就是什么样。</strong></p>
+<p>可以参考：</p>
+<p><a href="https://blog.csdn.net/zhuocr/article/details/70591310" target="_blank" rel="noopener">php手册经常见到，什么是“二进制安全”</a></p>
+<p><a href="https://blog.csdn.net/qq_28018283/article/details/79422536" target="_blank" rel="noopener">php的二进制安全</a></p>
+<h5 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h5><p>更好的了解php字符串的方式，就是官方手册。</p>
+<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><p>对此，官方文档有很好的说明：<a href="https://www.php.net/manual/zh/language.types.type-juggling.php" target="_blank" rel="noopener"><strong>类型转换的判别</strong></a></p>
 
         </div>
         
@@ -183,7 +213,7 @@ var _hmt = _hmt || [];
             <div class="level-start">
                 <div class="level-item">
                     <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/this/">this</a>
+                    <a class="has-link-grey -link" href="/tags/PHP/">PHP</a>
                 </div>
             </div>
         </div>
@@ -201,12 +231,19 @@ var _hmt = _hmt || [];
     <div class="level post-navigation is-flex-wrap is-mobile">
         
         <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/05/31/PHP的数据类型/">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/05/31/关于locale/">
                 <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">PHP的数据类型</span>
+                <span class="level-item">关于locale</span>
             </a>
         </div>
         
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/05/30/前言/">
+                <span class="level-item">前言</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
         
     </div>
 </div>
@@ -224,7 +261,7 @@ var _hmt = _hmt || [];
     var gitalk = new Gitalk({
         clientID: '44c082a052b9fed7430d',
         clientSecret: '4593e4f7c5d08bd4c093ea80274511159e13e821',
-        id: 'ef69c8ad34151799f6323a0a52eaab2c',
+        id: '470a74dde6a1167d1bc7b03f05e3d7d5',
         repo: 'poettian.com',
         owner: 'poettian',
         admin: "poettian"
@@ -346,7 +383,7 @@ var _hmt = _hmt || [];
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/logo.png" alt="前言" height="28">
+                    <img src="/images/logo.png" alt="PHP的数据类型" height="28">
                 
                 </a>
                 <p class="is-size-7">
