@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>分类: 技术 - Poettian的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+    <meta name="description" content="文本处理（awk、grep、sed、cut）本小节引用文章：【玩转linux系列】awk、grep、sed awk、grep、sed是linux操作文本的三大利器，也是必须掌握的linux命令之一。三者的功能都是处理文本，但侧重点各不相同，其中属awk功能最强大，但也最复杂。grep更适合单纯的查找或匹配文本，sed更适合编辑匹配到的文本，awk更适合格式化文本，对文本进行较复杂格式处理。">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux下的文本处理">
+<meta property="og:url" content="https://www.poettian.com/2018/09/04/linux下的文本处理/index.html">
+<meta property="og:site_name" content="Poettian的博客">
+<meta property="og:description" content="文本处理（awk、grep、sed、cut）本小节引用文章：【玩转linux系列】awk、grep、sed awk、grep、sed是linux操作文本的三大利器，也是必须掌握的linux命令之一。三者的功能都是处理文本，但侧重点各不相同，其中属awk功能最强大，但也最复杂。grep更适合单纯的查找或匹配文本，sed更适合编辑匹配到的文本，awk更适合格式化文本，对文本进行较复杂格式处理。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://www.poettian.com/images/og_image.png">
+<meta property="og:updated_time" content="2019-07-29T05:01:31.064Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux下的文本处理">
+<meta name="twitter:description" content="文本处理（awk、grep、sed、cut）本小节引用文章：【玩转linux系列】awk、grep、sed awk、grep、sed是linux操作文本的三大利器，也是必须掌握的linux命令之一。三者的功能都是处理文本，但侧重点各不相同，其中属awk功能最强大，但也最复杂。grep更适合单纯的查找或匹配文本，sed更适合编辑匹配到的文本，awk更适合格式化文本，对文本进行较复杂格式处理。">
+<meta name="twitter:image" content="https://www.poettian.com/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+<script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?a366524a3aa0beb76dced93bc66a1e21";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+    
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-2-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.png" alt="linux下的文本处理" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item" href="/">Home</a>
+                
+                <a class="navbar-item" href="/archives">Archives</a>
+                
+                <a class="navbar-item" href="/categories">Categories</a>
+                
+                <a class="navbar-item" href="/tags">Tags</a>
+                
+                <a class="navbar-item" href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/poettian">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-8-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-09-04T01:25:03.000Z">2018-09-04</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                linux下的文本处理
+            
+        </h1>
+        <div class="content">
+            <h3 id="文本处理（awk、grep、sed、cut）"><a href="#文本处理（awk、grep、sed、cut）" class="headerlink" title="文本处理（awk、grep、sed、cut）"></a>文本处理（awk、grep、sed、cut）</h3><p>本小节引用文章：<a href="https://thief.one/2017/08/12/1/" target="_blank" rel="noopener">【玩转linux系列】awk、grep、sed</a></p>
+<p>awk、grep、sed是linux操作文本的三大利器，也是必须掌握的linux命令之一。三者的功能都是处理文本，但侧重点各不相同，其中属awk功能最强大，但也最复杂。grep更适合单纯的查找或匹配文本，sed更适合编辑匹配到的文本，awk更适合格式化文本，对文本进行较复杂格式处理。</p>
+<a id="more"></a>
+<h4 id="实验数据"><a href="#实验数据" class="headerlink" title="实验数据"></a>实验数据</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># test.log</span></span><br><span class="line">20170102 admin,password Open</span><br><span class="line">20170801 nmask,nmask close</span><br><span class="line">20180902 nm4k,<span class="hljs-built_in">test</span> filter</span><br></pre></td></tr></table></figure>
+<h4 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h4><h5 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">awk [选项参数] <span class="hljs-string">'script'</span> var=value file(s)</span><br><span class="line">或</span><br><span class="line">awk [选项参数] -f scriptfile var=value file(s)</span><br></pre></td></tr></table></figure>
+<p> awk是以列为划分计数的，$0 表示所有列，$1 表示第一列，$2 表示第二列。</p>
+<h5 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h5><ul>
+<li>-F 指定输入文件折分隔符，如-F:</li>
+<li>-v 赋值一个用户定义变量，如-va=1</li>
+<li>-f 从脚本文件中读取awk命令</li>
+</ul>
+<h5 id="分隔符"><a href="#分隔符" class="headerlink" title="分隔符"></a>分隔符</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># 按空格分割</span></span><br><span class="line">awk <span class="hljs-string">'&#123;print $1,$3&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 使用“,”分割</span></span><br><span class="line">awk -F , <span class="hljs-string">'&#123;print $1,$2&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 使用多个分隔符，先使用空格分割，然后对分割结果再使用”,”分割</span></span><br><span class="line">awk -F <span class="hljs-string">'[ ,]'</span>  <span class="hljs-string">'&#123;print $1,$2,$3&#125;'</span>  test.log  <span class="hljs-comment">#注意逗号前面有一个空格</span></span><br></pre></td></tr></table></figure>
+<h5 id="设置变量"><a href="#设置变量" class="headerlink" title="设置变量"></a>设置变量</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">awk -v a=1 -v b=s <span class="hljs-string">'&#123;print $1,$1+a,$1b&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 字符串拼接，用"</span></span><br><span class="line">awk -v a=\<span class="hljs-string">" '&#123;print a"</span><span class="hljs-string">"<span class="hljs-variable">$0</span>"</span><span class="hljs-string">"a&#125;' test.log</span></span><br></pre></td></tr></table></figure>
+<h5 id="逻辑判断"><a href="#逻辑判断" class="headerlink" title="逻辑判断"></a>逻辑判断</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">运算符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">= += -= *= /= %= ^= **=</td>
+<td>赋值</td>
+</tr>
+<tr>
+<td style="text-align:left">?:</td>
+<td>C条件表达式</td>
+</tr>
+<tr>
+<td style="text-align:left">&#124;&#124;</td>
+<td>逻辑或</td>
+</tr>
+<tr>
+<td style="text-align:left">&amp;&amp;</td>
+<td>逻辑与</td>
+</tr>
+<tr>
+<td style="text-align:left">~ ~!</td>
+<td>匹配正则表达式和不匹配正则表达式</td>
+</tr>
+<tr>
+<td style="text-align:left">&lt; &lt;= &gt; &gt;= != ==</td>
+<td>关系运算符</td>
+</tr>
+<tr>
+<td style="text-align:left">空格</td>
+<td>连接</td>
+</tr>
+<tr>
+<td style="text-align:left">+ -</td>
+<td>加，减</td>
+</tr>
+<tr>
+<td style="text-align:left">* / %</td>
+<td>乘，除与求余</td>
+</tr>
+<tr>
+<td style="text-align:left">+ - !</td>
+<td>一元加，减和逻辑非</td>
+</tr>
+<tr>
+<td style="text-align:left">^ ***</td>
+<td>求幂</td>
+</tr>
+<tr>
+<td style="text-align:left">++ –</td>
+<td>增加或减少，作为前缀或后缀</td>
+</tr>
+<tr>
+<td style="text-align:left">$</td>
+<td>字段引用</td>
+</tr>
+<tr>
+<td style="text-align:left">in</td>
+<td>数组成员</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># 输出第一列为20170801的记录</span></span><br><span class="line">awk <span class="hljs-string">'$1==20170801 &#123;print&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 输出第二列不是nmask,nmask的记录</span></span><br><span class="line">awk <span class="hljs-string">'$2!="nmask,nmask" &#123;print&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 组合使用</span></span><br><span class="line">awk <span class="hljs-string">'$1==20170801 &amp;&amp; $2!="nmask,nmask" &#123;print $1,$2,$3&#125;'</span> test.log</span><br></pre></td></tr></table></figure>
+<h5 id="内建变量"><a href="#内建变量" class="headerlink" title="内建变量"></a>内建变量</h5><table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$n</td>
+<td>当前记录的第n个字段，字段间由FS分隔</td>
+</tr>
+<tr>
+<td>$0</td>
+<td>完整的输入记录</td>
+</tr>
+<tr>
+<td>ARGC</td>
+<td>命令行参数的数目</td>
+</tr>
+<tr>
+<td>ARGIND</td>
+<td>命令行中当前文件的位置(从0开始算)</td>
+</tr>
+<tr>
+<td>ARGV</td>
+<td>包含命令行参数的数组</td>
+</tr>
+<tr>
+<td>CONVFMT</td>
+<td>数字转换格式(默认值为%.6g)ENVIRON环境变量关联数组</td>
+</tr>
+<tr>
+<td>ERRNO</td>
+<td>最后一个系统错误的描述</td>
+</tr>
+<tr>
+<td>FIELDWIDTHS</td>
+<td>字段宽度列表(用空格键分隔)</td>
+</tr>
+<tr>
+<td>FILENAME</td>
+<td>当前文件名</td>
+</tr>
+<tr>
+<td>FNR</td>
+<td>各文件分别计数的行号</td>
+</tr>
+<tr>
+<td>FS</td>
+<td>字段分隔符(默认是任何空格)</td>
+</tr>
+<tr>
+<td>IGNORECASE</td>
+<td>如果为真，则进行忽略大小写的匹配</td>
+</tr>
+<tr>
+<td>NF</td>
+<td>一条记录的字段的数目</td>
+</tr>
+<tr>
+<td>NR</td>
+<td>已经读出的记录数，就是行号，从1开始</td>
+</tr>
+<tr>
+<td>OFMT</td>
+<td>数字的输出格式(默认值是%.6g)</td>
+</tr>
+<tr>
+<td>OFS</td>
+<td>输出记录分隔符（输出换行符），输出时用指定的符号代替换行符</td>
+</tr>
+<tr>
+<td>ORS</td>
+<td>输出记录分隔符(默认值是一个换行符)</td>
+</tr>
+<tr>
+<td>RLENGTH</td>
+<td>由match函数所匹配的字符串的长度</td>
+</tr>
+<tr>
+<td>RS</td>
+<td>记录分隔符(默认是一个换行符)</td>
+</tr>
+<tr>
+<td>RSTART</td>
+<td>由match函数所匹配的字符串的第一个位置</td>
+</tr>
+<tr>
+<td>SUBSEP</td>
+<td>数组下标分隔符(默认值是/034)</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="hljs-string">'BEGIN&#123;printf "%4s %4s %4s %4s %4s %4s %4s %4s %4s\n","FILENAME","ARGC","FNR","FS","NF","NR","OFS","ORS","RS";printf "---------------------------------------------\n"&#125; &#123;printf "%4s %4s %4s %4s %4s %4s %4s %4s %4s\n",FILENAME,ARGC,FNR,FS,NF,NR,OFS,ORS,RS&#125;'</span>  test.log</span><br></pre></td></tr></table></figure>
+<h5 id="使用正则"><a href="#使用正则" class="headerlink" title="使用正则"></a>使用正则</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># 输出第二列中包含nm开头的所有记录</span></span><br><span class="line">awk <span class="hljs-string">'$2 ~ /nm.*/ &#123;print&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 输出包含2017开头的记录</span></span><br><span class="line">awk <span class="hljs-string">'/2017.*/ &#123;print&#125;'</span> test.log <span class="hljs-comment"># 注意：这里没有～，因为没有指定是哪一列</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 忽略大小写&#123;INGORECASE=1&#125;</span></span><br><span class="line">awk <span class="hljs-string">'&#123;INGORECASE=1&#125; /nmask/ &#123;print&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 匹配取反 !~</span></span><br><span class="line">awk <span class="hljs-string">'$2 !~ /nm.*/ &#123;print&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 数组和正则捕获的强大用法</span></span><br></pre></td></tr></table></figure>
+<h5 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># substr字符串截取, 截取第一列的第一到第四个字符</span></span><br><span class="line">awk <span class="hljs-string">'&#123;print substr($1, 1, 4)&#125;'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># split切分字符串, 以逗号分隔第2列的数据，并输出分别输出第2列的内容</span></span><br><span class="line">awk <span class="hljs-string">'&#123;split($2, a, ",");print a[1],a[2]&#125;'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># gsub替换, 将第2列中的nmask替换成nMask</span></span><br><span class="line">awk <span class="hljs-string">'&#123;gsub("nmask", "nMask", $2);print&#125;'</span></span><br></pre></td></tr></table></figure>
+<h4 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h4><p>Linux grep命令用于查找文件里符合条件的字符串。</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># 递归查询</span></span><br><span class="line">grep -r nmask /etc/  <span class="hljs-comment">#查看/etc目录下内容包含nmask的文件</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 查询取反</span></span><br><span class="line">grep -v <span class="hljs-built_in">test</span>  test.log</span><br></pre></td></tr></table></figure>
+<h4 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h4><p>Linux sed命令是利用script来处理文本文件。</p>
+<h5 id="命令格式-1"><a href="#命令格式-1" class="headerlink" title="命令格式"></a>命令格式</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed [-hnV][-e&lt;script&gt;][-f&lt;script文件&gt;][文本文件]</span><br></pre></td></tr></table></figure>
+<h5 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h5><ul>
+<li>-e &lt;script&gt; 或 –expression=&lt;script&gt; 以选项中指定的script来处理输入的文本文件。</li>
+<li>-f &lt;script文件&gt; 或 –file=&lt;script文件&gt; 以选项中指定的script文件来处理输入的文本文件。</li>
+<li>-h或–help 显示帮助。</li>
+<li>-n或–quiet或–silent 仅显示script处理后的结果。</li>
+<li>-V或–version 显示版本信息。</li>
+</ul>
+<h5 id="动作说明"><a href="#动作说明" class="headerlink" title="动作说明"></a>动作说明</h5><ul>
+<li>a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)～</li>
+<li>c ：取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行！</li>
+<li>d ：删除，因为是删除啊，所以 d 后面通常不接任何咚咚；</li>
+<li>i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)；</li>
+<li>p ：打印，亦即将某个选择的数据印出。通常 p 会与参数 sed -n 一起运行～</li>
+<li>s ：取代，可以直接进行取代的工作哩！通常这个 s 的动作可以搭配正规表示法！例如 1,20s/old/new/g 就是啦！</li>
+</ul>
+<h5 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># 在test.log文件的第3行后插入一行，内容为nmask</span></span><br><span class="line">sed -e 3a\nmask test.log <span class="hljs-comment"># 注意在使用a, c or i时要在后面使用\</span></span><br><span class="line">或者</span><br><span class="line">sed -e <span class="hljs-string">'3a nmask'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># -e 可以省略</span></span><br><span class="line">sed 3a\nmask test.log</span><br><span class="line">或者</span><br><span class="line">sed <span class="hljs-string">'3a nmask'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 如果有空格</span></span><br><span class="line">sed 3a\nmask\ sdg\ sdg test.log</span><br><span class="line">或者</span><br><span class="line">sed <span class="hljs-string">'3a nmask sdg sdg'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 删除2~3行</span></span><br><span class="line">sed 2,3d test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 替换第二行为“No 2 number”</span></span><br><span class="line">sed <span class="hljs-string">'2c No 2-5 number'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 搜索有"nmask"关键字的行 </span></span><br><span class="line">sed -n <span class="hljs-string">'/nmask/p'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 搜索有"nmask"关键字的行并删除</span></span><br><span class="line">sed <span class="hljs-string">'/nmask/d'</span> test.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 数据的搜寻并替换</span></span><br><span class="line">sed <span class="hljs-string">'s/要被取代的字串/新的字串/g'</span> FILE</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 直接修改文件内容(危险动作)</span></span><br><span class="line">sed -i <span class="hljs-string">'s/\.$/\!/g'</span> regular_express.txt <span class="hljs-comment"># 利用 sed 将 regular_express.txt 内每一行结尾若为 . 则换成 !</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 利用 sed 直接在 regular_express.txt 最后一行加入『# This is a test』</span></span><br><span class="line"><span class="hljs-comment"># 由於 $ 代表的是最后一行，而 a 的动作是新增，因此该文件最后新增『# This is a test』！</span></span><br><span class="line">sed -i <span class="hljs-string">'$a # This is a test'</span> regular_express.txt</span><br></pre></td></tr></table></figure>
+<h4 id="cut"><a href="#cut" class="headerlink" title="cut"></a>cut</h4><p>Linux cut命令用于显示每行从开头算起 num1 到 num2 的文字。</p>
+<h6 id="命令格式-2"><a href="#命令格式-2" class="headerlink" title="命令格式"></a>命令格式</h6><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cut  [-bn] [file]</span><br><span class="line">cut [-c] [file]</span><br><span class="line">cut [-df] [file]</span><br></pre></td></tr></table></figure>
+<h5 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h5><ul>
+<li>-b ：以字节为单位进行分割。这些字节位置将忽略多字节字符边界，除非也指定了 -n 标志。</li>
+<li>-c ：以字符为单位进行分割。</li>
+<li>-d ：自定义分隔符，默认为制表符。</li>
+<li>-f ：与-d一起使用，指定显示哪个区域。</li>
+<li>-n ：取消分割多字节字符。仅和 -b 标志一起使用。如果字符的最后一个字节落在由 -b 标志的 List 参数指示的<br>范围之内，该字符将被写出；否则，该字符将被排除</li>
+</ul>
+<h5 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cut -d <span class="hljs-string">':'</span> -f1 /etc/passwd</span><br></pre></td></tr></table></figure>
+<h3 id="管道过滤器（xargs）"><a href="#管道过滤器（xargs）" class="headerlink" title="管道过滤器（xargs）"></a>管道过滤器（xargs）</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p><strong>xargs命令</strong>是给其他命令传递参数的一个过滤器，也是组合多个命令的一个工具。</p>
+<p><strong>它擅长将标准输入数据转换成命令行参数，xargs能够处理管道或者stdin并将其转换成特定命令的命令参数</strong>。</p>
+<p>xargs也可以将单行或多行文本输入转换为其他格式，例如多行变单行，单行变多行。</p>
+<p>xargs的默认命令是<a href="http://man.linuxde.net/echo" target="_blank" rel="noopener">echo</a>，空格是默认定界符。这意味着通过管道传递给xargs的输入将会包含换行和空白，不过通过xargs的处理，换行和空白将被空格取代。</p>
+<p>xargs 是一个强有力的命令，它能够捕获一个命令的输出，然后传递给另外一个命令。之所以能用到这个命令，关键是由于很多命令不支持|管道来传递参数，而日常工作中有有这个必要，所以就有了 xargs 命令</p>
+<h4 id="命令格式-3"><a href="#命令格式-3" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">somecommand |xargs -item  <span class="hljs-built_in">command</span></span><br></pre></td></tr></table></figure>
+<h4 id="常用参数-1"><a href="#常用参数-1" class="headerlink" title="常用参数"></a>常用参数</h4><ul>
+<li>-n num 后面加次数，表示命令在执行的时候一次用的argument的个数，默认是用所有的。</li>
+<li>-d delim 分隔符，默认的xargs分隔符是回车，argument的分隔符是空格，这里修改的是xargs的分隔符</li>
+</ul>
+<h4 id="用法-1"><a href="#用法-1" class="headerlink" title="用法"></a>用法</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># cat test.txt</span></span><br><span class="line"></span><br><span class="line">a b c d e f g</span><br><span class="line">h i j k l m n</span><br><span class="line">o p q</span><br><span class="line">r s t</span><br><span class="line">u v w x y z</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 多行输入单行输出：</span></span><br><span class="line"><span class="hljs-comment"># cat test.txt | xargs</span></span><br><span class="line">a b c d e f g h i j k l m n o p q r s t u v w x y z</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># -n 选项多行输出：</span></span><br><span class="line"><span class="hljs-comment"># cat test.txt | xargs -n3</span></span><br><span class="line">a b c</span><br><span class="line">d e f</span><br><span class="line">g h i</span><br><span class="line">j k l</span><br><span class="line">m n o</span><br><span class="line">p q r</span><br><span class="line">s t u</span><br><span class="line">v w x</span><br><span class="line">y z</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># -d 选项可以自定义一个定界符：</span></span><br><span class="line"><span class="hljs-comment"># echo "nameXnameXnameXname" | xargs -dX</span></span><br><span class="line">name name name name</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 读取 stdin，将格式化后的参数传递给命令</span></span><br><span class="line"><span class="hljs-comment"># xargs的一个选项-I，使用-I指定一个替换字符串&#123;&#125;，这个字符串在xargs扩展时会被替换掉，当-I与xargs结合使用，每一个参数命令都会被执行一次</span></span><br><span class="line">cat arg.txt | xargs -I &#123;&#125; ./sk.sh -p &#123;&#125; -l</span><br><span class="line">或者</span><br><span class="line">cat arg.txt | xargs -i ./sk.sh -p &#123;&#125; -l</span><br><span class="line"><span class="hljs-comment"># 输出：</span></span><br><span class="line">-p aaa -l</span><br><span class="line">-p bbb -l</span><br><span class="line">-p ccc -l</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 复制所有图片文件到 /data/images 目录下</span></span><br><span class="line">ls *.jpg | xargs -n1 -I &#123;&#125; cp &#123;&#125; /data/images</span><br><span class="line">或者</span><br><span class="line">ls *.jpg | xargs -n1 -i cp &#123;&#125; /data/images</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 参数说明</span></span><br><span class="line">-I R               same as --replace=R (R must be specified)</span><br><span class="line">-i,--replace=[R]   Replace R <span class="hljs-keyword">in</span> initial arguments with names <span class="hljs-built_in">read</span> from standard input. If R is unspecified, assume &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 再看一个例子</span></span><br><span class="line">sudo apt list | grep php | awk -F <span class="hljs-string">'/'</span> <span class="hljs-string">'/^php7\.2/ &#123;print $1&#125;'</span> | xargs</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># xargs结合find使用</span></span><br><span class="line"><span class="hljs-comment"># 用rm 删除太多的文件时候，可能得到一个错误信息：/bin/rm Argument list too long. 用xargs去避免这个问题：</span></span><br><span class="line">find . -<span class="hljs-built_in">type</span> f -name <span class="hljs-string">"*.log"</span> -print0 | xargs -0 rm -f</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 查找所有的jpg 文件，并且压缩它们：</span></span><br><span class="line">find . -<span class="hljs-built_in">type</span> f -name <span class="hljs-string">"*.jpg"</span> -<span class="hljs-built_in">print</span> | xargs tar -czvf images.tar.gz</span><br></pre></td></tr></table></figure>
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/PHP/">PHP</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/05/30/前言/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">前言</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2017/10/05/LNMP架构中的buffer机制/">
+                <span class="level-item">LNMP架构中的buffer机制</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.4.1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.4.1/dist/gitalk.min.js"></script>
+<script>
+    var gitalk = new Gitalk({
+        clientID: '44c082a052b9fed7430d',
+        clientSecret: '4593e4f7c5d08bd4c093ea80274511159e13e821',
+        id: '84043c1521017e992c9e4cfda1055b8c',
+        repo: 'poettian.com',
+        owner: 'poettian',
+        admin: "poettian"
+    })
+    gitalk.render('comment-container')
+</script>
+
+    </div>
+</div>
+</div>
+                
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-4-widescreen  has-order-3 column-right ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-05-31T07:09:41.000Z">2019-05-31</time></div>
+                    <a href="/2019/05/31/关于locale/" class="has-link-black-ter is-size-6">关于locale</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-05-31T05:22:26.000Z">2019-05-31</time></div>
+                    <a href="/2019/05/31/PHP的数据类型/" class="has-link-black-ter is-size-6">PHP的数据类型</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-05-30T14:02:20.000Z">2019-05-30</time></div>
+                    <a href="/2019/05/30/前言/" class="has-link-black-ter is-size-6">前言</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/杂记/">杂记</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-04T01:25:03.000Z">2018-09-04</time></div>
+                    <a href="/2018/09/04/linux下的文本处理/" class="has-link-black-ter is-size-6">linux下的文本处理</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2017-10-05T09:59:16.000Z">2017-10-05</time></div>
+                    <a href="/2017/10/05/LNMP架构中的buffer机制/" class="has-link-black-ter is-size-6">LNMP架构中的buffer机制</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/技术/">
+            <span class="level-start">
+                <span class="level-item">技术</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">4</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/杂记/">
+            <span class="level-start">
+                <span class="level-item">杂记</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/tags/locale/" style="font-size: 10px;">locale</a> <a href="/tags/this/" style="font-size: 10px;">this</a>
+    </div>
+</div>
+
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.png" alt="linux下的文本处理" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2019 poettian&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/poettian">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

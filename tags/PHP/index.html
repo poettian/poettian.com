@@ -202,6 +202,114 @@ var _hmt = _hmt || [];
 
 
 
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-09-04T01:25:03.000Z">2018-09-04</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/09/04/linux下的文本处理/">linux下的文本处理</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="文本处理（awk、grep、sed、cut）"><a href="#文本处理（awk、grep、sed、cut）" class="headerlink" title="文本处理（awk、grep、sed、cut）"></a>文本处理（awk、grep、sed、cut）</h3><p>本小节引用文章：<a href="https://thief.one/2017/08/12/1/" target="_blank" rel="noopener">【玩转linux系列】awk、grep、sed</a></p>
+<p>awk、grep、sed是linux操作文本的三大利器，也是必须掌握的linux命令之一。三者的功能都是处理文本，但侧重点各不相同，其中属awk功能最强大，但也最复杂。grep更适合单纯的查找或匹配文本，sed更适合编辑匹配到的文本，awk更适合格式化文本，对文本进行较复杂格式处理。</p>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            <div class="level-start">
+                <div class="level-item">
+                <a class="button is-size-7 is-light" href="/2018/09/04/linux下的文本处理/#more">阅读更多</a>
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-10-05T09:59:16.000Z">2017-10-05</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/10/05/LNMP架构中的buffer机制/">LNMP架构中的buffer机制</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="什么是缓冲区-buffer"><a href="#什么是缓冲区-buffer" class="headerlink" title="什么是缓冲区(buffer)"></a>什么是缓冲区(buffer)</h3><p>当执行 PHP 脚本中输出指令时，例如：<code>header()</code> <code>setcookie()</code>  <code>session_start()</code> 以及我们常用的<code>echo</code> <code>print</code> 等，此时产生的数据会有两种行为模式选择，一是立即发送到下游SAPI；二是缓存起来等积累到一定的大小后再发送到下游SAPI，这种先将输出数据存起来等之后再发送的机制，就是缓冲区。</p>
+<h3 id="为什么需要缓冲区"><a href="#为什么需要缓冲区" class="headerlink" title="为什么需要缓冲区"></a>为什么需要缓冲区</h3><ul>
+<li><p>没有缓冲区，数据立即发送给SAPI，这会使得数据以碎片形式不断传输，降低php和SAPI间通讯的效率；</p>
+</li>
+<li><p>没有缓冲区，你将无法对输出数据在发送前做一些操作，而缓冲区的存在使得你可以任意加工这些数据，然后选择你认为合适的时机再发送；</p>
+</li>
+<li><p>如果你遇到过这样的提示 “Warning: Cannot modify header information - headers already sent by (output)”，那么你可以利用缓冲区来解决。</p>
+</li>
+</ul>
+<h3 id="LNMP架构下的多层缓冲区"><a href="#LNMP架构下的多层缓冲区" class="headerlink" title="LNMP架构下的多层缓冲区"></a>LNMP架构下的多层缓冲区</h3><p>上面我们谈到的缓冲区只是指 php 脚本运行时存在于php进程内存中（到底存在于哪里我并不清楚，这只是我的理解）的缓冲区，只讨论这一个缓冲区是不够的。在LNMP架构下，每一层都存在着缓冲区：</p>
+<ul>
+<li>php的缓冲区</li>
+<li>SAPI（php-fpm）的缓冲区</li>
+<li>webserver（nginx）的缓冲区</li>
+</ul>
+<p>用一张图可以很好的说明这几者间的关系：</p>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            <div class="level-start">
+                <div class="level-item">
+                <a class="button is-size-7 is-light" href="/2017/10/05/LNMP架构中的buffer机制/#more">阅读更多</a>
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
 </div>
                 
 
@@ -245,7 +353,7 @@ var _hmt = _hmt || [];
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        3
+                        5
                     </p>
                 </div>
             </div>
@@ -329,7 +437,7 @@ var _hmt = _hmt || [];
                 <span class="level-item">技术</span>
             </span>
             <span class="level-end">
-                <span class="level-item tag">2</span>
+                <span class="level-item tag">4</span>
             </span>
         </a></li><li>
         <a class="level is-marginless" href="/categories/杂记/">
@@ -351,7 +459,7 @@ var _hmt = _hmt || [];
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/locale/" style="font-size: 10px;">locale</a> <a href="/tags/this/" style="font-size: 10px;">this</a>
+        <a href="/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/tags/locale/" style="font-size: 10px;">locale</a> <a href="/tags/this/" style="font-size: 10px;">this</a>
     </div>
 </div>
 
@@ -405,6 +513,32 @@ var _hmt = _hmt || [];
             </div>
         </article>
         
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-04T01:25:03.000Z">2018-09-04</time></div>
+                    <a href="/2018/09/04/linux下的文本处理/" class="has-link-black-ter is-size-6">linux下的文本处理</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2017-10-05T09:59:16.000Z">2017-10-05</time></div>
+                    <a href="/2017/10/05/LNMP架构中的buffer机制/" class="has-link-black-ter is-size-6">LNMP架构中的buffer机制</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
     </div>
 </div>
 
@@ -424,6 +558,28 @@ var _hmt = _hmt || [];
                 </span>
                 <span class="level-end">
                     <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
                 </span>
             </a>
         </li>
@@ -490,6 +646,32 @@ var _hmt = _hmt || [];
             </div>
         </article>
         
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-04T01:25:03.000Z">2018-09-04</time></div>
+                    <a href="/2018/09/04/linux下的文本处理/" class="has-link-black-ter is-size-6">linux下的文本处理</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2017-10-05T09:59:16.000Z">2017-10-05</time></div>
+                    <a href="/2017/10/05/LNMP架构中的buffer机制/" class="has-link-black-ter is-size-6">LNMP架构中的buffer机制</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
     </div>
 </div>
 
@@ -509,6 +691,28 @@ var _hmt = _hmt || [];
                 </span>
                 <span class="level-end">
                     <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
                 </span>
             </a>
         </li>
