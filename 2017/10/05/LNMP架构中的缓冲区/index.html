@@ -2,7 +2,7 @@
 <html lang="zh">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>LNMP架构中的buffer机制 - Poettian的博客</title>
+<title>LNMP架构中的缓冲区 - Poettian的博客</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
@@ -10,15 +10,15 @@
     <meta name="description" content="什么是缓冲区(buffer)当执行 PHP 脚本中输出指令时，例如：header() setcookie()  session_start() 以及我们常用的echo print 等，此时产生的数据会有两种行为模式选择，一是立即发送到下游SAPI；二是缓存起来等积累到一定的大小后再发送到下游SAPI，这种先将输出数据存起来等之后再发送的机制，就是缓冲区。 为什么需要缓冲区 没有缓冲区，数据立即发送">
 <meta name="keywords" content="PHP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LNMP架构中的buffer机制">
-<meta property="og:url" content="https://www.poettian.com/2017/10/05/LNMP架构中的buffer机制/index.html">
+<meta property="og:title" content="LNMP架构中的缓冲区">
+<meta property="og:url" content="https://www.poettian.com/2017/10/05/LNMP架构中的缓冲区/index.html">
 <meta property="og:site_name" content="Poettian的博客">
 <meta property="og:description" content="什么是缓冲区(buffer)当执行 PHP 脚本中输出指令时，例如：header() setcookie()  session_start() 以及我们常用的echo print 等，此时产生的数据会有两种行为模式选择，一是立即发送到下游SAPI；二是缓存起来等积累到一定的大小后再发送到下游SAPI，这种先将输出数据存起来等之后再发送的机制，就是缓冲区。 为什么需要缓冲区 没有缓冲区，数据立即发送">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://www.poettian.com/images/og_image.png">
-<meta property="og:updated_time" content="2019-06-20T05:32:42.498Z">
+<meta property="og:updated_time" content="2019-07-29T05:30:55.191Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LNMP架构中的buffer机制">
+<meta name="twitter:title" content="LNMP架构中的缓冲区">
 <meta name="twitter:description" content="什么是缓冲区(buffer)当执行 PHP 脚本中输出指令时，例如：header() setcookie()  session_start() 以及我们常用的echo print 等，此时产生的数据会有两种行为模式选择，一是立即发送到下游SAPI；二是缓存起来等积累到一定的大小后再发送到下游SAPI，这种先将输出数据存起来等之后再发送的机制，就是缓冲区。 为什么需要缓冲区 没有缓冲区，数据立即发送">
 <meta name="twitter:image" content="https://www.poettian.com/images/og_image.png">
 
@@ -102,7 +102,7 @@ var _hmt = _hmt || [];
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/logo.png" alt="LNMP架构中的buffer机制" height="28">
+                <img src="/images/logo.png" alt="LNMP架构中的缓冲区" height="28">
             
             </a>
         </div>
@@ -166,7 +166,7 @@ var _hmt = _hmt || [];
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                LNMP架构中的buffer机制
+                LNMP架构中的缓冲区
             
         </h1>
         <div class="content">
@@ -186,7 +186,7 @@ var _hmt = _hmt || [];
 <li>webserver（nginx）的缓冲区</li>
 </ul>
 <p>用一张图可以很好的说明这几者间的关系：</p>
-
+<img src="/2017/10/05/LNMP架构中的缓冲区/图1.png" title="PHP buffer flow">
 <a id="more"></a>
 <h3 id="php的缓冲区"><a href="#php的缓冲区" class="headerlink" title="php的缓冲区"></a>php的缓冲区</h3><p>php默认开启了缓冲区，大小为4096字节，这可以在配置文件 php.ini 中看到，参数项 <code>output_buffering = 4096</code> 即指明了缓冲区开启并设置大小为4096字节。</p>
 <p>可设置的参数值如下：</p>
@@ -283,7 +283,7 @@ var _hmt = _hmt || [];
     var gitalk = new Gitalk({
         clientID: '44c082a052b9fed7430d',
         clientSecret: '4593e4f7c5d08bd4c093ea80274511159e13e821',
-        id: '25a1b390e49b6961ca6e0b8638e04d62',
+        id: '1d1d9819f3d7ff04b8f1aea5273210c8',
         repo: 'poettian.com',
         owner: 'poettian',
         admin: "poettian"
@@ -353,7 +353,7 @@ var _hmt = _hmt || [];
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2017-10-05T09:59:16.000Z">2017-10-05</time></div>
-                    <a href="/2017/10/05/LNMP架构中的buffer机制/" class="has-link-black-ter is-size-6">LNMP架构中的buffer机制</a>
+                    <a href="/2017/10/05/LNMP架构中的缓冲区/" class="has-link-black-ter is-size-6">LNMP架构中的缓冲区</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/技术/">技术</a>
                     </p>
@@ -431,7 +431,7 @@ var _hmt = _hmt || [];
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/logo.png" alt="LNMP架构中的buffer机制" height="28">
+                    <img src="/images/logo.png" alt="LNMP架构中的缓冲区" height="28">
                 
                 </a>
                 <p class="is-size-7">
