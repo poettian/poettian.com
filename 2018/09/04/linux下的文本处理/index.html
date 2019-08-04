@@ -16,7 +16,7 @@
 <meta property="og:description" content="文本处理（awk、grep、sed、cut）本小节引用文章：【玩转linux系列】awk、grep、sed awk、grep、sed是linux操作文本的三大利器，也是必须掌握的linux命令之一。三者的功能都是处理文本，但侧重点各不相同，其中属awk功能最强大，但也最复杂。grep更适合单纯的查找或匹配文本，sed更适合编辑匹配到的文本，awk更适合格式化文本，对文本进行较复杂格式处理。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://www.poettian.com/images/og_image.png">
-<meta property="og:updated_time" content="2019-07-29T05:01:31.064Z">
+<meta property="og:updated_time" content="2019-08-04T10:29:12.418Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux下的文本处理">
 <meta name="twitter:description" content="文本处理（awk、grep、sed、cut）本小节引用文章：【玩转linux系列】awk、grep、sed awk、grep、sed是linux操作文本的三大利器，也是必须掌握的linux命令之一。三者的功能都是处理文本，但侧重点各不相同，其中属awk功能最强大，但也最复杂。grep更适合单纯的查找或匹配文本，sed更适合编辑匹配到的文本，awk更适合格式化文本，对文本进行较复杂格式处理。">
@@ -90,6 +90,8 @@ var _hmt = _hmt || [];
     
     
     
+
+    
     
     
 
@@ -110,15 +112,9 @@ var _hmt = _hmt || [];
             
             <div class="navbar-start">
                 
-                <a class="navbar-item" href="/">Home</a>
+                <a class="navbar-item" href="/">首页</a>
                 
-                <a class="navbar-item" href="/archives">Archives</a>
-                
-                <a class="navbar-item" href="/categories">Categories</a>
-                
-                <a class="navbar-item" href="/tags">Tags</a>
-                
-                <a class="navbar-item" href="/about">About</a>
+                <a class="navbar-item" href="/about">关于</a>
                 
             </div>
             
@@ -134,6 +130,10 @@ var _hmt = _hmt || [];
                     
                 
                 
+                <a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;">
+                    <i class="fas fa-list-ul"></i>
+                </a>
+                
                 
                 <a class="navbar-item search" title="搜索" href="javascript:;">
                     <i class="fas fa-search"></i>
@@ -147,7 +147,7 @@ var _hmt = _hmt || [];
     <section class="section">
         <div class="container">
             <div class="columns">
-                <div class="column is-8-tablet is-8-desktop is-8-widescreen has-order-2 column-main"><div class="card">
+                <div class="column is-8-tablet is-9-desktop is-9-widescreen has-order-2 column-main"><div class="card">
     
     <div class="card-content article ">
         
@@ -430,36 +430,126 @@ var _hmt = _hmt || [];
 </div>
 
 
+</div>
+                
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+
+
+
+<div class="column is-4-tablet is-3-desktop is-3-widescreen  has-order-1 column-left ">
+    
         
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.4.1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1.4.1/dist/gitalk.min.js"></script>
-<script>
-    var gitalk = new Gitalk({
-        clientID: '44c082a052b9fed7430d',
-        clientSecret: '4593e4f7c5d08bd4c093ea80274511159e13e821',
-        id: '84043c1521017e992c9e4cfda1055b8c',
-        repo: 'poettian.com',
-        owner: 'poettian',
-        admin: "poettian"
-    })
-    gitalk.render('comment-container')
-</script>
-
+<div class="card widget" id="toc">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                目录
+            </h3>
+            <ul class="menu-list"><li>
+        <a class="is-flex" href="#文本处理（awk、grep、sed、cut）">
+        <span class="has-mr-6">1</span>
+        <span>文本处理（awk、grep、sed、cut）</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#实验数据">
+        <span class="has-mr-6">1.1</span>
+        <span>实验数据</span>
+        </a></li><li>
+        <a class="is-flex" href="#awk">
+        <span class="has-mr-6">1.2</span>
+        <span>awk</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#命令格式">
+        <span class="has-mr-6">1.2.1</span>
+        <span>命令格式</span>
+        </a></li><li>
+        <a class="is-flex" href="#常用参数">
+        <span class="has-mr-6">1.2.2</span>
+        <span>常用参数</span>
+        </a></li><li>
+        <a class="is-flex" href="#分隔符">
+        <span class="has-mr-6">1.2.3</span>
+        <span>分隔符</span>
+        </a></li><li>
+        <a class="is-flex" href="#设置变量">
+        <span class="has-mr-6">1.2.4</span>
+        <span>设置变量</span>
+        </a></li><li>
+        <a class="is-flex" href="#逻辑判断">
+        <span class="has-mr-6">1.2.5</span>
+        <span>逻辑判断</span>
+        </a></li><li>
+        <a class="is-flex" href="#内建变量">
+        <span class="has-mr-6">1.2.6</span>
+        <span>内建变量</span>
+        </a></li><li>
+        <a class="is-flex" href="#使用正则">
+        <span class="has-mr-6">1.2.7</span>
+        <span>使用正则</span>
+        </a></li><li>
+        <a class="is-flex" href="#内置函数">
+        <span class="has-mr-6">1.2.8</span>
+        <span>内置函数</span>
+        </a></li></ul></li><li>
+        <a class="is-flex" href="#grep">
+        <span class="has-mr-6">1.3</span>
+        <span>grep</span>
+        </a></li><li>
+        <a class="is-flex" href="#sed">
+        <span class="has-mr-6">1.4</span>
+        <span>sed</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#命令格式-1">
+        <span class="has-mr-6">1.4.1</span>
+        <span>命令格式</span>
+        </a></li><li>
+        <a class="is-flex" href="#参数">
+        <span class="has-mr-6">1.4.2</span>
+        <span>参数</span>
+        </a></li><li>
+        <a class="is-flex" href="#动作说明">
+        <span class="has-mr-6">1.4.3</span>
+        <span>动作说明</span>
+        </a></li><li>
+        <a class="is-flex" href="#插入操作">
+        <span class="has-mr-6">1.4.4</span>
+        <span>插入操作</span>
+        </a></li></ul></li><li>
+        <a class="is-flex" href="#cut">
+        <span class="has-mr-6">1.5</span>
+        <span>cut</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#参数-1">
+        <span class="has-mr-6">1.5.1</span>
+        <span>参数</span>
+        </a></li><li>
+        <a class="is-flex" href="#用法">
+        <span class="has-mr-6">1.5.2</span>
+        <span>用法</span>
+        </a></li></ul></li></ul></li><li>
+        <a class="is-flex" href="#管道过滤器（xargs）">
+        <span class="has-mr-6">2</span>
+        <span>管道过滤器（xargs）</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#简介">
+        <span class="has-mr-6">2.1</span>
+        <span>简介</span>
+        </a></li><li>
+        <a class="is-flex" href="#命令格式-3">
+        <span class="has-mr-6">2.2</span>
+        <span>命令格式</span>
+        </a></li><li>
+        <a class="is-flex" href="#常用参数-1">
+        <span class="has-mr-6">2.3</span>
+        <span>常用参数</span>
+        </a></li><li>
+        <a class="is-flex" href="#用法-1">
+        <span class="has-mr-6">2.4</span>
+        <span>用法</span>
+        </a></li></ul></li></ul>
+        </div>
     </div>
 </div>
-</div>
-                
-                
 
-
-
-
-<div class="column is-4-tablet is-4-desktop is-4-widescreen  has-order-3 column-right ">
     
         
 <div class="card widget">
@@ -473,7 +563,7 @@ var _hmt = _hmt || [];
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-05-31T07:09:41.000Z">2019-05-31</time></div>
-                    <a href="/2019/05/31/关于locale/" class="has-link-black-ter is-size-6">关于locale</a>
+                    <a href="/2019/05/31/关于locale/" class="title has-link-black-ter is-size-6 has-text-weight-normal">关于locale</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/技术/">技术</a>
                     </p>
@@ -486,7 +576,7 @@ var _hmt = _hmt || [];
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-05-31T05:22:26.000Z">2019-05-31</time></div>
-                    <a href="/2019/05/31/PHP的数据类型/" class="has-link-black-ter is-size-6">PHP的数据类型</a>
+                    <a href="/2019/05/31/PHP的数据类型/" class="title has-link-black-ter is-size-6 has-text-weight-normal">PHP的数据类型</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/技术/">技术</a>
                     </p>
@@ -499,7 +589,7 @@ var _hmt = _hmt || [];
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-04T01:25:03.000Z">2018-09-04</time></div>
-                    <a href="/2018/09/04/linux下的文本处理/" class="has-link-black-ter is-size-6">linux下的文本处理</a>
+                    <a href="/2018/09/04/linux下的文本处理/" class="title has-link-black-ter is-size-6 has-text-weight-normal">linux下的文本处理</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/技术/">技术</a>
                     </p>
@@ -512,7 +602,7 @@ var _hmt = _hmt || [];
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2017-10-05T09:59:16.000Z">2017-10-05</time></div>
-                    <a href="/2017/10/05/LNMP架构中的缓冲区/" class="has-link-black-ter is-size-6">LNMP架构中的缓冲区</a>
+                    <a href="/2017/10/05/LNMP架构中的缓冲区/" class="title has-link-black-ter is-size-6 has-text-weight-normal">LNMP架构中的缓冲区</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/技术/">技术</a>
                     </p>
@@ -525,7 +615,7 @@ var _hmt = _hmt || [];
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2017-05-30T14:02:20.000Z">2017-05-30</time></div>
-                    <a href="/2017/05/30/前言/" class="has-link-black-ter is-size-6">前言</a>
+                    <a href="/2017/05/30/前言/" class="title has-link-black-ter is-size-6 has-text-weight-normal">前言</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/杂记/">杂记</a>
                     </p>
@@ -567,7 +657,243 @@ var _hmt = _hmt || [];
     </div>
 </div>
     
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
         
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/PHP/">
+                        <span class="tag">PHP</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/locale/">
+                        <span class="tag">locale</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/this/">
+                        <span class="tag">this</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                        <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="Poettian">
+                    
+                    
+                    <p class="is-size-4 is-block">
+                        Poettian
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        coder
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Beijing,China</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        5
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        2
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        3
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/poettian" target="_blank">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="Github" href="https://github.com/poettian">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="Facebook" href="https://facebook.com/poettian">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="Twitter" href="https://twitter.com/poet_tian">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="Dribbble" href="https://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+        
+            
+
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://hexo.io" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Hexo</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">hexo.io</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/ppoffice" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">PPOffice</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+
+        
+            
 <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
@@ -577,10 +903,13 @@ var _hmt = _hmt || [];
     </div>
 </div>
 
-    
+        
+        </div>
     
 </div>
 
+
+                
             </div>
         </div>
     </section>
@@ -720,6 +1049,11 @@ document.addEventListener('DOMContentLoaded', function () {
     
     
     
+    
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+    <script src="/js/clipboard.js" defer></script>
+    
+
     
     
     
