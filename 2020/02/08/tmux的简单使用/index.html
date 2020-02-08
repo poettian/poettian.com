@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+<title>tmux的简单使用 - Poettian的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+    <meta name="description" content="本文参考和引自： Tmux使用教程、Tmux使用手册 简介命令行的典型使用方式是，打开一个终端窗口（terminal window，以下简称”窗口”），在里面输入命令。用户与计算机的这种临时的交互，称为一次”会话”（session）。 会话的一个重要特点是，窗口与其中启动的进程是连在一起的。打开窗口，会话开始；关闭窗口，会话结束，会话内部的进程也会随之终止，不管有没有运行完。 一个典型的例子就是，">
+<meta name="keywords" content="tools">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tmux的简单使用">
+<meta property="og:url" content="https://www.poettian.com/2020/02/08/tmux的简单使用/index.html">
+<meta property="og:site_name" content="Poettian的博客">
+<meta property="og:description" content="本文参考和引自： Tmux使用教程、Tmux使用手册 简介命令行的典型使用方式是，打开一个终端窗口（terminal window，以下简称”窗口”），在里面输入命令。用户与计算机的这种临时的交互，称为一次”会话”（session）。 会话的一个重要特点是，窗口与其中启动的进程是连在一起的。打开窗口，会话开始；关闭窗口，会话结束，会话内部的进程也会随之终止，不管有没有运行完。 一个典型的例子就是，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://www.poettian.com/images/og_image.png">
+<meta property="og:updated_time" content="2020-02-08T07:41:14.287Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tmux的简单使用">
+<meta name="twitter:description" content="本文参考和引自： Tmux使用教程、Tmux使用手册 简介命令行的典型使用方式是，打开一个终端窗口（terminal window，以下简称”窗口”），在里面输入命令。用户与计算机的这种临时的交互，称为一次”会话”（session）。 会话的一个重要特点是，窗口与其中启动的进程是连在一起的。打开窗口，会话开始；关闭窗口，会话结束，会话内部的进程也会随之终止，不管有没有运行完。 一个典型的例子就是，">
+<meta name="twitter:image" content="https://www.poettian.com/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+<script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?a366524a3aa0beb76dced93bc66a1e21";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+    
+    
+
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-2-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.png" alt="tmux的简单使用" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item" href="/">首页</a>
+                
+                <a class="navbar-item" href="/archives">归档</a>
+                
+                <a class="navbar-item" href="/about">关于</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/poettian">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                <a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;">
+                    <i class="fas fa-list-ul"></i>
+                </a>
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-9-desktop is-9-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-02-08T04:27:06.000Z">2020-02-08</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/工具/">工具</a>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                tmux的简单使用
+            
+        </h1>
+        <div class="content">
+            <p>本文参考和引自：</p>
+<p><a href="https://www.ruanyifeng.com/blog/2019/10/tmux.html" target="_blank" rel="noopener">Tmux使用教程</a>、<a href="http://louiszhai.github.io/2017/09/30/tmux/" target="_blank" rel="noopener">Tmux使用手册</a></p>
+<h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>命令行的典型使用方式是，打开一个终端窗口（terminal window，以下简称”窗口”），在里面输入命令。<strong>用户与计算机的这种临时的交互，称为一次”会话”（session）</strong>。</p>
+<p>会话的一个重要特点是，窗口与其中启动的进程是<a href="http://www.ruanyifeng.com/blog/2016/02/linux-daemon.html" target="_blank" rel="noopener">连在一起</a>的。打开窗口，会话开始；关闭窗口，会话结束，会话内部的进程也会随之终止，不管有没有运行完。</p>
+<p>一个典型的例子就是，<a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html" target="_blank" rel="noopener">SSH 登录</a>远程计算机，打开一个远程窗口执行命令。这时，网络突然断线，再次登录的时候，是找不回上一次执行的命令的。因为上一次 SSH 会话已经终止了，里面的进程也随之消失了。</p>
+<p>Tmux 的出现解决了上面的问题。</p>
+<a id="more"></a>
+<h4 id="Tmux功能"><a href="#Tmux功能" class="headerlink" title="Tmux功能"></a>Tmux功能</h4><h5 id="多会话、多窗口、分屏"><a href="#多会话、多窗口、分屏" class="headerlink" title="多会话、多窗口、分屏"></a>多会话、多窗口、分屏</h5><ol>
+<li>它允许在单个窗口中，同时访问多个会话。这对于同时运行多个命令行程序很有用。</li>
+<li>它可以让新窗口”接入”已经存在的会话。</li>
+<li>它允许每个会话有多个连接窗口，因此可以多人实时共享会话。</li>
+<li>它还支持窗口任意的垂直和水平拆分。</li>
+</ol>
+<p>为了更好的理解这三个概念，可以参考如下的图示：</p>
+<img src="/2020/02/08/tmux的简单使用/image-20200208135533033.png" title="tmux图示">
+<h5 id="保护现场"><a href="#保护现场" class="headerlink" title="保护现场"></a>保护现场</h5><p>即使命令行的工作只进行到一半，关闭终端后还可以重新进入到操作现场，继续工作。对于ssh远程连接而言，即使网络不稳定也没有关系，掉线后重新连接，可以直奔现场，之前运行中的任务，依旧在跑，就好像从来没有离开过一样；特别是在远程服务器上运行耗时的任务，tmux可以帮你一直保持住会话。如此一来，你就可以随时随地放心地进行移动办公，只要你附近的计算机装有tmux（没有你也可以花几分钟装一个），你就能继续刚才的工作。</p>
+<h5 id="会话分享（适用结对编程和远程教学）"><a href="#会话分享（适用结对编程和远程教学）" class="headerlink" title="会话分享（适用结对编程和远程教学）"></a>会话分享（适用结对编程和远程教学）</h5><p>将 tmux 会话的地址分享给他人，这样他们就可以通过 SSH 接入该会话。如果你要给同事演示远程服务器的操作，他不必直勾勾地盯着你的屏幕，借助tmux，他完全可以进入到你的会话，然后静静地看着他桌面上你风骚的键盘走位，只要他愿意，甚至还可以录个屏。</p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># Ubuntu 或 Debian</span></span><br><span class="line">$ sudo apt-get install tmux</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># CentOS 或 Fedora</span></span><br><span class="line">$ sudo yum install tmux</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># Mac</span></span><br><span class="line">$ brew install tmux</span><br></pre></td></tr></table></figure>
+<h4 id="会话管理"><a href="#会话管理" class="headerlink" title="会话管理"></a>会话管理</h4><h5 id="新建会话"><a href="#新建会话" class="headerlink" title="新建会话"></a>新建会话</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tmux <span class="hljs-comment"># 新建一个无名称的会话</span></span><br><span class="line">tmux new -s demo <span class="hljs-comment"># 新建一个名称为demo的会话</span></span><br></pre></td></tr></table></figure>
+<h5 id="断开会话"><a href="#断开会话" class="headerlink" title="断开会话"></a>断开会话</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tmux detach <span class="hljs-comment"># 断开当前会话，会话在后台运行</span></span><br><span class="line"><span class="hljs-comment"># 快捷键 ctrl+b d</span></span><br></pre></td></tr></table></figure>
+<h5 id="重连会话"><a href="#重连会话" class="headerlink" title="重连会话"></a>重连会话</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tmux attach <span class="hljs-comment"># 默认进入第一个会话</span></span><br><span class="line">tmux attach -t demo <span class="hljs-comment"># 进入到名称为demo的会话</span></span><br></pre></td></tr></table></figure>
+<h5 id="关闭会话"><a href="#关闭会话" class="headerlink" title="关闭会话"></a>关闭会话</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tmux <span class="hljs-built_in">kill</span>-session -t demo <span class="hljs-comment"># 关闭demo会话</span></span><br><span class="line">tmux <span class="hljs-built_in">kill</span>-server <span class="hljs-comment"># 关闭服务器，所有的会话都将关闭</span></span><br></pre></td></tr></table></figure>
+<h4 id="常用快捷键"><a href="#常用快捷键" class="headerlink" title="常用快捷键"></a>常用快捷键</h4><h5 id="系统和会话"><a href="#系统和会话" class="headerlink" title="系统和会话"></a>系统和会话</h5><table>
+<thead>
+<tr>
+<th style="text-align:center">前缀</th>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>?</code></td>
+<td style="text-align:center">显示快捷键帮助文档</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>Ctrl+b</code></strong></td>
+<td style="text-align:center"><strong><code>d</code></strong></td>
+<td style="text-align:center"><strong>断开当前会话</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>D</code></td>
+<td style="text-align:center">选择要断开的会话</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>Ctrl+z</code></td>
+<td style="text-align:center">挂起当前会话</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>Ctrl+b</code></strong></td>
+<td style="text-align:center"><strong><code>r</code></strong></td>
+<td style="text-align:center"><strong>强制重载当前会话</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>Ctrl+b</code></strong></td>
+<td style="text-align:center"><strong><code>s</code></strong></td>
+<td style="text-align:center"><strong>显示会话列表用于选择并切换</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>:</code></td>
+<td style="text-align:center">进入命令行模式，此时可直接输入<code>ls</code>等命令</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>[</code></td>
+<td style="text-align:center">进入复制模式，按<code>q</code>退出</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>]</code></td>
+<td style="text-align:center">粘贴复制模式中复制的文本</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>~</code></td>
+<td style="text-align:center">列出提示信息缓存</td>
+</tr>
+</tbody>
+</table>
+<h5 id="窗口"><a href="#窗口" class="headerlink" title="窗口"></a>窗口</h5><table>
+<thead>
+<tr>
+<th style="text-align:center">前缀</th>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong><code>Ctrl+b</code></strong></td>
+<td style="text-align:center"><strong><code>c</code></strong></td>
+<td style="text-align:center"><strong>新建窗口</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>Ctrl+b</code></strong></td>
+<td style="text-align:center"><strong><code>&amp;</code></strong></td>
+<td style="text-align:center"><strong>关闭当前窗口（关闭前需输入<code>y</code> or <code>n</code>确认）</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>Ctrl+b</code></strong></td>
+<td style="text-align:center"><strong><code>0~9</code></strong></td>
+<td style="text-align:center"><strong>切换到指定窗口</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>p</code></td>
+<td style="text-align:center">切换到上一窗口</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>n</code></td>
+<td style="text-align:center">切换到下一窗口</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>Ctrl+b</code></strong></td>
+<td style="text-align:center"><strong><code>w</code></strong></td>
+<td style="text-align:center"><strong>打开窗口列表，用于且切换窗口</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>,</code></td>
+<td style="text-align:center">重命名当前窗口</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>.</code></td>
+<td style="text-align:center">修改当前窗口编号（适用于窗口重新排序）</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>f</code></td>
+<td style="text-align:center">快速定位到窗口（输入关键字匹配窗口名称）</td>
+</tr>
+</tbody>
+</table>
+<h5 id="面板"><a href="#面板" class="headerlink" title="面板"></a>面板</h5><table>
+<thead>
+<tr>
+<th style="text-align:center">前缀</th>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong><code>Ctrl+b</code></strong></td>
+<td style="text-align:center"><strong>-</strong></td>
+<td style="text-align:center"><strong>当前面板上下一分为二，下侧新建面板</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>Ctrl+b</code></strong></td>
+<td style="text-align:center"><strong>｜</strong></td>
+<td style="text-align:center"><strong>当前面板左右一分为二，右侧新建面板</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>Ctrl+b</code></strong></td>
+<td style="text-align:center"><strong><code>x</code></strong></td>
+<td style="text-align:center"><strong>关闭当前面板（关闭前需输入<code>y</code> or <code>n</code>确认）</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>z</code></td>
+<td style="text-align:center">最大化当前面板，再重复一次按键后恢复正常（v1.8版本新增）</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>Ctrl+b</code></strong></td>
+<td style="text-align:center"><strong><code>!</code></strong></td>
+<td style="text-align:center"><strong>将当前面板移动到新的窗口打开（原窗口中存在两个及以上面板有效）</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>;</code></td>
+<td style="text-align:center">切换到最后一次使用的面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>q</code></td>
+<td style="text-align:center">显示面板编号，在编号消失前输入对应的数字可切换到相应的面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>{</code></td>
+<td style="text-align:center">向前置换当前面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>}</code></td>
+<td style="text-align:center">向后置换当前面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>Ctrl+o</code></td>
+<td style="text-align:center">顺时针旋转当前窗口中的所有面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><code>Ctrl+b</code></strong></td>
+<td style="text-align:center"><strong><code>方向键</code></strong></td>
+<td style="text-align:center"><strong>移动光标切换面板</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>o</code></td>
+<td style="text-align:center">选择下一面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>空格键</code></td>
+<td style="text-align:center">在自带的面板布局中循环切换</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>Alt+方向键</code></td>
+<td style="text-align:center">以5个单元格为单位调整当前面板边缘</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>Ctrl+方向键</code></td>
+<td style="text-align:center">以1个单元格为单位调整当前面板边缘（Mac下被系统快捷键覆盖）</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>t</code></td>
+<td style="text-align:center">显示时钟</td>
+</tr>
+</tbody>
+</table>
+<h4 id="可配置性"><a href="#可配置性" class="headerlink" title="可配置性"></a>可配置性</h4><p>tmux的用户级配置文件为 <code>~/.tmux.conf</code>（没有的话就创建一个）。</p>
+<p>贴一下我自己 mac 上的配置：</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># 配置 24-bit True-color(Tc), more info in this PR:</span></span><br><span class="line"><span class="hljs-comment">#   https://github.com/tmux/tmux/pull/112</span></span><br><span class="line"><span class="hljs-built_in">set</span> -g default-terminal <span class="hljs-string">"screen-256color"</span></span><br><span class="line"><span class="hljs-built_in">set</span> -ga terminal-overrides <span class="hljs-string">",*256col*:Tc"</span> <span class="hljs-comment"># 这句是关键</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 配置prefix</span></span><br><span class="line"><span class="hljs-built_in">set</span> -g prefix `</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 解除C-b的绑定</span></span><br><span class="line">unbind C-b</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 绑定快捷键，重新加载配置文件</span></span><br><span class="line"><span class="hljs-built_in">bind</span> r <span class="hljs-built_in">source</span>-file ~/.tmux.conf \; display-message <span class="hljs-string">"Config reloaded.."</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 支持鼠标选择窗口，调节窗口大小</span></span><br><span class="line"><span class="hljs-comment">#set -g mouse on</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-built_in">set</span> -sg escape-time 1</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 窗口号和窗口分割号都以1开始（默认从0开始）</span></span><br><span class="line"><span class="hljs-built_in">set</span> -g base-index 1</span><br><span class="line">setw -g pane-base-index 1</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 监视窗口信息，如有内容变动，进行提示</span></span><br><span class="line">setw -g monitor-activity on</span><br><span class="line"><span class="hljs-built_in">set</span> -g visual-activity on</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 绑定hjkl键为面板切换的上下左右键</span></span><br><span class="line"><span class="hljs-built_in">bind</span> -r k select-pane -U <span class="hljs-comment"># 绑定k为↑</span></span><br><span class="line"><span class="hljs-built_in">bind</span> -r j select-pane -D <span class="hljs-comment"># 绑定j为↓</span></span><br><span class="line"><span class="hljs-built_in">bind</span> -r h select-pane -L <span class="hljs-comment"># 绑定h为←</span></span><br><span class="line"><span class="hljs-built_in">bind</span> -r l select-pane -R <span class="hljs-comment"># 绑定l为→</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 新增面板</span></span><br><span class="line">unbind <span class="hljs-string">'"'</span></span><br><span class="line"><span class="hljs-built_in">bind</span> - splitw -v -c <span class="hljs-string">'#&#123;pane_current_path&#125;'</span> <span class="hljs-comment"># 垂直方向新增面板，默认进入当前目录</span></span><br><span class="line">unbind %</span><br><span class="line"><span class="hljs-built_in">bind</span> | splitw -h -c <span class="hljs-string">'#&#123;pane_current_path&#125;'</span> <span class="hljs-comment"># 水平方向新增面板，默认进入当前目录</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 启动鼠标支持</span></span><br><span class="line"><span class="hljs-built_in">set</span> -g mouse on</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 插件</span></span><br><span class="line">run-shell ~/.tmux/plugins/tmux-resurrect/resurrect.tmux</span><br></pre></td></tr></table></figure>
+<p>有一点需要注意的是，当启动鼠标支持时，<code>iterm2</code> 自带的<strong>双击选中</strong>和<strong>前后鼠标点击加shift选中</strong>会失效，此时需要同时按下 <code>Alt</code> 键，才会生效。</p>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/tools/">tools</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/09/26/2019年的目标/">
+                <span class="level-item">2019年的目标</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-3-desktop is-3-widescreen  has-order-1 column-left is-sticky">
+    
+        
+<div class="card widget" id="toc">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                目录
+            </h3>
+            <ul class="menu-list"><li>
+        <a class="is-flex" href="#简介">
+        <span class="has-mr-6">1</span>
+        <span>简介</span>
+        </a></li><li>
+        <a class="is-flex" href="#Tmux功能">
+        <span class="has-mr-6">2</span>
+        <span>Tmux功能</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#多会话、多窗口、分屏">
+        <span class="has-mr-6">2.1</span>
+        <span>多会话、多窗口、分屏</span>
+        </a></li><li>
+        <a class="is-flex" href="#保护现场">
+        <span class="has-mr-6">2.2</span>
+        <span>保护现场</span>
+        </a></li><li>
+        <a class="is-flex" href="#会话分享（适用结对编程和远程教学）">
+        <span class="has-mr-6">2.3</span>
+        <span>会话分享（适用结对编程和远程教学）</span>
+        </a></li></ul></li><li>
+        <a class="is-flex" href="#安装">
+        <span class="has-mr-6">3</span>
+        <span>安装</span>
+        </a></li><li>
+        <a class="is-flex" href="#会话管理">
+        <span class="has-mr-6">4</span>
+        <span>会话管理</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#新建会话">
+        <span class="has-mr-6">4.1</span>
+        <span>新建会话</span>
+        </a></li><li>
+        <a class="is-flex" href="#断开会话">
+        <span class="has-mr-6">4.2</span>
+        <span>断开会话</span>
+        </a></li><li>
+        <a class="is-flex" href="#重连会话">
+        <span class="has-mr-6">4.3</span>
+        <span>重连会话</span>
+        </a></li><li>
+        <a class="is-flex" href="#关闭会话">
+        <span class="has-mr-6">4.4</span>
+        <span>关闭会话</span>
+        </a></li></ul></li><li>
+        <a class="is-flex" href="#常用快捷键">
+        <span class="has-mr-6">5</span>
+        <span>常用快捷键</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#系统和会话">
+        <span class="has-mr-6">5.1</span>
+        <span>系统和会话</span>
+        </a></li><li>
+        <a class="is-flex" href="#窗口">
+        <span class="has-mr-6">5.2</span>
+        <span>窗口</span>
+        </a></li><li>
+        <a class="is-flex" href="#面板">
+        <span class="has-mr-6">5.3</span>
+        <span>面板</span>
+        </a></li></ul></li><li>
+        <a class="is-flex" href="#可配置性">
+        <span class="has-mr-6">6</span>
+        <span>可配置性</span>
+        </a></li></ul>
+        </div>
+    </div>
+</div>
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-08T04:27:06.000Z">2020-02-08</time></div>
+                    <a href="/2020/02/08/tmux的简单使用/" class="title has-link-black-ter is-size-6 has-text-weight-normal">tmux的简单使用</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/工具/">工具</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-26T07:26:23.000Z">2019-09-26</time></div>
+                    <a href="/2019/09/26/2019年的目标/" class="title has-link-black-ter is-size-6 has-text-weight-normal">2019年的目标</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/杂记/">杂记</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-05-31T07:09:41.000Z">2019-05-31</time></div>
+                    <a href="/2019/05/31/关于locale/" class="title has-link-black-ter is-size-6 has-text-weight-normal">关于locale</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-05-31T05:22:26.000Z">2019-05-31</time></div>
+                    <a href="/2019/05/31/PHP的数据类型/" class="title has-link-black-ter is-size-6 has-text-weight-normal">PHP的数据类型</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-04T01:25:03.000Z">2018-09-04</time></div>
+                    <a href="/2018/09/04/linux下的文本处理/" class="title has-link-black-ter is-size-6 has-text-weight-normal">linux下的文本处理</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/技术/">技术</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/工具/">
+            <span class="level-start">
+                <span class="level-item">工具</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/技术/">
+            <span class="level-start">
+                <span class="level-item">技术</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">4</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/杂记/">
+            <span class="level-start">
+                <span class="level-item">杂记</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">2</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/PHP/">
+                        <span class="tag">PHP</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/locale/">
+                        <span class="tag">locale</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/this/">
+                        <span class="tag">this</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/tools/">
+                        <span class="tag">tools</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/tudo/">
+                        <span class="tag">tudo</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen is-sticky">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                        <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="Poettian">
+                    
+                    
+                    <p class="is-size-4 is-block">
+                        Poettian
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        coder
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Beijing,China</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        7
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        3
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        5
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/poettian" target="_blank">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="Github" href="https://github.com/poettian">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="Facebook" href="https://facebook.com/poettian">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="Twitter" href="https://twitter.com/poet_tian">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="Dribbble" href="https://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+        
+            
+
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://hexo.io" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Hexo</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">hexo.io</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/ppoffice" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">PPOffice</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/tags/locale/" style="font-size: 10px;">locale</a> <a href="/tags/this/" style="font-size: 10px;">this</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a> <a href="/tags/tudo/" style="font-size: 10px;">tudo</a>
+    </div>
+</div>
+
+        
+        </div>
+    
+</div>
+
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.png" alt="tmux的简单使用" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 poettian&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/poettian">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+    <script src="/js/clipboard.js" defer></script>
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
